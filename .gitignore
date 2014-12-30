@@ -1,2 +1,5 @@
-*.class
 bin/
+tmp/
+test-bin/
+lib/
+javadoc/
