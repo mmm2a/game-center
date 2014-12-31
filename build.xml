@@ -26,10 +26,15 @@
   <path id="production.class.path">
     <path refid="guava.class.path"/>
     <path refid="guice.class.path"/>
+
+    <pathelement location="${ext.dir}/jsr305.jar"/>
+    <pathelement location="${ext.dir}/javax.inject.jar"/>
+    <pathelement location="${ext.dir}/aopalliance.jar"/>
   </path>
 
   <path id="production-runtime.class.path">
     <pathelement location="${lib.dir}/game-center-shared.jar"/>
+    <pathelement location="${lib.dir}/game-center-server.jar"/>
   </path>
 
   <path id="test.class.path">
@@ -42,7 +47,7 @@
     <path refid="production-runtime.class.path"/>
   </path>
 
-  <target name="build" depends="shared.jar"/>
+  <target name="build" depends="shared.jar,server.jar"/>
 
   <target name="test" depends="build,test.jar">
     <junit fork="no" haltonfailure="no" printsummary="on">
@@ -63,11 +68,27 @@
         classpathref="production.class.path"/>
   </target>
 
+  <target name="server.jar" depends="server.compile">
+    <mkdir dir="${lib.dir}"/>
+    <jar destfile="${lib.dir}/game-center-server.jar">
+      <fileset dir="${bin.dir}" includes="com/morgan/server/**"/>
+    </jar>
+  </target>
+
   <target name="shared.jar" depends="shared.compile">
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/game-center-shared.jar">
       <fileset dir="${bin.dir}" includes="com/morgan/shared/**"/>
     </jar>
+  </target>
+
+  <target name="server.compile">
+    <mkdir dir="${bin.dir}"/>
+    <javac srcdir="${src.dir}"
+        destdir="${bin.dir}"
+        classpathref="production.class.path"
+        includeAntRuntime="false"
+        includes="com/morgan/server/**/*.java"/>
   </target>
 
   <target name="shared.compile">

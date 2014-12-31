@@ -23,6 +23,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/Mockito/mockito-api.jar!/javadoc"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="ext/jsr305.jar"/>
+	<classpathentry kind="lib" path="ext/aopalliance.jar"/>
+	<classpathentry kind="lib" path="ext/javax.inject.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
