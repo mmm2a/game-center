@@ -4,10 +4,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.morgan.shared.macro.AllMacroTests;
 import com.morgan.shared.util.AllUtilTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+  AllMacroTests.class,
   AllUtilTests.class
 })
 public class AllSharedTests {
