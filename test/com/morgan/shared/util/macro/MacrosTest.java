@@ -1,4 +1,4 @@
-package com.morgan.shared.macro;
+package com.morgan.shared.util.macro;
 
 import java.util.Properties;
 

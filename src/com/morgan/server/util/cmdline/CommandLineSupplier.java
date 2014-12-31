@@ -1,4 +1,4 @@
-package com.morgan.shared.util.cmdline;
+package com.morgan.server.util.cmdline;
 
 /**
  * Interface for a type that supplies flags and arguments to a {@link CommandLine.Builder}

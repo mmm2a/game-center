@@ -1,4 +1,4 @@
-package com.morgan.shared.util.cmdline;
+package com.morgan.server.util.cmdline;
 
 import com.google.common.base.Preconditions;
 

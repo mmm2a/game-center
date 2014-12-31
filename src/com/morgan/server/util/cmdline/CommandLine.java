@@ -1,9 +1,12 @@
-package com.morgan.shared.util.cmdline;
+package com.morgan.server.util.cmdline;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -17,6 +20,14 @@ import com.google.common.collect.ImmutableMap;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 public final class CommandLine {
+
+  /**
+   * Special flag name that, when encountered, parses a configuration properties file and adds the
+   * properties in there as flags to the command line.  Whenever such a flag is encountered, the
+   * flags from that configuration are added automatically, but don't override pre-existing
+   * flags set from the parent parser.
+   */
+  static final String CONFIGURATION_FLAG = "configuration";
 
   private final ImmutableMap<String, String> flagStringValuesMap;
   private final ImmutableList<String> additionalArgs;
@@ -73,8 +84,15 @@ public final class CommandLine {
     private final Map<String, String> flags = new HashMap<>();
     private final ImmutableList.Builder<String> argumentsBuilder = ImmutableList.builder();
 
-    private Builder() {
+    @Nullable private Builder childBuilder = null;
+
+    @VisibleForTesting Builder() {
       // Do not instantiate directly
+    }
+
+    @VisibleForTesting void addChildConfiguration(String filename, Builder subBuilder) {
+      ArgumentConfigurationParser childParser = new ArgumentConfigurationParser(filename);
+      childParser.supplyCommandLineContents(subBuilder);
     }
 
     public Builder addBooleanFlag(String flagName, boolean isOn) {
@@ -84,7 +102,16 @@ public final class CommandLine {
     public Builder addFlag(String flagName, String flagValue) {
       Preconditions.checkArgument(!Strings.isNullOrEmpty(flagName));
       Preconditions.checkArgument(!Strings.isNullOrEmpty(flagValue));
-      flags.put(flagName, flagValue);
+
+      if (flagName.equals(CONFIGURATION_FLAG)) {
+        if (childBuilder == null) {
+          childBuilder = new Builder();
+        }
+        addChildConfiguration(flagValue, childBuilder);
+      } else {
+        flags.put(flagName, flagValue);
+      }
+
       return this;
     }
 
@@ -95,7 +122,12 @@ public final class CommandLine {
     }
 
     public CommandLine build() {
-      return new CommandLine(flags, argumentsBuilder.build());
+      Map<String, String> allFlags = new HashMap<>();
+      if (childBuilder != null) {
+        allFlags.putAll(childBuilder.flags);
+      }
+      allFlags.putAll(flags);
+      return new CommandLine(allFlags, argumentsBuilder.build());
     }
   }
 }

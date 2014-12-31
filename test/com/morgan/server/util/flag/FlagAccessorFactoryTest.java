@@ -15,7 +15,7 @@ import com.google.common.truth.Truth;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.morgan.shared.util.cmdline.CommandLine;
+import com.morgan.server.util.cmdline.CommandLine;
 
 /**
  * Tests for the {@link FlagAccessorFactory} class.

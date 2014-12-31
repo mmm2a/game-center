@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.morgan.shared.util.cmdline.CommandLine;
+import com.morgan.server.util.cmdline.CommandLine;
 
 /**
  * Global class for maintaining and manipulating flags for a binary.

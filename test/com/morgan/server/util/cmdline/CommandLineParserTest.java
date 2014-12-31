@@ -1,8 +1,10 @@
-package com.morgan.shared.util.cmdline;
+package com.morgan.server.util.cmdline;
 
 import org.junit.Test;
 
 import com.google.common.truth.Truth;
+import com.morgan.server.util.cmdline.CommandLine;
+import com.morgan.server.util.cmdline.CommandLineParser;
 
 /**
  * Tests for the {@link CommandLineParser} class.
