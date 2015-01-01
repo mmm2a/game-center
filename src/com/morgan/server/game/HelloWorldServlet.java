@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.security.SecurityInformationHelper;
+import com.morgan.server.security.UserIdObfuscator;
 
 /**
  * Simple "hello world" servlet to prove the server is running.
@@ -25,9 +26,11 @@ class HelloWorldServlet extends HttpServlet {
   static final long serialVersionUID = 0L;
 
   private final SecurityInformationHelper helper;
+  private final UserIdObfuscator obfuscator;
 
-  @Inject HelloWorldServlet(SecurityInformationHelper helper) {
+  @Inject HelloWorldServlet(SecurityInformationHelper helper, UserIdObfuscator obfuscator) {
     this.helper = helper;
+    this.obfuscator = obfuscator;
   }
 
   @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -41,6 +44,9 @@ class HelloWorldServlet extends HttpServlet {
         pOut.format("<li><b>%s</b>: %s\n", entry.getKey(), entry.getValue());
       }
       pOut.println("</ul>");
+      String encrypted = obfuscator.obfuscateId(7L);
+      pOut.format("<b>Obfuscating 7L:</b> %s<br>\n", encrypted);
+      pOut.format("<b>Deobfuscating:</b> %d<br>\n", obfuscator.deobfuscateId(encrypted));
       pOut.println("</body></html>");
       pOut.flush();
     }

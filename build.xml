@@ -64,6 +64,7 @@
       </classpath>
       <arg value="--nosecure"/>
       <arg value="--port=8080"/>
+      <arg value="--configuration=/Users/morgan/.game-center/security/keystore.conf"/>
     </java>
   </target>
 
