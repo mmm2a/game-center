@@ -11,8 +11,8 @@ import com.google.inject.Inject;
  */
 class SimpleEnableDisableEvaluator implements ServerFeatureEvaluator {
 
-  private static final String ENABLE_STRING = "enable";
-  private static final String DISABLE_STRING = "disable";
+  private static final String ENABLE_STRING = "enabled";
+  private static final String DISABLE_STRING = "disabled";
 
   @Inject SimpleEnableDisableEvaluator() {
   }

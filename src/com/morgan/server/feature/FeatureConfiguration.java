@@ -23,7 +23,7 @@ import com.google.inject.assistedinject.AssistedInject;
 class FeatureConfiguration {
 
   private static final Pattern FEATURE_CONFIGURATION_PATTERN = Pattern.compile(
-      "^\\s*(\\w+)\\s*\\([^\\)]*\\)\\s*$");
+      "^\\s*(\\w+)\\s*\\(([^\\)]*)\\)\\s*$");
 
   private static final Splitter FEATURE_EXPRESSION_SPLITTER =
       Splitter.on('|').omitEmptyStrings().trimResults();

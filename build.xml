@@ -9,6 +9,8 @@
 
   <path id="guice.class.path">
     <pathelement location="${ext.dir}/Guice/guice-3.0.jar"/>
+    <pathelement location="${ext.dir}/Guice/guice-assistedinject-snapshot.jar"/>
+    <pathelement location="${ext.dir}/Guice/guice-multibindings-snapshot.jar"/>
   </path>
 
   <path id="mockito.class.path">

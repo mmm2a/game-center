@@ -5,12 +5,15 @@ import java.nio.charset.Charset;
 
 import javax.annotation.Nullable;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.morgan.shared.feature.FeatureChecker;
 
 /**
@@ -29,9 +32,10 @@ import com.morgan.shared.feature.FeatureChecker;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
+@Singleton
 public class ServerFeatureChecker<T extends Enum<T>> implements FeatureChecker<T> {
 
-  private static final String DEFAULT_FEATURES_CONF_RESOURCE_PATH =
+  @VisibleForTesting static final String DEFAULT_FEATURES_CONF_RESOURCE_PATH =
       "/META-INF/features.conf";
 
   private final ImmutableSet<String> commandLineDisabledFeatures;
@@ -50,14 +54,22 @@ public class ServerFeatureChecker<T extends Enum<T>> implements FeatureChecker<T
     if (featuresFile == null) {
       commandLineConfiguredConfiguration = null;
     } else {
-      File file = new File(featuresFile);
-      Preconditions.checkState(file.canRead(), "Can't read file %s", featuresFile);
       commandLineConfiguredConfiguration = configurationFactory.create(
-          Files.asCharSource(file, Charset.defaultCharset()));
+          getCharSourceForPath(featuresFile));
     }
 
-    defaultConfiguration = configurationFactory.create(Resources.asCharSource(
-        Resources.getResource(DEFAULT_FEATURES_CONF_RESOURCE_PATH), Charset.defaultCharset()));
+    defaultConfiguration = configurationFactory.create(
+        getCharSourceForResource(DEFAULT_FEATURES_CONF_RESOURCE_PATH));
+  }
+
+  @VisibleForTesting CharSource getCharSourceForPath(String filePath) {
+    File file = new File(filePath);
+    Preconditions.checkState(file.canRead(), "Can't read file %s", filePath);
+    return Files.asCharSource(file, Charset.defaultCharset());
+  }
+
+  @VisibleForTesting CharSource getCharSourceForResource(String resource) {
+    return Resources.asCharSource(Resources.getResource(resource), Charset.defaultCharset());
   }
 
   private Optional<Boolean> checkCommandLineFor(T feature) {
