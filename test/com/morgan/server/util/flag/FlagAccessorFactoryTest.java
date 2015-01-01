@@ -1,6 +1,11 @@
 package com.morgan.server.util.flag;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Type;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -11,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.truth.Truth;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -55,6 +61,12 @@ public class FlagAccessorFactoryTest {
         description = "some description",
         parser = FancyParser.class)
     ImmutableList<String> fancyFlag();
+
+    @Flag(name = "collection-flag",
+        description = "some description",
+        required = false,
+        defaultValue = "SECONDS,MINUTES, HOURS")
+    ImmutableSet<TimeUnit> collectionFlag();
   }
 
   @Mock private FancyParser mockFancyParser;
@@ -71,7 +83,7 @@ public class FlagAccessorFactoryTest {
   }
 
   @Before public void setUpCommonMockInteractions() {
-    when(mockFancyParser.parseStringRepresentation(ImmutableList.class, "fancy-value"))
+    when(mockFancyParser.parseStringRepresentation(any(Type.class), eq("fancy-value")))
         .thenReturn(ImmutableList.of("one", "two", "three"));
   }
 
@@ -122,5 +134,10 @@ public class FlagAccessorFactoryTest {
   @Test public void optionalFlag() {
     Truth.assertThat(getAccessorFor(null).optionalFlag()).isEqualTo("optional");
     Truth.assertThat(getAccessorFor("filled in").optionalFlag()).isEqualTo("filled in");
+  }
+
+  @Test public void collectionFlag() {
+    Truth.assertThat(getAccessorFor(null).collectionFlag())
+        .isEqualTo(ImmutableSet.of(TimeUnit.SECONDS, TimeUnit.MINUTES, TimeUnit.HOURS));
   }
 }

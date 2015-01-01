@@ -26,6 +26,8 @@
 	<classpathentry kind="lib" path="ext/jsr305.jar"/>
 	<classpathentry kind="lib" path="ext/aopalliance.jar"/>
 	<classpathentry kind="lib" path="ext/javax.inject.jar"/>
+	<classpathentry kind="lib" path="ext/Guice/guice-multibindings-snapshot.jar" sourcepath="ext/Guice/guice-multibindings-snapshot-src.jar"/>
+	<classpathentry kind="lib" path="ext/Guice/guice-assistedinject-snapshot.jar" sourcepath="ext/Guice/guice-assistedinject-snapshot-src.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

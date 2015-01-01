@@ -67,7 +67,7 @@ public class FlagAccessorFactory {
     Class<? extends FlagValueParser> valueParserClass = annotation.parser();
     FlagValueParser parser = Preconditions.checkNotNull(injector.getInstance(valueParserClass));
 
-    Object value = parser.parseStringRepresentation(m.getReturnType(), stringValue);
+    Object value = parser.parseStringRepresentation(m.getGenericReturnType(), stringValue);
     return Suppliers.ofInstance(value);
   }
 
