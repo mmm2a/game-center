@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -17,9 +18,12 @@ import com.google.inject.Provider;
 public class SecurityInformationHelper {
 
   private final Provider<HttpServletRequest> requestProvider;
+  private final CookieHelper cookieHelper;
 
-  @Inject SecurityInformationHelper(Provider<HttpServletRequest> requestProvider) {
+  @Inject SecurityInformationHelper(Provider<HttpServletRequest> requestProvider,
+      CookieHelper cookieHelper) {
     this.requestProvider = requestProvider;
+    this.cookieHelper = cookieHelper;
   }
 
   public ImmutableMap<String, String> getInformation() {
@@ -66,6 +70,14 @@ public class SecurityInformationHelper {
     builder.put("server name", "" + request.getServerName());
     builder.put("server port", "" + request.getServerPort());
     builder.put("servlet path", "" + request.getServletPath());
+
+    Optional<Long> userId = cookieHelper.getUserIdFromCookie();
+    if (userId.isPresent()) {
+      builder.put("User ID", "" + userId.get());
+    } else {
+      builder.put("User ID", "Not logged in");
+      cookieHelper.setAuthenticationCookieFor(69L);
+    }
 
     return builder.build();
   }

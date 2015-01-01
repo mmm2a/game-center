@@ -1,7 +1,10 @@
 package com.morgan.server.security;
 
+import org.joda.time.ReadableDuration;
+
 import com.morgan.server.util.flag.Flag;
 import com.morgan.server.util.flag.FlagAccessor;
+import com.morgan.server.util.time.DurationFlagParser;
 
 /**
  * A flag accessor for accessing security-related flags.
@@ -44,4 +47,17 @@ interface SecurityFlagAccessor extends FlagAccessor {
       description = "The password used to access the X.509 certificate from the keystore",
       required = true)
   String sslCertPassword();
+
+  @Flag(name = "cookie-validation-duration",
+      description = "Indicates the duration of time that cookies, once created, are valid for",
+      required = false,
+      defaultValue = "30d",
+      parser = DurationFlagParser.class)
+  ReadableDuration cookieValidationDuration();
+
+  @Flag(name = "cookie-version",
+      description = "A version string indicating the cookie version",
+      required = false,
+      defaultValue = "2015-01-01")
+  String cookieVersion();
 }
