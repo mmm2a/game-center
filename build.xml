@@ -11,10 +11,15 @@
     <pathelement location="${ext.dir}/Guice/guice-3.0.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-assistedinject-snapshot.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-multibindings-snapshot.jar"/>
+    <pathelement location="${ext.dir}/Guice/guice-servlet-snapshot.jar"/>
   </path>
 
   <path id="mockito.class.path">
     <pathelement location="${ext.dir}/Mockito/mockito-all-1.9.5.jar"/>
+  </path>
+
+  <path id="jetty.class.path">
+    <fileset dir="${ext.dir}/Jetty" includes="*.jar"/>
   </path>
 
   <path id="truth.class.path">
@@ -28,10 +33,12 @@
   <path id="production.class.path">
     <path refid="guava.class.path"/>
     <path refid="guice.class.path"/>
+    <path refid="jetty.class.path"/>
 
     <pathelement location="${ext.dir}/jsr305.jar"/>
     <pathelement location="${ext.dir}/javax.inject.jar"/>
     <pathelement location="${ext.dir}/aopalliance.jar"/>
+    <pathelement location="${ext.dir}/servlet-api-3.1.jar"/>
   </path>
 
   <path id="production-runtime.class.path">
@@ -48,6 +55,17 @@
 
     <path refid="production-runtime.class.path"/>
   </path>
+
+  <target name="run.server" depends="build">
+    <java classname="com.morgan.server.game.GameServerLauncher">
+      <classpath>
+        <path refid="production.class.path"/>
+        <path refid="production-runtime.class.path"/>
+      </classpath>
+      <arg value="--nosecure"/>
+      <arg value="--port=8080"/>
+    </java>
+  </target>
 
   <target name="build" depends="shared.jar,server.jar"/>
 
