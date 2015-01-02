@@ -26,14 +26,14 @@ public final class Flags {
    * Gets the string representation for the given flag name.  If the flag was not set, this
    * method returns {@code null}.
    */
-  @Nullable String getStringRepresentationFor(String flagName) {
+  @Nullable public String getStringRepresentationFor(String flagName) {
     return commandLine.getFlagMap().get(flagName);
   }
 
   /**
    * Gets the list of arguments that were given to the program.
    */
-  ImmutableList<String> getArguments() {
+  public ImmutableList<String> getArguments() {
     return commandLine.getArguments();
   }
 

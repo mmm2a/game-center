@@ -70,6 +70,7 @@
       <arg value="--nosecure"/>
       <arg value="--port=8080"/>
       <arg value="--configuration=security/keystore.conf"/>
+      <arg value="--backend-type=FAKE"/>
     </java>
   </target>
 
