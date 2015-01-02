@@ -10,10 +10,12 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.GuiceFilter;
 
@@ -25,9 +27,13 @@ import com.google.inject.servlet.GuiceFilter;
 @Singleton
 class GameServer {
 
+  private final Provider<Server> serverProvider;
   private final ImmutableSet<ServerConnectorFactory> connectorFactories;
 
-  @Inject GameServer(Set<ServerConnectorFactory> connectorFactories) {
+  @Inject GameServer(
+      Provider<Server> serverProvider,
+      Set<ServerConnectorFactory> connectorFactories) {
+    this.serverProvider = serverProvider;
     this.connectorFactories = ImmutableSet.copyOf(connectorFactories);
   }
 
@@ -45,27 +51,33 @@ class GameServer {
     Preconditions.checkState(numAdded > 0, "You have to add at least one connector");
   }
 
+  @VisibleForTesting ServletContextHandler createContextHandler(
+      Server server, String path, int options) {
+    return new ServletContextHandler(server, path, options);
+  }
+
+  @VisibleForTesting void startAndJoin(Server server) throws Exception {
+    server.start();
+    server.join();
+  }
+
   /**
    * Starts the game server and waits for the server to complete.
    *
    * @throws Exception if the server fails to start.
    */
   void start() throws Exception {
-    Server server = new Server();
+    Server server = serverProvider.get();
 
     addConnectors(server);
 
-    ServletContextHandler servletContextHandler = new ServletContextHandler(
-        server, "/", ServletContextHandler.SESSIONS);
+    ServletContextHandler servletContextHandler =
+        createContextHandler(server, "/", ServletContextHandler.SESSIONS);
     servletContextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
 
     // You MUST add DefaultServlet or your server will always return 404s
     servletContextHandler.addServlet(DefaultServlet.class, "/");
 
-    // Start the server
-    server.start();
-
-    // Wait until the server exits
-    server.join();
+    startAndJoin(server);
   }
 }
