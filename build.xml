@@ -7,6 +7,10 @@
     <pathelement location="${ext.dir}/Guava/guava-18.0.jar"/>
   </path>
 
+  <path id="joda.class.path">
+    <pathelement location="${ext.dir}/Joda/joda-time-2.6.jar"/>
+  </path>
+
   <path id="guice.class.path">
     <pathelement location="${ext.dir}/Guice/guice-3.0.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-assistedinject-snapshot.jar"/>
@@ -34,6 +38,7 @@
     <path refid="guava.class.path"/>
     <path refid="guice.class.path"/>
     <path refid="jetty.class.path"/>
+    <path refid="joda.class.path"/>
 
     <pathelement location="${ext.dir}/jsr305.jar"/>
     <pathelement location="${ext.dir}/javax.inject.jar"/>
