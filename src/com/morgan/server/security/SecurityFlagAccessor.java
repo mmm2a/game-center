@@ -13,20 +13,20 @@ import com.morgan.server.util.time.DurationFlagParser;
  */
 interface SecurityFlagAccessor extends FlagAccessor {
 
-  @Flag(name = "keystore",
+  @Flag(name = "obfuscation-keystore",
       description = "The path to the keystore to get security-related keys from",
       required = true)
-  String keystorePath();
+  String obfuscationKeystorePath();
 
-  @Flag(name = "keystore-passwd",
+  @Flag(name = "obfuscation-keystore-passwd",
       description = "The password needed to access the security keystore",
       required = true)
-  String keystorePassword();
+  String obfuscationKeystorePassword();
 
-  @Flag(name = "keystore-type",
+  @Flag(name = "obfuscation-keystore-type",
       description = "The type for the security keystore",
       required = true)
-  String keystoreType();
+  String obfuscationKeystoreType();
 
   @Flag(name = "obfuscator-alias",
       description = "The alias of a symettric key to be used for cookie and name obfuscation",
@@ -37,6 +37,21 @@ interface SecurityFlagAccessor extends FlagAccessor {
       description = "The password needed to access the obfuscator symmetric key",
       required = true)
   String obfuscatorPassword();
+
+  @Flag(name = "ssl-keystore",
+      description = "The path to the keystore to get security-related keys from",
+      required = true)
+  String sslKeystorePath();
+
+  @Flag(name = "ssl-keystore-passwd",
+      description = "The password needed to access the security keystore",
+      required = true)
+  String sslKeystorePassword();
+
+  @Flag(name = "ssl-keystore-type",
+      description = "The type for the security keystore",
+      required = true)
+  String sslKeystoreType();
 
   @Flag(name = "ssl-alias",
       description = "The alias of a X.509 certificate to use for the SSL socket",
