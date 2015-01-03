@@ -27,9 +27,16 @@ import com.google.inject.util.Providers;
 @RunWith(MockitoJUnitRunner.class)
 public class GameServerTest {
 
+  private static final String WAR = "war";
+  private static final String WAR_CONTEXT_PATH = "context-path";
+  private static final String WAR_RESOURCE_BASE = "resource-base";
+  private static final String WAR_DESCRIPTOR = "descriptor";
+  private static final boolean WAR_PARENT_LOADER_PRIORITY = true;
+
   @Mock private Server mockServer;
   @Mock private WebAppContext mockWebAppContext;
 
+  @Mock private GameServerFlagAccessor mockFlagAccessor;
   @Mock private ServerConnectorFactory mockConnectorFactory1;
   @Mock private ServerConnectorFactory mockConnectorFactory2;
 
@@ -49,17 +56,29 @@ public class GameServerTest {
         .thenReturn(Optional.<ServerConnector>absent());
     when(mockConnectorFactory2.createServerConnector(mockServer))
         .thenReturn(Optional.<ServerConnector>absent());
+
+    when(mockFlagAccessor.warFile()).thenReturn(WAR);
+    when(mockFlagAccessor.warContextPath()).thenReturn(WAR_CONTEXT_PATH);
+    when(mockFlagAccessor.warResourceBase()).thenReturn(WAR_RESOURCE_BASE);
+    when(mockFlagAccessor.warDescriptorPath()).thenReturn(WAR_DESCRIPTOR);
+    when(mockFlagAccessor.isParentLoaderPriority()).thenReturn(WAR_PARENT_LOADER_PRIORITY);
   }
 
   @Test(expected = IllegalStateException.class) public void start_noConnectors() throws Exception {
     server.start();
   }
 
-  private void verifyCommonServerStartBehavior() throws Exception {
-    verify(mockWebAppContext).setResourceBase("./war");
-    verify(mockWebAppContext).setDescriptor("./war/WEB-INF/web.xml");
-    verify(mockWebAppContext).setContextPath("/");
-    verify(mockWebAppContext).setParentLoaderPriority(true);
+  private void verifyCommonServerStartBehavior(boolean isWar) throws Exception {
+    verify(mockWebAppContext).setContextPath(WAR_CONTEXT_PATH);
+
+    if (isWar) {
+      verify(mockWebAppContext).setWar(WAR);
+    } else {
+      verify(mockWebAppContext).setResourceBase(WAR_RESOURCE_BASE);
+      verify(mockWebAppContext).setDescriptor(WAR_DESCRIPTOR);
+      verify(mockWebAppContext).setParentLoaderPriority(WAR_PARENT_LOADER_PRIORITY);
+    }
+
     verify(mockServer).setHandler(mockWebAppContext);
   }
 
@@ -73,7 +92,7 @@ public class GameServerTest {
 
     verify(mockServer).addConnector(mockConnector1);
     verify(mockServer).addConnector(mockConnector2);
-    verifyCommonServerStartBehavior();
+    verifyCommonServerStartBehavior(true);
   }
 
   @Test public void start_onlyOneConnector() throws Exception {
@@ -84,13 +103,22 @@ public class GameServerTest {
 
     verify(mockServer, never()).addConnector(mockConnector1);
     verify(mockServer).addConnector(mockConnector2);
-    verifyCommonServerStartBehavior();
+    verifyCommonServerStartBehavior(true);
+  }
+
+  @Test public void start_notWarFile() throws Exception {
+    when(mockConnectorFactory1.createServerConnector(mockServer))
+        .thenReturn(Optional.of(mockConnector1));
+    when(mockFlagAccessor.warFile()).thenReturn(null);
+    server.start();
+    verifyCommonServerStartBehavior(false);
   }
 
   private class TestableGameServer extends GameServer {
 
     TestableGameServer() {
       super(
+          mockFlagAccessor,
           Providers.of(mockServer),
           Providers.of(mockWebAppContext),
           ImmutableSet.of(mockConnectorFactory1, mockConnectorFactory2));

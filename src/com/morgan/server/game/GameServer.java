@@ -10,6 +10,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -23,14 +24,17 @@ import com.google.inject.Singleton;
 @Singleton
 class GameServer {
 
+  private final GameServerFlagAccessor flagAccessor;
   private final Provider<Server> serverProvider;
   private final Provider<WebAppContext> webAppContextProvider;
   private final ImmutableSet<ServerConnectorFactory> connectorFactories;
 
   @Inject GameServer(
+      GameServerFlagAccessor flagAccessor,
       Provider<Server> serverProvider,
       Provider<WebAppContext> webAppContextProvider,
       Set<ServerConnectorFactory> connectorFactories) {
+    this.flagAccessor = flagAccessor;
     this.serverProvider = serverProvider;
     this.webAppContextProvider = webAppContextProvider;
     this.connectorFactories = ImmutableSet.copyOf(connectorFactories);
@@ -53,16 +57,18 @@ class GameServer {
   private Handler createAndConfigureGwtWebApp() {
     WebAppContext handler = webAppContextProvider.get();
 
-    /* If we were a WAR
-     * handler.setContextPath("/");
-     * handler.setWar("./apps/GameCenterApplication.war");
-     */
+    handler.setContextPath(flagAccessor.warContextPath());
 
-    // For when we aren't packaged as a WAR
-    handler.setResourceBase("./war");
-    handler.setDescriptor("./war/WEB-INF/web.xml");
-    handler.setContextPath("/");
-    handler.setParentLoaderPriority(true);
+    String warFile = flagAccessor.warFile();
+    if (!Strings.isNullOrEmpty(warFile)) {
+      // For when we are packaged as a WAR
+      handler.setWar(warFile);
+    } else {
+      // For when we aren't packaged as a WAR
+      handler.setResourceBase(flagAccessor.warResourceBase());
+      handler.setDescriptor(flagAccessor.warDescriptorPath());
+      handler.setParentLoaderPriority(flagAccessor.isParentLoaderPriority());
+    }
 
     return handler;
   }
