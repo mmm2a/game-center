@@ -130,9 +130,8 @@
         includeAntRuntime="false"
         includes="com/morgan/server/**/*.java"/>
 	<copy todir="${bin.dir}/com/morgan/server">
-		<fileset dir="${src.dir}/com/morgan/server">
-			<include name="${default.compile.copy.includes}"/>
-		</fileset>
+		<fileset dir="${src.dir}/com/morgan/server"
+			includes="${default.compile.copy.includes}"/>
 	</copy>
   </target>
 
@@ -144,9 +143,8 @@
         includeAntRuntime="false"
         includes="com/morgan/shared/**/*.java"/>
 	<copy todir="${bin.dir}/com/morgan/shared">
-		<fileset dir="${src.dir}/com/morgan/shared">
-			<include name="${default.compile.copy.includes}"/>
-		</fileset>
+		<fileset dir="${src.dir}/com/morgan/shared"
+			includes="${default.compile.copy.includes}"/>
 	</copy>
   </target>
 
@@ -165,9 +163,7 @@
         includeAntRuntime="false"
         includes="**/*.java"/>
 	<copy todir="${test.bin.dir}">
-		<fileset dir="${test.dir}">
-			<include name="${default.compile.copy.includes}"/>
-		</fileset>
+	  <fileset dir="${test.dir}" includes="${default.compile.copy.includes}"/>
 	</copy>
   </target>
 
