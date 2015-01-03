@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="game-center" default="build" basedir=".">
 
-  <property file="${basedir}/build.properties"/>
+  <!-- Arguments to gwtc and gwt targets -->
+  <property name="gwt.args" value=""/>
 
-  <path id="gwt-server.class.path">
-    <pathelement location="${ext.dir}/GWT/gwt-servlet.jar"/>
-  </path>
+  <property name="gwt.sdk" location="/Users/morgan/Code/GWT/gwt-2.5.1" />
+
+  <property file="${basedir}/build.properties"/>
 
   <path id="guava.class.path">
     <pathelement location="${ext.dir}/Guava/guava-18.0.jar"/>
+    <pathelement location="${ext.dir}/Guava/guava-gwt-18.0.jar"/>
   </path>
 
   <path id="joda.class.path">
@@ -24,6 +26,10 @@
     <pathelement location="${ext.dir}/Guice/guice-assistedinject-snapshot.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-multibindings-snapshot.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-servlet-snapshot.jar"/>
+  </path>
+
+  <path id="gin.class.path">
+    <pathelement location="${ext.dir}/GIN/gin-2.1.2.jar"/>
   </path>
 
   <path id="mockito.class.path">
@@ -42,9 +48,14 @@
     <pathelement location="${ext.dir}/JUnit/junit-4.12.jar"/>
   </path>
 
+  <path id="gwt-server.class.path">
+    <pathelement location="${ext.dir}/GWT/gwt-servlet.jar"/>
+  </path>
+
   <path id="production.class.path">
     <path refid="guava.class.path"/>
     <path refid="guice.class.path"/>
+    <path refid="gin.class.path"/>
     <path refid="jetty.class.path"/>
     <path refid="joda.class.path"/>
     <path refid="soy.class.path"/>
@@ -71,6 +82,18 @@
     <path refid="production-runtime.class.path"/>
   </path>
 
+  <path id="gwt-compiler.class.path">
+    <pathelement location="${gwt.sdk}/gwt-dev.jar"/>
+    <pathelement location="${gwt.sdk}/gwt-user.jar"/>
+    <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar"/>
+    <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar"/>
+
+    <pathelement location="${lib.dir}/game-center-shared.jar"/>
+    <pathelement location="${lib.dir}/game-center-client.jar"/>
+
+    <path refid="production.class.path"/>
+  </path>
+
   <target name="run.server" depends="build">
     <java classname="com.morgan.server.game.GameServerLauncher">
       <classpath>
@@ -84,7 +107,7 @@
     </java>
   </target>
 
-  <target name="build" depends="shared.jar,server.jar"/>
+  <target name="build" depends="client.jar,shared.jar,server.jar,gwt.compile"/>
 
   <target name="test" depends="build,test.jar">
     <junit fork="no" haltonfailure="no" printsummary="on">
@@ -122,6 +145,13 @@
     </jar>
   </target>
 
+  <target name="client.jar" depends="client.compile">
+    <mkdir dir="${lib.dir}"/>
+    <jar destfile="${lib.dir}/game-center-client.jar">
+      <fileset dir="${bin.dir}" includes="com/morgan/client/**"/>
+    </jar>
+  </target>
+
   <target name="server.compile">
     <mkdir dir="${bin.dir}"/>
     <javac srcdir="${src.dir}"
@@ -148,6 +178,43 @@
 	</copy>
   </target>
 
+  <target name="client.compile">
+    <mkdir dir="${bin.dir}"/>
+    <javac srcdir="${src.dir}"
+        destdir="${bin.dir}"
+        classpathref="production.class.path"
+        includeAntRuntime="false"
+        includes="com/morgan/client/**/*.java"/>
+	<copy todir="${bin.dir}/com/morgan/client">
+		<fileset dir="${src.dir}/com/morgan/client"
+			includes="${default.compile.copy.includes}"/>
+	</copy>
+  </target>
+
+  <target name="gwt.compile" depends="auth-app.gwt.compile"/>
+
+  <target name="auth-app.gwt.compile" depends="shared.jar,client.jar">
+    <mkdir dir="${basedir}/gwt-unitCache"/>
+    <mkdir dir="${war.dir}"/>
+    <java failonerror="true"
+        fork="true" classname="com.google.gwt.dev.Compiler">
+      <classpath>
+        <path refid="gwt-compiler.class.path"/>
+        <pathelement location="${src.dir}"/>
+      </classpath>
+
+      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+      <jvmarg value="-Xmx256M"/>
+      <arg line="-war"/>
+      <arg value="war"/>
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.args}"/>
+      <arg value="com.morgan.Auth"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+    </java>
+  </target>
+
   <target name="test.jar" depends="test.compile">
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/game-center-test.jar">
@@ -172,5 +239,7 @@
     <delete quiet="true" failonerror="false" dir="${lib.dir}"/>
     <delete quiet="true" failonerror="false" dir="${javadoc.dir}"/>
     <delete quiet="true" failonerror="false" dir="${test.bin.dir}"/>
+    <delete quiet="true" failonerror="false" dir="${basedir}/gwt-unitCache"/>
+    <delete quiet="true" failonerror="false" dir="${war.dir}"/>
   </target>
 </project>

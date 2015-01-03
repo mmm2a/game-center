@@ -51,6 +51,12 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/GWT/gwt-src.jar!/javadoc"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="ext/GIN/gin-2.1.2.jar" sourcepath="ext/GIN/gin-2.1.2-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/GIN/gin-api-2.1.2.jar!/javadoc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="ext/Guava/guava-gwt-18.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
