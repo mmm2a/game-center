@@ -4,14 +4,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +17,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.util.Providers;
 
 /**
@@ -33,6 +28,7 @@ import com.google.inject.util.Providers;
 public class GameServerTest {
 
   @Mock private Server mockServer;
+  @Mock private WebAppContext mockWebAppContext;
 
   @Mock private ServerConnectorFactory mockConnectorFactory1;
   @Mock private ServerConnectorFactory mockConnectorFactory2;
@@ -60,10 +56,11 @@ public class GameServerTest {
   }
 
   private void verifyCommonServerStartBehavior() throws Exception {
-    verify(mockContextHandler)
-        .addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
-    verify(mockContextHandler)
-        .addServlet(DefaultServlet.class, "/");
+    verify(mockWebAppContext).setResourceBase("./war");
+    verify(mockWebAppContext).setDescriptor("./war/WEB-INF/web.xml");
+    verify(mockWebAppContext).setContextPath("/");
+    verify(mockWebAppContext).setParentLoaderPriority(true);
+    verify(mockServer).setHandler(mockWebAppContext);
   }
 
   @Test public void start_bothConnectors() throws Exception {
@@ -95,15 +92,8 @@ public class GameServerTest {
     TestableGameServer() {
       super(
           Providers.of(mockServer),
+          Providers.of(mockWebAppContext),
           ImmutableSet.of(mockConnectorFactory1, mockConnectorFactory2));
-    }
-
-    @Override ServletContextHandler createContextHandler(Server server, String path, int options) {
-      Preconditions.checkArgument(server == mockServer);
-      Preconditions.checkArgument(path.equals("/"));
-      Preconditions.checkArgument(options == ServletContextHandler.SESSIONS);
-
-      return mockContextHandler;
     }
 
     @Override void startAndJoin(Server server) {

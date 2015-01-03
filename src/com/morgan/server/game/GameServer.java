@@ -5,7 +5,6 @@ import java.util.Set;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -66,11 +65,6 @@ class GameServer {
     handler.setParentLoaderPriority(true);
 
     return handler;
-  }
-
-  @VisibleForTesting ServletContextHandler createContextHandler(
-      Server server, String path, int options) {
-    return new ServletContextHandler(server, path, options);
   }
 
   @VisibleForTesting void startAndJoin(Server server) throws Exception {
