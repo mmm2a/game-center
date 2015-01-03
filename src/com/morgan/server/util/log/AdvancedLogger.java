@@ -26,7 +26,7 @@ public class AdvancedLogger {
 
   @VisibleForTesting void doLog(Level logLevel, @Nullable Throwable e, String fmt, Object... args) {
     if (e == null) {
-      delegate.log(logLevel, fmt, args);
+      delegate.log(logLevel, String.format(fmt, args));
     } else {
       delegate.log(logLevel, String.format(fmt, args), e);
     }

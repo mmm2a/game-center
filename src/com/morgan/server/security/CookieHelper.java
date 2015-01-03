@@ -27,7 +27,7 @@ import com.morgan.server.util.time.Clock;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-class CookieHelper {
+public class CookieHelper {
 
   private static final AdvancedLogger LOG = new AdvancedLogger(CookieHelper.class);
 
@@ -119,7 +119,7 @@ class CookieHelper {
    * Gets the user id from the current session cookies.  If the current session cookies don't exist,
    * or the cookies have expired, then {@link Optional#absent()} is returned.
    */
-  Optional<Long> getUserIdFromCookie() {
+  public Optional<Long> getUserIdFromCookie() {
     Optional<Long> userId = Optional.absent();
 
     Cookie cookie = findCookie();
@@ -142,7 +142,7 @@ class CookieHelper {
    * Creates and sets the cookie into the current {@link HttpServletResponse} to identify the
    * given user.
    */
-  void setAuthenticationCookieFor(long userId) {
+  public void setAuthenticationCookieFor(long userId) {
     invalidateCurrentCookie();
     setAuthenticationCookieIntoResponse(new AuthenticationCookie(
         userId,
@@ -155,7 +155,7 @@ class CookieHelper {
    * Invalidates the current cookie (simply by putting in the invalid cookie object.  This is
    * basically equivalent to loggging out.
    */
-  void invalidateCurrentCookie() {
+  public void invalidateCurrentCookie() {
     Cookie cookie = findCookie();
     if (cookie != null) {
       cookie.setMaxAge(0);

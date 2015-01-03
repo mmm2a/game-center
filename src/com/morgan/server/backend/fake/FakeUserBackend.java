@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.UserBackend;
-import com.morgan.server.common.BackendException;
+import com.morgan.shared.common.BackendException;
 import com.morgan.shared.common.Role;
 
 /**

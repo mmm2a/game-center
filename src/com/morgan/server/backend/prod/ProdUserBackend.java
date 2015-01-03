@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.UserBackend;
-import com.morgan.server.common.BackendException;
+import com.morgan.shared.common.BackendException;
 
 /**
  * Production implementation of the {@link UserBackend} interface.

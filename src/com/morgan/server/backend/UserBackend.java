@@ -2,7 +2,7 @@ package com.morgan.server.backend;
 
 import com.google.common.base.Optional;
 import com.morgan.server.auth.UserInformation;
-import com.morgan.server.common.BackendException;
+import com.morgan.shared.common.BackendException;
 
 /**
  * Interface for communicating with the backend to deal with user authentication issues.

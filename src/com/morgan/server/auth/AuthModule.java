@@ -20,6 +20,7 @@ public class AuthModule extends AbstractModule {
 
   @Override protected void configure() {
     install(new AuthHostPageServletModule());
+    install(new AuthServletsModule());
 
     Multibinder<PageConstantsSource<AuthConstant>> binder = Multibinder.newSetBinder(
         binder(), new TypeLiteral<PageConstantsSource<AuthConstant>>(){});
