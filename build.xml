@@ -13,6 +13,10 @@
     <pathelement location="${ext.dir}/Guava/guava-gwt-18.0.jar"/>
   </path>
 
+  <path id="gson.class.path">
+    <pathelement location="${ext.dir}/GSON/gson-2.3.1.jar"/>
+  </path>
+
   <path id="joda.class.path">
     <pathelement location="${ext.dir}/Joda/joda-time-2.6.jar"/>
   </path>
@@ -58,6 +62,7 @@
     <path refid="gin.class.path"/>
     <path refid="jetty.class.path"/>
     <path refid="joda.class.path"/>
+    <path refid="gson.class.path"/>
     <path refid="soy.class.path"/>
     <path refid="gwt-server.class.path"/>
 

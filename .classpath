@@ -59,6 +59,11 @@
 	<classpathentry kind="lib" path="ext/Guava/guava-gwt-18.0.jar"/>
 	<classpathentry kind="lib" path="ext/Jetty/jetty-webapp-9.2.6.v20141205.jar"/>
 	<classpathentry kind="lib" path="ext/Jetty/jetty-xml-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="ext/GSON/gson-2.3.1.jar" sourcepath="ext/GSON/gson-2.3.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/GSON/gson-2.3.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

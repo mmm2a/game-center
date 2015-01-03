@@ -16,7 +16,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.template.soy.tofu.SoyTofu.Renderer;
+import com.morgan.server.constants.PageConstantsHelper;
 import com.morgan.server.util.soy.fake.FakeSoyTemplateFactory;
+import com.morgan.shared.auth.AuthConstant;
 
 /**
  * Tests for the {@link AuthHostPageServlet} class.
@@ -31,6 +33,8 @@ public class AuthHostPageServletTest {
 
   @Mock private Renderer mockRenderer;
 
+  @Mock private PageConstantsHelper<AuthConstant> mockPageConstantsHelper;
+
   private StringWriter writer;
   private PrintWriter pWriter;
 
@@ -43,7 +47,7 @@ public class AuthHostPageServletTest {
 
     AuthSoyTemplate soy = FakeSoyTemplateFactory.createProxyWithRendererFor(
         mockRenderer, AuthSoyTemplate.class);
-    servlet = new AuthHostPageServlet(soy);
+    servlet = new AuthHostPageServlet(soy, mockPageConstantsHelper);
   }
 
   @Test public void doGet() throws Exception {

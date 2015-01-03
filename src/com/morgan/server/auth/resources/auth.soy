@@ -2,6 +2,8 @@
 
 /**
  * Soy template for rendering the host page for the auth application.
+ *
+ * @param pageConstants a JSON document representing the page constants for this application.
  */
 {template .hostPage}
   <!doctype html>
@@ -24,6 +26,10 @@
       <!-- If you add any GWT meta tags, they must -->
       <!-- be added before this line               -->
       <script type="text/javascript" language="javascript" src="/auth/auth.nocache.js"></script>
+      
+      <script type="text/javascript" language="javascript">
+        var gameCenterPageConstants = {$pageConstants};
+      </script>
     </head>
     
     <!-- The body can have arbitrary html, or     -->
