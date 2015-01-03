@@ -1,14 +1,12 @@
 package com.morgan.server.game;
 
-import java.util.EnumSet;
 import java.util.Set;
 
-import javax.servlet.DispatcherType;
-
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
@@ -17,7 +15,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.servlet.GuiceFilter;
 
 /**
  * Main server class for the game engine.
@@ -28,12 +25,15 @@ import com.google.inject.servlet.GuiceFilter;
 class GameServer {
 
   private final Provider<Server> serverProvider;
+  private final Provider<WebAppContext> webAppContextProvider;
   private final ImmutableSet<ServerConnectorFactory> connectorFactories;
 
   @Inject GameServer(
       Provider<Server> serverProvider,
+      Provider<WebAppContext> webAppContextProvider,
       Set<ServerConnectorFactory> connectorFactories) {
     this.serverProvider = serverProvider;
+    this.webAppContextProvider = webAppContextProvider;
     this.connectorFactories = ImmutableSet.copyOf(connectorFactories);
   }
 
@@ -49,6 +49,23 @@ class GameServer {
     }
 
     Preconditions.checkState(numAdded > 0, "You have to add at least one connector");
+  }
+
+  private Handler createAndConfigureGwtWebApp() {
+    WebAppContext handler = webAppContextProvider.get();
+
+    /* If we were a WAR
+     * handler.setContextPath("/");
+     * handler.setWar("./apps/GameCenterApplication.war");
+     */
+
+    // For when we aren't packaged as a WAR
+    handler.setResourceBase("./war");
+    handler.setDescriptor("./war/WEB-INF/web.xml");
+    handler.setContextPath("/");
+    handler.setParentLoaderPriority(true);
+
+    return handler;
   }
 
   @VisibleForTesting ServletContextHandler createContextHandler(
@@ -71,12 +88,7 @@ class GameServer {
 
     addConnectors(server);
 
-    ServletContextHandler servletContextHandler =
-        createContextHandler(server, "/", ServletContextHandler.SESSIONS);
-    servletContextHandler.addFilter(GuiceFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
-
-    // You MUST add DefaultServlet or your server will always return 404s
-    servletContextHandler.addServlet(DefaultServlet.class, "/");
+    server.setHandler(createAndConfigureGwtWebApp());
 
     startAndJoin(server);
   }

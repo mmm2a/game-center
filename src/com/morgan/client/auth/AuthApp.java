@@ -1,5 +1,7 @@
 package com.morgan.client.auth;
 
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 
 /**
@@ -17,5 +19,8 @@ class AuthApp {
    */
   void startApplication() {
     // This method doesn't need to do anything
+    // TODO(markmorgan): This is just temporary
+
+    RootPanel.get().add(new Label("Hello from GWT"));
   }
 }

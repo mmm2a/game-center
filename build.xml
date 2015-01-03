@@ -193,9 +193,15 @@
 
   <target name="gwt.compile" depends="auth-app.gwt.compile"/>
 
-  <target name="auth-app.gwt.compile" depends="shared.jar,client.jar">
-    <mkdir dir="${basedir}/gwt-unitCache"/>
+  <target name="init.war">
     <mkdir dir="${war.dir}"/>
+    <copy todir="${war.dir}">
+      <fileset dir="${war.src.dir}" includes="**/*"/>
+    </copy>
+  </target>
+
+  <target name="auth-app.gwt.compile" depends="init.war,shared.jar,client.jar">
+    <mkdir dir="${basedir}/gwt-unitCache"/>
     <java failonerror="true"
         fork="true" classname="com.google.gwt.dev.Compiler">
       <classpath>

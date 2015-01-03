@@ -18,8 +18,9 @@ public final class GameServerLauncher {
     CommandLineParser parser = new CommandLineParser(args);
     Flags.initializeWith(parser.supplyCommandLineContents(CommandLine.builder()).build());
 
-    // Then, create the main GUICE injector, and go forth
-    Injector injector = Guice.createInjector(new GameModule());
+    // Then, create a simple GUICE injector to bootstrap the server, then the server will likewise
+    // create one of its own for the rest of the application.
+    Injector injector = Guice.createInjector(new BootstrapModule());
     GameServer server = injector.getInstance(GameServer.class);
     server.start();
   }
