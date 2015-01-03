@@ -41,6 +41,11 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/Joda/joda-time-2.6-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="ext/Soy/soy-latest.jar" sourcepath="ext/Soy/soy-src-latest.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/Soy/soy-latest-api.jar!/javadoc"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
