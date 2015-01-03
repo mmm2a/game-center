@@ -1,14 +1,11 @@
 package com.morgan.server.backend;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.morgan.server.backend.fake.FakeBackendModule;
 import com.morgan.server.backend.prod.ProdBackendModule;
 import com.morgan.server.util.flag.FlagAccessorFactory;
-import com.morgan.server.util.flag.Flags;
 
 /**
  * GUICE module for configuring the backends.
@@ -18,9 +15,7 @@ import com.morgan.server.util.flag.Flags;
 public class BackendModule extends AbstractModule {
 
 	@Override protected void configure() {
-		String backend = Flags.getInstance().getStringRepresentationFor("backend-type");
-		Preconditions.checkState(!Strings.isNullOrEmpty(backend), "Backend type not specified");
-		BackendType backendType = BackendType.valueOf(backend);
+		BackendType backendType = BackendType.getCurrent();
 
 		switch (backendType) {
 			case FAKE :
@@ -32,7 +27,7 @@ public class BackendModule extends AbstractModule {
 				break;
 
 			default :
-				throw new IllegalStateException("Unknown backend type: " + backend);
+				throw new IllegalStateException("Unknown backend type: " + backendType);
 		}
 	}
 
