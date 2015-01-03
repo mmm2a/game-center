@@ -5,9 +5,13 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
+import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
+import com.google.template.soy.data.SanitizedContent.ContentKind;
 
 /**
  * Default implementation of the {@link SoyDataConverter} interface.  This default simply
@@ -34,6 +38,16 @@ class DefaultSoyDataConverter implements SoyDataConverter {
       map.put((Object) name, null);;
     } else if (value instanceof SoyConvertable) {
       map.put(name, ((SoyConvertable) value).toSoyData());
+    } else if (value instanceof SafeHtml) {
+      map.put(
+          name,
+          UnsafeSanitizedContentOrdainer.ordainAsSafe(((SafeHtml) value).asString(),
+              ContentKind.HTML));
+    } else if (value instanceof SafeUri) {
+      map.put(
+          name,
+          UnsafeSanitizedContentOrdainer.ordainAsSafe(((SafeUri) value).asString(),
+          ContentKind.URI));
     } else {
       map.put(name, value);
     }

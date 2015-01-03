@@ -1,19 +1,28 @@
 package com.morgan.server.util.soy;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
 import com.google.common.reflect.AbstractInvocationHandler;
 import com.google.common.reflect.Reflection;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -28,6 +37,8 @@ import com.google.template.soy.tofu.SoyTofu.Renderer;
  * 
  * @author mark@mark-morgan.net (Mark Morgan)
  */
+// TODO(markmorgan): We need the deprecation suppressing because of the use of input supplier.
+@SuppressWarnings("deprecation")
 public class SoyTemplateFactory {
 
   private final Injector injector;
@@ -49,6 +60,20 @@ public class SoyTemplateFactory {
     }
     
     return builder.build();
+  }
+  
+  private void addResourceToSoyFileSetBuilder(
+      SoyFileSet.Builder builder, Class<?> context, String resource) {
+    // TODO(markmorgan): When we get a new version of SOY, this is what we want, but SOY is
+    // a few versions behind in Guava and so this won't work
+    // builder.add(Resources.getResource(context, resource));
+    final URL url = Resources.getResource(context, resource);
+    builder.add(new InputSupplier<Reader>() {
+      @Override public Reader getInput() throws IOException {
+        InputStream in = url.openStream();
+        return new InputStreamReader(in, Charsets.UTF_8);
+      }
+    }, url.toString());
   }
   
   /**
@@ -79,7 +104,7 @@ public class SoyTemplateFactory {
         context = templateIface;
       }
       
-      builder.add(Resources.getResource(context, resource));
+      addResourceToSoyFileSetBuilder(builder, context, resource);
     } else {
       builder.add(new File(file));
     }
@@ -154,6 +179,13 @@ public class SoyTemplateFactory {
         finalRenderer = new FinalRenderer() {
           @Override public Object render(Renderer renderer) {
             return renderer;
+          }
+        };
+      } else if (mRetT.isAssignableFrom(SafeHtml.class)) {
+        finalRenderer = new FinalRenderer() {
+          @Override public Object render(Renderer renderer) {
+            return SafeHtmlUtils.fromTrustedString(
+                    renderer.renderAsSanitizedContent().getContent());
           }
         };
       } else {

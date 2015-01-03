@@ -1,5 +1,40 @@
-{namespace test.morgan.soy}
+{namespace test.morgan.soy autoescape="strict"}
 
+/**
+ * Renders a document for a soy test with no arguments.
+ */
 {template .noArgs}
   No arguments
+{/template}
+
+/**
+ * Renders a simple document for a soy test with a
+ * few basic parameter types.
+ *
+ * @param one a simple string parameter
+ * @param two a simple int parameter
+ */
+{template .simpleArgs}
+  Arg {$one} and {$two}.
+{/template}
+
+/**
+ * Renders a simple document for a soy test with an
+ * optional argument.
+ *
+ * @param opt an optional string parameter.
+ */
+{template .optionalArg}
+  {if not $opt}
+    no arg
+  {else}
+    arg is {$opt}
+  {/if}
+{/template}
+
+/**
+ * Renders true HTML content for testing with the SafeHtml class.
+ */
+{template .trueHtml}
+  <div>foo</div>
 {/template}
