@@ -27,7 +27,7 @@ import com.morgan.shared.common.Role;
       query = "SELECT u FROM userinfo AS u WHERE u.emailAddress = :emailAddress")
 })
 @Entity(name = "userinfo")
-public class UserInformationEntity {
+class UserInformationEntity {
 
   @Id @GeneratedValue
   private long id;

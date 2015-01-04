@@ -14,7 +14,7 @@ import com.google.common.base.Strings;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 @Entity(name = "password")
-public class AuthenticationEntity {
+class AuthenticationEntity {
 
   @Id
   private long id;
