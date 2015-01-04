@@ -124,9 +124,11 @@
     </java>
   </target>
 
-  <target name="build" depends="client.jar,shared.jar,server.jar,gwt.compile"/>
+  <target name="build" depends="java.compile,gwt.compile"/>
 
-  <target name="test" depends="build,test.jar">
+  <target name="java.compile" depends="client.jar,shared.jar,server.jar"/>
+
+  <target name="test" depends="java.compile,test.jar">
     <junit fork="no" haltonfailure="no" printsummary="on">
       <classpath>
         <path refid="test.class.path"/>
@@ -135,7 +137,7 @@
 
       <test name="com.morgan.AllMorganTests"/>
 
-      <formatter type="plain" usefile="false"/>
+      <formatter type="plain"/>
       <formatter type="xml"/>
     </junit>
   </target>
@@ -245,7 +247,7 @@
     </jar>
   </target>
 
-  <target name="test.compile" depends="build">
+  <target name="test.compile" depends="java.compile">
     <mkdir dir="${test.bin.dir}"/>
     <javac srcdir="${test.dir}"
         destdir="${test.bin.dir}"

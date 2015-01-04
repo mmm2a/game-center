@@ -4,5 +4,6 @@ test-bin/
 lib/
 javadoc/
 TEST-*.xml
+TEST-*.txt
 gwt-unitCache/
 war/

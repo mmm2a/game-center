@@ -40,7 +40,7 @@ public class AuthDbHelper {
    * {@link Optional#absent()}.
    */
   @Transactional
-  public Optional<UserInformation> findUserId(long id) {
+  public Optional<UserInformation> findUserById(long id) {
     return Optional.fromNullable(convertUserInformationEntityToUserInformation(
         entityManager.find(UserInformationEntity.class, id)));
   }

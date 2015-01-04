@@ -49,6 +49,12 @@ class UserInformationEntity {
   UserInformationEntity() {
   }
 
+  UserInformationEntity(long id, String emailAddress, String name, Role role) {
+    this(emailAddress, name, role);
+
+    this.id = id;
+  }
+
   UserInformationEntity(String emailAddress, String name, Role role) {
     Preconditions.checkArgument(!Strings.isNullOrEmpty(emailAddress));
     Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
@@ -76,5 +82,10 @@ class UserInformationEntity {
 
   AuthenticationEntity getAuthenticationEntity() {
     return authenticationEntity;
+  }
+
+  UserInformationEntity setAuthenticationEntity(AuthenticationEntity entity) {
+    this.authenticationEntity = Preconditions.checkNotNull(entity);
+    return this;
   }
 }
