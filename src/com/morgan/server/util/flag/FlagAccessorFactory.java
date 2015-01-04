@@ -11,6 +11,8 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.AbstractInvocationHandler;
 import com.google.common.reflect.Reflection;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
@@ -100,6 +102,17 @@ public class FlagAccessorFactory {
     return Reflection.newProxy(
         flagAccessorClass,
         new FlagAccessorInvocationHandler(getMethodToReturnValueMap(flagAccessorClass)));
+  }
+
+  /**
+   * Gets an instance of this factory that does the best it can without be GUICE configured.
+   */
+  public static FlagAccessorFactory getNonInjectedInstance() {
+    return new FlagAccessorFactory(Guice.createInjector(new AbstractModule() {
+      @Override protected void configure() {
+        // Nothing configured.
+      }
+    }));
   }
 
   /**

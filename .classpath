@@ -64,6 +64,22 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/GSON/gson-2.3.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="ext/Derby/derby.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/Derby/derby-api.jar!/javadoc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="ext/EclipseLink/eclipselink.jar" sourcepath="ext/EclipseLink/eclipselink-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GameCenter/ext/EclipseLink/eclipselink-javadocs.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="ext/javax.persistence_2.0.4.v201112161009.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://docs.oracle.com/javaee/6/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="ext/Guice/guice-persist-snapshot.jar" sourcepath="ext/Guice/guice-persist-snapshot-src.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
