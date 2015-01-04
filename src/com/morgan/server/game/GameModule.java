@@ -3,6 +3,7 @@ package com.morgan.server.game;
 import com.google.inject.AbstractModule;
 import com.morgan.server.auth.AuthModule;
 import com.morgan.server.backend.BackendModule;
+import com.morgan.server.email.EmailModule;
 import com.morgan.server.security.SecurityModule;
 
 /**
@@ -17,5 +18,6 @@ class GameModule extends AbstractModule {
     install(new GameServletsModule());
     install(new SecurityModule());
     install(new BackendModule());
+    install(new EmailModule());
   }
 }

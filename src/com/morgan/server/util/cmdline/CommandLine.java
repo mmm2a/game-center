@@ -124,8 +124,10 @@ public final class CommandLine {
     public CommandLine build() {
       Map<String, String> allFlags = new HashMap<>();
       if (childBuilder != null) {
-        allFlags.putAll(childBuilder.flags);
+        CommandLine childCommandLine = childBuilder.build();
+        allFlags.putAll(childCommandLine.flagStringValuesMap);
       }
+
       allFlags.putAll(flags);
       return new CommandLine(allFlags, argumentsBuilder.build());
     }

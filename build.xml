@@ -65,6 +65,10 @@
     <pathelement location="${ext.dir}/EclipseLink/eclipselink.jar"/>
   </path>
 
+  <path id="commons-email.class.path">
+    <pathelement location="${ext.dir}/CommonsEmail/commons-email-1.3.3.jar"/>
+  </path>
+
   <path id="production.class.path">
     <path refid="derby.class.path"/>
     <path refid="eclipselink.class.path"/>
@@ -76,12 +80,14 @@
     <path refid="gson.class.path"/>
     <path refid="soy.class.path"/>
     <path refid="gwt-server.class.path"/>
+    <path refid="commons-email.class.path"/>
 
     <pathelement location="${ext.dir}/jsr305.jar"/>
     <pathelement location="${ext.dir}/javax.inject.jar"/>
     <pathelement location="${ext.dir}/aopalliance.jar"/>
     <pathelement location="${ext.dir}/servlet-api-3.1.jar"/>
     <pathelement location="${ext.dir}/javax.persistence_2.0.4.v201112161009.jar"/>
+    <pathelement location="${ext.dir}/javax.mail.glassfish-1.4.1.v201005082020.jar"/>
   </path>
 
   <path id="production-runtime.class.path">

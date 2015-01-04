@@ -10,7 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+
+import com.google.common.base.Throwables;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.morgan.server.security.SecurityInformationHelper;
 import com.morgan.server.security.UserIdObfuscator;
@@ -27,10 +32,12 @@ class HelloWorldServlet extends HttpServlet {
 
   private final SecurityInformationHelper helper;
   private final UserIdObfuscator obfuscator;
+  private final Provider<HtmlEmail> htmlEmailProvider;
 
-  @Inject HelloWorldServlet(SecurityInformationHelper helper, UserIdObfuscator obfuscator) {
+  @Inject HelloWorldServlet(SecurityInformationHelper helper, UserIdObfuscator obfuscator, Provider<HtmlEmail> htmlEmailProvider) {
     this.helper = helper;
     this.obfuscator = obfuscator;
+    this.htmlEmailProvider = htmlEmailProvider;
   }
 
   @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -52,5 +59,16 @@ class HelloWorldServlet extends HttpServlet {
     }
 
     resp.setStatus(HttpServletResponse.SC_OK);
+
+    HtmlEmail email = htmlEmailProvider.get();
+    try {
+      email.setHtmlMsg("<html><div><h1>Hello</h1></div><div>This is an <i>HTML</i> message!</div></html>");
+      email.setTextMsg("The text version");
+      email.setSubject("A subject");
+      email.addTo("mark@mark-morgan.net");
+      email.send();
+    } catch (EmailException e) {
+      Throwables.propagate(e);
+    }
   }
 }

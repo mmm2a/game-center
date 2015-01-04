@@ -7,3 +7,4 @@ TEST-*.xml
 TEST-*.txt
 gwt-unitCache/
 war/
+derby.log
