@@ -41,4 +41,10 @@ public final class CommonBindingAnnotations {
   @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
   public @interface SslCert {
   }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
+  public @interface Background {
+  }
 }

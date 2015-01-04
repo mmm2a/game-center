@@ -1,6 +1,7 @@
 package com.morgan.server.backend.prod;
 
 import com.google.inject.AbstractModule;
+import com.morgan.server.backend.AlarmBackend;
 import com.morgan.server.backend.UserBackend;
 import com.morgan.server.db.DatabaseModule;
 
@@ -14,5 +15,6 @@ public class ProdBackendModule extends AbstractModule {
 	  install(new DatabaseModule());
 
 		bind(UserBackend.class).to(ProdUserBackend.class);
+		bind(AlarmBackend.class).to(ProdAlarmBackend.class);
 	}
 }
