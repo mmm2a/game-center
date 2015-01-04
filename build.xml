@@ -30,6 +30,7 @@
     <pathelement location="${ext.dir}/Guice/guice-assistedinject-snapshot.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-multibindings-snapshot.jar"/>
     <pathelement location="${ext.dir}/Guice/guice-servlet-snapshot.jar"/>
+    <pathelement location="${ext.dir}/Guice/guice-persist-snapshot.jar"/>
   </path>
 
   <path id="gin.class.path">
@@ -56,7 +57,17 @@
     <pathelement location="${ext.dir}/GWT/gwt-servlet.jar"/>
   </path>
 
+  <path id="derby.class.path">
+    <pathelement location="${ext.dir}/Derby/derby.jar"/>
+  </path>
+
+  <path id="eclipselink.class.path">
+    <pathelement location="${ext.dir}/EclipseLink/eclipselink.jar"/>
+  </path>
+
   <path id="production.class.path">
+    <path refid="derby.class.path"/>
+    <path refid="eclipselink.class.path"/>
     <path refid="guava.class.path"/>
     <path refid="guice.class.path"/>
     <path refid="gin.class.path"/>
@@ -70,6 +81,7 @@
     <pathelement location="${ext.dir}/javax.inject.jar"/>
     <pathelement location="${ext.dir}/aopalliance.jar"/>
     <pathelement location="${ext.dir}/servlet-api-3.1.jar"/>
+    <pathelement location="${ext.dir}/javax.persistence_2.0.4.v201112161009.jar"/>
   </path>
 
   <path id="production-runtime.class.path">
