@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import org.joda.time.ReadableDuration;
 import org.joda.time.ReadableInstant;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -34,8 +35,8 @@ class DefaultAlarmManager implements AlarmManager, Runnable {
 
   private static final AdvancedLogger log = new AdvancedLogger(DefaultAlarmManager.class);
 
-  private static final int INITIAL_CAPACITY = 32;
-  private static final long MINIMUM_SLEEP_TIME_MS = 100L;
+  @VisibleForTesting static final int INITIAL_CAPACITY = 32;
+  @VisibleForTesting static final long MINIMUM_SLEEP_TIME_MS = 100L;
 
   private static final Comparator<AlarmOccurrence> alarmOccurrenceComparator =
       new Comparator<DefaultAlarmManager.AlarmOccurrence>() {
@@ -182,13 +183,14 @@ class DefaultAlarmManager implements AlarmManager, Runnable {
         ReadableInstant now = clock.now();
         while (!occurrences.isEmpty() && occurrences.peek().deadline.isBefore(now)) {
           AlarmOccurrence occurrence = occurrences.remove();
-          AlarmDescription description = alarmDescriptions.get(occurrence.getId());
+          AlarmDescription description = alarmDescriptions.remove(occurrence.getId());
           if (description != null) {
             ReadableInstant nextDeadline = description.fireAlarm();
             if (nextDeadline != null) {
               AlarmOccurrence nextOccurrence =
                   new AlarmOccurrence(occurrence.getId(), nextDeadline);
               occurrences.add(nextOccurrence);
+              alarmDescriptions.put(description.getAlarmId(), description);
             }
           }
         }
