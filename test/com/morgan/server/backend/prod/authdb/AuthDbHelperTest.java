@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableList;
+import com.google.inject.util.Providers;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.shared.common.Role;
 
@@ -37,7 +38,7 @@ public class AuthDbHelperTest {
   private AuthDbHelper helper;
 
   @Before public void createTestInstances() {
-    helper = new AuthDbHelper(mockEntityManager);
+    helper = new AuthDbHelper(Providers.of(mockEntityManager));
   }
 
   @Before public void setUpCommonMockInteractions() {

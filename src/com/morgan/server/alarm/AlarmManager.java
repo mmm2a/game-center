@@ -5,11 +5,14 @@ import javax.annotation.Nullable;
 import org.joda.time.ReadableDuration;
 import org.joda.time.ReadableInstant;
 
+import com.google.inject.ImplementedBy;
+
 /**
  * A manager that manages alarms in the server.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
+@ImplementedBy(DefaultAlarmManager.class)
 public interface AlarmManager {
 
   /**

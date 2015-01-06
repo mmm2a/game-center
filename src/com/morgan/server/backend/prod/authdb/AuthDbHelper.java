@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 import com.morgan.server.auth.UserInformation;
 
@@ -16,10 +17,10 @@ import com.morgan.server.auth.UserInformation;
  */
 public class AuthDbHelper {
 
-  private final EntityManager entityManager;
+  private final Provider<EntityManager> entityManagerProvider;
 
-  @Inject AuthDbHelper(EntityManager entityManager) {
-    this.entityManager = entityManager;
+  @Inject AuthDbHelper(Provider<EntityManager> entityManagerProvider) {
+    this.entityManagerProvider = entityManagerProvider;
   }
 
   @Nullable private UserInformation convertUserInformationEntityToUserInformation(
@@ -41,6 +42,7 @@ public class AuthDbHelper {
    */
   @Transactional
   public Optional<UserInformation> findUserById(long id) {
+    EntityManager entityManager = entityManagerProvider.get();
     return Optional.fromNullable(convertUserInformationEntityToUserInformation(
         entityManager.find(UserInformationEntity.class, id)));
   }
@@ -52,6 +54,7 @@ public class AuthDbHelper {
    */
   @Transactional
   public Optional<UserInformation> authenticate(String emailAddress, String password) {
+    EntityManager entityManager = entityManagerProvider.get();
     UserInformationEntity entity = Iterables.getOnlyElement(
         entityManager.createNamedQuery("findUserByEmail", UserInformationEntity.class)
             .setParameter("emailAddress", emailAddress.toLowerCase())

@@ -20,6 +20,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import com.morgan.server.backend.AlarmBackend;
 import com.morgan.server.backend.AlarmBackend.PersistedAlarmDescription;
 import com.morgan.server.common.CommonBindingAnnotations.Background;
@@ -31,6 +32,7 @@ import com.morgan.server.util.time.Clock;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
+@Singleton
 class DefaultAlarmManager implements AlarmManager, Runnable {
 
   private static final AdvancedLogger log = new AdvancedLogger(DefaultAlarmManager.class);

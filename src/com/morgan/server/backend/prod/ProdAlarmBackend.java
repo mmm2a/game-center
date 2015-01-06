@@ -9,6 +9,7 @@ import org.joda.time.ReadableInstant;
 
 import com.google.inject.Inject;
 import com.morgan.server.backend.AlarmBackend;
+import com.morgan.server.backend.prod.alarmdb.AlarmDbHelper;
 
 /**
  * Production implemenation of the {@link AlarmBackend} interface.
@@ -17,11 +18,14 @@ import com.morgan.server.backend.AlarmBackend;
  */
 class ProdAlarmBackend implements AlarmBackend {
 
-  @Inject ProdAlarmBackend() {
+  private final AlarmDbHelper alarmHelper;
+
+  @Inject ProdAlarmBackend(AlarmDbHelper alarmHelper) {
+    this.alarmHelper = alarmHelper;
   }
 
   @Override public Iterable<PersistedAlarmDescription> readAllAlarms() {
-    throw new UnsupportedOperationException();
+    return alarmHelper.readAllAlarms();
   }
 
   @Override public long persistNewAlarm(
@@ -29,14 +33,18 @@ class ProdAlarmBackend implements AlarmBackend {
       @Nullable ReadableDuration repeatInterval,
       String alarmCallbackClass,
       @Nullable Serializable alarmData) {
-    throw new UnsupportedOperationException();
+    return alarmHelper.persistNewAlarm(
+        nextDeadline,
+        repeatInterval,
+        alarmCallbackClass,
+        alarmData);
   }
 
   @Override public void removeAlarm(long alarmId) {
-    throw new UnsupportedOperationException();
+    alarmHelper.removeAlarm(alarmId);
   }
 
   @Override public void updateAlarm(long alarmId, ReadableInstant nextDeadline) {
-    throw new UnsupportedOperationException();
+    alarmHelper.updateAlarm(alarmId, nextDeadline);
   }
 }

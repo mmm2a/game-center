@@ -10,6 +10,5 @@ import com.google.inject.AbstractModule;
 public class AlarmModule extends AbstractModule {
 
   @Override protected void configure() {
-    bind(AlarmManager.class).to(DefaultAlarmManager.class).asEagerSingleton();
   }
 }
