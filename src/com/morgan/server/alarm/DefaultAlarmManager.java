@@ -24,6 +24,7 @@ import com.google.inject.Singleton;
 import com.morgan.server.backend.AlarmBackend;
 import com.morgan.server.backend.AlarmBackend.PersistedAlarmDescription;
 import com.morgan.server.common.CommonBindingAnnotations.Background;
+import com.morgan.server.util.common.Service;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.time.Clock;
 
@@ -33,9 +34,11 @@ import com.morgan.server.util.time.Clock;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 @Singleton
-class DefaultAlarmManager implements AlarmManager, Runnable {
+class DefaultAlarmManager implements AlarmManager, Runnable, Service {
 
   private static final AdvancedLogger log = new AdvancedLogger(DefaultAlarmManager.class);
+
+  private static final int SERVICE_PRIORITY = 0;
 
   @VisibleForTesting static final int INITIAL_CAPACITY = 32;
   @VisibleForTesting static final long MINIMUM_SLEEP_TIME_MS = 100L;
@@ -70,27 +73,6 @@ class DefaultAlarmManager implements AlarmManager, Runnable {
     this.alarmBackend = alarmBackend;
     this.executorService = executorService;
     this.scheduledExecutorService = scheduledExecutorService;
-
-    for (PersistedAlarmDescription pad : alarmBackend.readAllAlarms()) {
-      AlarmId id = new PersistentAlarmId(pad.getId());
-      AlarmOccurrence occurrence = new AlarmOccurrence(id, pad.getNextDeadline());
-
-      try {
-        PersistentAlarmDescription description = new PersistentAlarmDescription(
-            pad.getId(),
-            findCallbackClass(pad.getAlarmCallbackClass()),
-            Optional.<Object>fromNullable(pad.getAlarmData()),
-            pad.getRepeatInterval());
-
-        // No need to synchronize because this is being done in the constructor
-        occurrences.add(occurrence);
-        alarmDescriptions.put(id, description);
-      } catch (Throwable cause) {
-        log.warning(cause, "Failed to load persisted alarm %d", pad.getId());
-      }
-    }
-
-    scheduleNextAlarmCycle();
   }
 
   private AlarmHandle scheduleNewAlarm(
@@ -155,11 +137,41 @@ class DefaultAlarmManager implements AlarmManager, Runnable {
   }
 
   private void cancelAlarm(AlarmId alarmId) {
-    // We don't worry about removing the alarm from the occurences queue; when that fires, it'll
+    // We don't worry about removing the alarm from the occurrences queue; when that fires, it'll
     // fail to find the alarm and just give up.
     synchronized(alarmDescriptions) {
       alarmDescriptions.remove(alarmId);
     }
+  }
+
+  @Override public int getServicePriority() {
+    return SERVICE_PRIORITY;
+  }
+
+  @Override public void start() {
+    for (PersistedAlarmDescription pad : alarmBackend.readAllAlarms()) {
+      AlarmId id = new PersistentAlarmId(pad.getId());
+      AlarmOccurrence occurrence = new AlarmOccurrence(id, pad.getNextDeadline());
+
+      try {
+        PersistentAlarmDescription description = new PersistentAlarmDescription(
+            pad.getId(),
+            findCallbackClass(pad.getAlarmCallbackClass()),
+            Optional.<Object>fromNullable(pad.getAlarmData()),
+            pad.getRepeatInterval());
+
+        synchronized(occurrences) {
+          synchronized(alarmDescriptions) {
+            occurrences.add(occurrence);
+            alarmDescriptions.put(id, description);
+          }
+        }
+      } catch (Throwable cause) {
+        log.warning(cause, "Failed to load persisted alarm %d", pad.getId());
+      }
+    }
+
+    scheduleNextAlarmCycle();
   }
 
   @Override
