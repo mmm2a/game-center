@@ -15,6 +15,7 @@ import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
+import com.morgan.server.alarm.PersistentAlarmId;
 import com.morgan.server.backend.AlarmBackend.PersistedAlarmDescription;
 import com.morgan.server.backend.DefaultPersistedAlarmDescription;
 
@@ -67,6 +68,10 @@ public class AlarmDbHelper {
     entity.setNextOccurrence(nextDeadline.toInstant().toDate());
   }
 
+  /**
+   * Internal function to translate {@link AlarmEntity} instances into
+   * {@link PersistedAlarmDescription} instances.
+   */
   private static class DbToServerFunc implements Function<AlarmEntity, PersistedAlarmDescription> {
 
     private final EntityManager entityManager;
