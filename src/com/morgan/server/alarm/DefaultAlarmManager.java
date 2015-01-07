@@ -18,13 +18,13 @@ import org.joda.time.ReadableInstant;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.AbstractService;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.morgan.server.backend.AlarmBackend;
 import com.morgan.server.backend.AlarmBackend.PersistedAlarmDescription;
 import com.morgan.server.common.CommonBindingAnnotations.Background;
-import com.morgan.server.util.common.Service;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.time.Clock;
 
@@ -34,11 +34,9 @@ import com.morgan.server.util.time.Clock;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 @Singleton
-class DefaultAlarmManager implements AlarmManager, Runnable, Service {
+class DefaultAlarmManager extends AbstractService implements AlarmManager, Runnable {
 
   private static final AdvancedLogger log = new AdvancedLogger(DefaultAlarmManager.class);
-
-  private static final int SERVICE_PRIORITY = 0;
 
   @VisibleForTesting static final int INITIAL_CAPACITY = 32;
   @VisibleForTesting static final long MINIMUM_SLEEP_TIME_MS = 100L;
@@ -144,11 +142,7 @@ class DefaultAlarmManager implements AlarmManager, Runnable, Service {
     }
   }
 
-  @Override public int getServicePriority() {
-    return SERVICE_PRIORITY;
-  }
-
-  @Override public void start() {
+  @Override protected void doStart() {
     for (PersistedAlarmDescription pad : alarmBackend.readAllAlarms()) {
       AlarmId id = new PersistentAlarmId(pad.getId());
       AlarmOccurrence occurrence = new AlarmOccurrence(id, pad.getNextDeadline());
@@ -172,6 +166,10 @@ class DefaultAlarmManager implements AlarmManager, Runnable, Service {
     }
 
     scheduleNextAlarmCycle();
+  }
+
+  @Override protected void doStop() {
+    // Nothing needs to be done to stop this service.
   }
 
   @Override

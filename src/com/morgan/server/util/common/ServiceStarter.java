@@ -1,9 +1,9 @@
 package com.morgan.server.util.common;
 
-import java.util.Comparator;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.util.concurrent.Service;
 import com.google.inject.Inject;
 import com.morgan.server.util.log.AdvancedLogger;
 
@@ -16,17 +16,10 @@ public class ServiceStarter {
 
   private static final AdvancedLogger log = new AdvancedLogger(ServiceStarter.class);
 
-  private static final Comparator<Service> SERVICE_COMPARATOR =
-      new Comparator<Service>() {
-        @Override public int compare(Service o1, Service o2) {
-          return o1.getServicePriority() - o2.getServicePriority();
-        }
-      };
-
-  private final ImmutableSortedSet<Service> services;
+  private final ImmutableSet<Service> services;
 
   @Inject ServiceStarter(Set<Service> services) {
-    this.services = ImmutableSortedSet.copyOf(SERVICE_COMPARATOR, services);
+    this.services = ImmutableSet.copyOf(services);
   }
 
   /**
@@ -36,9 +29,8 @@ public class ServiceStarter {
     int count = 0;
     log.info("Starting all services");
     for (Service service : services) {
-      log.info("[Service #%d] Starting service %s at priority %d",
-          ++count, service, service.getServicePriority());
-      service.start();
+      log.info("[Service #%d] Starting service %s", ++count, service);
+      service.startAsync();
     }
     log.info("Finished starting %d services", count);
   }

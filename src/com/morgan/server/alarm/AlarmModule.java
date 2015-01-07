@@ -1,8 +1,8 @@
 package com.morgan.server.alarm;
 
+import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import com.morgan.server.util.common.Service;
 
 /**
  * GUICE module for the alarm package.

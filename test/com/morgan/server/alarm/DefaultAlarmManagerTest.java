@@ -92,7 +92,7 @@ public class DefaultAlarmManagerTest {
             mockBackend,
             backendExecutor,
             mockScheduledExecutor);
-    mgr.start();
+    mgr.doStart();
     return mgr;
   }
 
