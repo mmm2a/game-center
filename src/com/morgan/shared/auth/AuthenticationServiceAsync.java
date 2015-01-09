@@ -9,6 +9,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface AuthenticationServiceAsync {
 
-  /** See {@link AuthenticationService#authenticate(String, char[])} */
+  /** See {@link AuthenticationService#authenticate(String, String)} */
   void authenticate(String emailAddress, String password, AsyncCallback<Boolean> callback);
 }
