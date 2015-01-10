@@ -4,7 +4,7 @@
   <!-- Arguments to gwtc and gwt targets -->
   <property name="gwt.args" value=""/>
 
-  <property name="gwt.sdk" location="/Users/morgan/Code/GWT/gwt-2.5.1" />
+  <property name="gwt.sdk" location="/Users/morgan/Code/GWT/current" />
 
   <property file="${basedir}/build.properties"/>
 

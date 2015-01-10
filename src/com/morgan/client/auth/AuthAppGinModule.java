@@ -1,6 +1,7 @@
 package com.morgan.client.auth;
 
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.morgan.client.common.CommonGinModule;
 
 /**
  * GIN module for the authentication application.
@@ -10,5 +11,6 @@ import com.google.gwt.inject.client.AbstractGinModule;
 public class AuthAppGinModule extends AbstractGinModule {
 
   @Override protected void configure() {
+    install(new CommonGinModule());
   }
 }

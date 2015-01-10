@@ -12,6 +12,7 @@ import com.morgan.server.auth.AuthModule;
 import com.morgan.server.backend.BackendModule;
 import com.morgan.server.common.CommonBindingAnnotations.Background;
 import com.morgan.server.email.EmailModule;
+import com.morgan.server.nav.NavigationModule;
 import com.morgan.server.security.SecurityModule;
 
 /**
@@ -28,6 +29,7 @@ class GameModule extends AbstractModule {
     install(new BackendModule());
     install(new EmailModule());
     install(new AlarmModule());
+    install(new NavigationModule());
   }
 
   @Provides @Singleton @Background
