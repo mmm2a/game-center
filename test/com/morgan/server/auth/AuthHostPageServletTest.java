@@ -18,7 +18,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.template.soy.tofu.SoyTofu.Renderer;
 import com.morgan.server.constants.PageConstantsHelper;
 import com.morgan.server.util.soy.fake.FakeSoyTemplateFactory;
-import com.morgan.shared.auth.AuthConstant;
 
 /**
  * Tests for the {@link AuthHostPageServlet} class.
@@ -33,7 +32,7 @@ public class AuthHostPageServletTest {
 
   @Mock private Renderer mockRenderer;
 
-  @Mock private PageConstantsHelper<AuthConstant> mockPageConstantsHelper;
+  @Mock private PageConstantsHelper mockPageConstantsHelper;
 
   private StringWriter writer;
   private PrintWriter pWriter;
@@ -56,5 +55,8 @@ public class AuthHostPageServletTest {
     verify(mockRenderer).render(pWriter);
     verify(mockResponse).setContentType("text/html");
     verify(mockResponse).setStatus(HttpServletResponse.SC_OK);
+    verify(mockResponse).setHeader("Cache-Control", "no-cache");
+    verify(mockResponse).setHeader("Pragma", "no-cache");
+    verify(mockResponse).setDateHeader("Expires", 0);
   }
 }

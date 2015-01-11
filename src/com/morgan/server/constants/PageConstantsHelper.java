@@ -12,13 +12,13 @@ import com.google.template.soy.data.SanitizedContent;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class PageConstantsHelper<T extends Enum<T>> {
+public class PageConstantsHelper {
 
-  private final ImmutableSet<PageConstantsSource<T>> sources;
+  private final ImmutableSet<PageConstantsSource> sources;
   private final Provider<PageConstants> constantsProvider;
 
   @Inject PageConstantsHelper(
-      Set<PageConstantsSource<T>> sources,
+      Set<PageConstantsSource> sources,
       Provider<PageConstants> constantsProvider) {
     this.sources = ImmutableSet.copyOf(sources);
     this.constantsProvider = constantsProvider;
@@ -29,7 +29,7 @@ public class PageConstantsHelper<T extends Enum<T>> {
    */
   public SanitizedContent createPageConstantsJson() {
     PageConstants constants = constantsProvider.get();
-    for (PageConstantsSource<T> source : sources) {
+    for (PageConstantsSource source : sources) {
       source.provideConstantsInto(constants);
     }
     return constants.emit();

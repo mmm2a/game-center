@@ -7,7 +7,7 @@ package com.morgan.server.constants;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public interface PageConstantsSource<T extends Enum<T>> {
+public interface PageConstantsSource {
 
   /**
    * Asks this provider to add its constants to the sink.

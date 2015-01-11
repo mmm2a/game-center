@@ -2,15 +2,12 @@ package com.morgan.client.nav;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
-import com.morgan.client.constants.ClientPageConstants;
 import com.morgan.shared.nav.ApplicationPlace;
-import com.morgan.shared.nav.NavigationConstant;
 
 /**
  * Default implementation of both the {@link Navigator} and {@link NavigationState} interfaces.
- * 
+ *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 class DefaultNavigation implements Navigator, NavigationState {
@@ -21,21 +18,19 @@ class DefaultNavigation implements Navigator, NavigationState {
           onPathChanged(event.getValue());
         }
       };
-      
-  private final ClientPageConstants constants;
-  
-  @Inject DefaultNavigation(HistoryHelper helper, ClientPageConstants constants) {
-    this.constants = constants;
-    
+
+  private final HistoryHelper helper;
+
+  @Inject DefaultNavigation(HistoryHelper helper) {
+    this.helper = helper;
+
     helper.addValueChangeHandler(historyChangeHandler);
     helper.fireCurrentHistoryState();
   }
-  
+
   private void onPathChanged(String path) {
-    Window.alert("Server URL: " + constants.getString(NavigationConstant.APPLICATION_URL)
-        + ", Token: " + path);
   }
-  
+
   @Override public ApplicationPlace getCurrentPlace() {
     // TODO(morgan)
     return null;
@@ -45,8 +40,10 @@ class DefaultNavigation implements Navigator, NavigationState {
   }
 
   @Override public void back() {
+    helper.back();
   }
 
   @Override public void forward() {
+    helper.forward();
   }
 }

@@ -18,7 +18,7 @@ import com.google.template.soy.data.UnsafeSanitizedContentOrdainer;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public final class PageConstants {
+public class PageConstants {
 
   private final ImmutableMap.Builder<Enum<?>, JsonElement> mapBuilder = ImmutableMap.builder();
 

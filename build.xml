@@ -103,6 +103,7 @@
     <path refid="junit.class.path"/>
 
     <path refid="production-runtime.class.path"/>
+    <pathelement location="${lib.dir}/game-center-client.jar"/>
   </path>
 
   <path id="gwt-compiler.class.path">

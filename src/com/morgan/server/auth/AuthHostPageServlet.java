@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.constants.PageConstantsHelper;
-import com.morgan.shared.auth.AuthConstant;
 
 /**
  * Servlet implementation for serving the authentication host page.
@@ -23,11 +22,11 @@ class AuthHostPageServlet extends HttpServlet {
   static final long serialVersionUID = 0L;
 
   private final AuthSoyTemplate soy;
-  private final PageConstantsHelper<AuthConstant> pageConstantsHelper;
+  private final PageConstantsHelper pageConstantsHelper;
 
   @Inject AuthHostPageServlet(
       AuthSoyTemplate soy,
-      PageConstantsHelper<AuthConstant> pageConstantsHelper) {
+      PageConstantsHelper pageConstantsHelper) {
     this.soy = soy;
     this.pageConstantsHelper = pageConstantsHelper;
   }
@@ -39,6 +38,9 @@ class AuthHostPageServlet extends HttpServlet {
       soy.hostPage(pageConstantsHelper.createPageConstantsJson()).render(out);
       resp.setContentType("text/html");
       resp.setStatus(HttpServletResponse.SC_OK);
+      resp.setHeader("Cache-Control", "no-cache"); //HTTP 1.1
+      resp.setHeader("Pragma", "no-cache"); //HTTP 1.0
+      resp.setDateHeader("Expires", 0); //prevents caching at the proxy server
     }
   }
 }
