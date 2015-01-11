@@ -1,4 +1,4 @@
-package com.morgan.shared.util.macro;
+package com.morgan.server.util.macro;
 
 import java.util.Map;
 import java.util.Properties;

@@ -1,4 +1,4 @@
-package com.morgan.shared.util.macro;
+package com.morgan.server.util.macro;
 
 import java.util.Properties;
 
@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.truth.Truth;
-import com.morgan.shared.util.macro.Macros;
+import com.morgan.server.util.macro.Macros;
 
 /**
  * Tests for the {@link Macros} class.

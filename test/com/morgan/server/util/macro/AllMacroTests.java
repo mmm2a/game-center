@@ -1,4 +1,4 @@
-package com.morgan.shared.util.macro;
+package com.morgan.server.util.macro;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

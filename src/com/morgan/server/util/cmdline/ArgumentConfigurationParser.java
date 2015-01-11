@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.morgan.shared.util.macro.Macros;
+import com.morgan.server.util.macro.Macros;
 
 
 /**
