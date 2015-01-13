@@ -1,9 +1,10 @@
 package com.morgan.server.game;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.ListeningScheduledExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -33,12 +34,12 @@ class GameModule extends AbstractModule {
   }
 
   @Provides @Singleton @Background
-  protected ExecutorService provideBackgroundExecutorService() {
-    return Executors.newCachedThreadPool();
+  protected ListeningExecutorService provideBackgroundExecutorService() {
+    return MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
   }
 
   @Provides @Singleton
-  protected ScheduledExecutorService provideScheduledExecutorService() {
-    return Executors.newSingleThreadScheduledExecutor();
+  protected ListeningScheduledExecutorService provideScheduledExecutorService() {
+    return MoreExecutors.listeningDecorator(Executors.newScheduledThreadPool(4));
   }
 }

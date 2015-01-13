@@ -5,9 +5,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -19,6 +16,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.AbstractService;
+import com.google.common.util.concurrent.ListenableScheduledFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -51,21 +51,21 @@ class DefaultAlarmManager extends AbstractService implements AlarmManager, Runna
   private final Clock clock;
   private final AlarmBackend alarmBackend;
   private final Injector injector;
-  private final ExecutorService executorService;
-  private final ScheduledExecutorService scheduledExecutorService;
+  private final ListeningExecutorService executorService;
+  private final ListeningScheduledExecutorService scheduledExecutorService;
 
   private final PriorityQueue<AlarmOccurrence> occurrences =
       new PriorityQueue<>(INITIAL_CAPACITY, alarmOccurrenceComparator);
   private final Map<AlarmId, AlarmDescription> alarmDescriptions = new HashMap<>();
 
-  @Nullable private ScheduledFuture<?> nextOccurrenceFuture;
+  @Nullable private ListenableScheduledFuture<?> nextOccurrenceFuture;
 
   @Inject DefaultAlarmManager(
       Clock clock,
       Injector injector,
       AlarmBackend alarmBackend,
-      @Background ExecutorService executorService,
-      ScheduledExecutorService scheduledExecutorService) {
+      @Background ListeningExecutorService executorService,
+      ListeningScheduledExecutorService scheduledExecutorService) {
     this.clock = clock;
     this.injector = injector;
     this.alarmBackend = alarmBackend;

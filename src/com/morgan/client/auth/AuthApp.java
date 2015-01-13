@@ -4,8 +4,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
-import com.morgan.client.constants.ClientPageConstants;
-import com.morgan.shared.auth.AuthConstant;
 import com.morgan.shared.auth.AuthenticationServiceAsync;
 
 /**
@@ -15,11 +13,9 @@ import com.morgan.shared.auth.AuthenticationServiceAsync;
  */
 class AuthApp {
 
-  private final ClientPageConstants constants;
   private final AuthenticationServiceAsync service;
 
-  @Inject AuthApp(ClientPageConstants constants, AuthenticationServiceAsync service) {
-    this.constants = constants;
+  @Inject AuthApp(AuthenticationServiceAsync service) {
     this.service = service;
   }
 
@@ -29,8 +25,6 @@ class AuthApp {
   void startApplication() {
     // This method doesn't need to do anything
     // TODO(markmorgan): This is just temporary
-
-    RootPanel.get().add(new Label(constants.getString(AuthConstant.HELLO_MSG) + ", Version = " + constants.getInt(AuthConstant.VERSION)));
 
     service.authenticate("mark@mark-morgan.net", "wrong password", new AsyncCallback<Boolean>() {
       @Override public void onSuccess(Boolean result) {

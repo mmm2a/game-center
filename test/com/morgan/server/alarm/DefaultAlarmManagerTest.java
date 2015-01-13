@@ -11,8 +11,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.joda.time.Duration;
@@ -28,6 +26,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.truth.Truth;
+import com.google.common.util.concurrent.ListenableScheduledFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.ListeningScheduledExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -48,19 +50,19 @@ public class DefaultAlarmManagerTest {
   private static final String DATA = "Hello data";
 
   @Mock private AlarmBackend mockBackend;
-  @Mock private ScheduledExecutorService mockScheduledExecutor;
+  @Mock private ListeningScheduledExecutorService mockScheduledExecutor;
 
-  @Mock private ScheduledFuture<Void> mockFuture;
+  @Mock private ListenableScheduledFuture<Void> mockFuture;
 
   @Mock private AlarmCallback mockCallback;
 
   @Captor private ArgumentCaptor<Runnable> runnableCaptor;
 
   private FakeClock clock;
-  private FakeExecutorService backendExecutor;
+  private ListeningExecutorService backendExecutor;
 
   @Before public void createTestInstances() {
-    backendExecutor = new FakeExecutorService();
+    backendExecutor = MoreExecutors.listeningDecorator(new FakeExecutorService());
     clock = new FakeClock();
   }
 
