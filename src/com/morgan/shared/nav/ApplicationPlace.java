@@ -25,6 +25,10 @@ public abstract class ApplicationPlace extends Place {
     this.parameters = ImmutableMap.copyOf(parameters);
   }
 
+  protected ApplicationPlace(ClientApplication clientApplication) {
+    this(clientApplication, ImmutableMap.<String, String>of());
+  }
+
   final ClientApplication getClientApplication() {
     return clientApplication;
   }
@@ -37,6 +41,11 @@ public abstract class ApplicationPlace extends Place {
     return helper.add("clientApplication", clientApplication)
         .add("parameters", parameters);
   }
+
+  /**
+   * Gets a {@link ApplicationPlaceRepresentation} that can represent this place type.
+   */
+  public abstract ApplicationPlaceRepresentation getRepresentation();
 
   @Override public int hashCode() {
     return Objects.hash(clientApplication, parameters);

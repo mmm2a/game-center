@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public interface ApplicationPlaceRepresentation<P extends ApplicationPlace> {
+public interface ApplicationPlaceRepresentation {
 
   /**
    * Asks this representation to try and parse the urlToken (the part of the url that is the
@@ -18,11 +18,11 @@ public interface ApplicationPlaceRepresentation<P extends ApplicationPlace> {
    * <p>For a URL like {@code http://tempuri.org/?p=foo&q=bar#!alpha/beta}, the token part is
    * {@code !alpha/beta}, <b>not</b> {@code alpha/beta} and <b>not</b> {@code #!alpha/beta}.
    */
-  @Nullable P parsePlaceFromToken(String urlToken);
+  @Nullable ApplicationPlace parsePlaceFromToken(String urlToken);
 
   /**
    * Generates the URL token fragment.  This will be everything AFTER the fragment character (#),
    * but might include (if appropriate for the place) the ! character that is often found there.
    */
-  String generateUrlTokenFor(P place);
+  String generateUrlTokenFor(ApplicationPlace place);
 }

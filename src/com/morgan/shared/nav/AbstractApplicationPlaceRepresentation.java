@@ -22,8 +22,8 @@ import com.google.common.collect.Iterables;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public abstract class AbstractApplicationPlaceRepresentation<P extends ApplicationPlace>
-    implements ApplicationPlaceRepresentation<P> {
+public abstract class AbstractApplicationPlaceRepresentation
+    implements ApplicationPlaceRepresentation {
 
   private static final String TOKEN_PREFIX = "!";
   private static final String TOKEN_SEPARATOR = "/";
@@ -62,24 +62,24 @@ public abstract class AbstractApplicationPlaceRepresentation<P extends Applicati
    * implementation is still welcome to return {@code null} indicating that the place was not
    * understood.
    */
-  @Nullable protected abstract P parseFromParts(
+  @Nullable protected abstract ApplicationPlace parseFromParts(
       ImmutableList<String> pathParts,
       ImmutableMap<String, String> parameterMap);
 
   /**
    * Get the parameter map for the input place instance.
    */
-  protected final Map<String, String> getParametersFor(P place) {
+  protected final Map<String, String> getParametersFor(ApplicationPlace place) {
     return place.getParameters();
   }
 
   /**
    * Gets the path parts for the given input place.
    */
-  protected abstract List<String> getPathPartsFor(P place);
+  protected abstract List<String> getPathPartsFor(ApplicationPlace place);
 
-  @Override public final P parsePlaceFromToken(String urlToken) {
-    P place = null;
+  @Override public final ApplicationPlace parsePlaceFromToken(String urlToken) {
+    ApplicationPlace place = null;
 
     Preconditions.checkNotNull(urlToken);
     if (urlToken.startsWith(TOKEN_PREFIX)) {
@@ -112,7 +112,7 @@ public abstract class AbstractApplicationPlaceRepresentation<P extends Applicati
     return place;
   }
 
-  @Override public final String generateUrlTokenFor(P place) {
+  @Override public final String generateUrlTokenFor(ApplicationPlace place) {
     Preconditions.checkNotNull(place);
 
     List<String> pathParts = getPathPartsFor(place);

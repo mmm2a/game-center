@@ -123,7 +123,7 @@ public class AbstractApplicationPlaceRepresentationTest {
   }
 
   static class TestableAbstractApplicationPlaceRepresentation
-      extends AbstractApplicationPlaceRepresentation<ApplicationPlace> {
+      extends AbstractApplicationPlaceRepresentation {
 
     @Override protected ApplicationPlace parseFromParts(ImmutableList<String> pathParts,
         ImmutableMap<String, String> parameterMap) {
