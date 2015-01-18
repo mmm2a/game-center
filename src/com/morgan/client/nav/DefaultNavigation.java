@@ -1,8 +1,11 @@
 package com.morgan.client.nav;
 
+import com.google.common.base.Preconditions;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.inject.Inject;
+import com.morgan.client.common.CommonBindingAnnotations.Default;
+import com.morgan.client.page.PagePresenterHelper;
 import com.morgan.shared.nav.ApplicationPlace;
 
 /**
@@ -19,24 +22,45 @@ class DefaultNavigation implements Navigator, NavigationState {
         }
       };
 
+  private final ApplicationPlace defaultApplicationPlace;
   private final HistoryHelper helper;
+  private final PlaceRepresentationHelper representationHelper;
+  private final PagePresenterHelper pagePresentationHelper;
 
-  @Inject DefaultNavigation(HistoryHelper helper) {
+  private ApplicationPlace currentPlace;
+
+  @Inject DefaultNavigation(
+      @Default ApplicationPlace defaultApplicationPlace,
+      HistoryHelper helper,
+      PlaceRepresentationHelper representationHelper,
+      PagePresenterHelper pagePresentationHelper) {
+    this.defaultApplicationPlace = defaultApplicationPlace;
     this.helper = helper;
+    this.representationHelper = representationHelper;
+    this.pagePresentationHelper = pagePresentationHelper;
 
     helper.addValueChangeHandler(historyChangeHandler);
-    helper.fireCurrentHistoryState();
+
+    onPathChanged(helper.getToken());
   }
 
   private void onPathChanged(String path) {
+    currentPlace = representationHelper.parseFromHistoryToken(path);
+    if (currentPlace != null) {
+      pagePresentationHelper.presentPageFor(currentPlace);
+    } else {
+      helper.replaceItem(
+          representationHelper.representPlaceAsHistoryToken(defaultApplicationPlace), true);
+    }
   }
 
   @Override public ApplicationPlace getCurrentPlace() {
-    // TODO(morgan)
-    return null;
+    return currentPlace;
   }
 
   @Override public void navigateTo(ApplicationPlace place) {
+    Preconditions.checkNotNull(place);
+    helper.newItem(representationHelper.representPlaceAsHistoryToken(place), true);
   }
 
   @Override public void back() {

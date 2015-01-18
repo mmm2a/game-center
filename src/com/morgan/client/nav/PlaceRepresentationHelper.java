@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
-import com.morgan.client.common.CommonBindingAnnotations.Default;
 import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 
@@ -18,13 +17,10 @@ import com.morgan.shared.nav.ApplicationPlaceRepresentation;
  */
 public class PlaceRepresentationHelper {
 
-  private final ApplicationPlace defaultPlace;
   private final ImmutableSet<ApplicationPlaceRepresentation> placeRepresentations;
 
   @Inject PlaceRepresentationHelper(
-      @Default ApplicationPlace defaultPlace,
       Set<ApplicationPlaceRepresentation> placeRepresentations) {
-    this.defaultPlace = defaultPlace;
     this.placeRepresentations = ImmutableSet.copyOf(placeRepresentations);
   }
 
@@ -42,7 +38,7 @@ public class PlaceRepresentationHelper {
       }
     }
 
-    return defaultPlace;
+    return null;
   }
 
   /**

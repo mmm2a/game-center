@@ -21,8 +21,7 @@ import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 @RunWith(MockitoJUnitRunner.class)
 public class PlaceRepresentationHelperTest {
 
-  @Mock private ApplicationPlace mockDefaultPlace;
-  @Mock private ApplicationPlace mockOtherPlace;
+  @Mock private ApplicationPlace mockPlace;
 
   @Mock private ApplicationPlaceRepresentation mockRepresentation1;
   @Mock private ApplicationPlaceRepresentation mockRepresentation2;
@@ -32,22 +31,17 @@ public class PlaceRepresentationHelperTest {
 
   @Before public void createTestInstances() {
     helper = new PlaceRepresentationHelper(
-        mockDefaultPlace,
         ImmutableSet.of(mockRepresentation1, mockRepresentation2, mockRepresentation3));
   }
 
-  @Test public void parseFromHistoryToken_noMatches_returnsDefault() {
-    assertThat(helper.parseFromHistoryToken("any string")).isEqualTo(mockDefaultPlace);
-  }
-
   @Test public void parseFromHistoryToken_matchReturned() {
-    when(mockRepresentation2.parsePlaceFromToken("history token")).thenReturn(mockOtherPlace);
-    assertThat(helper.parseFromHistoryToken("history token")).isEqualTo(mockOtherPlace);
+    when(mockRepresentation2.parsePlaceFromToken("history token")).thenReturn(mockPlace);
+    assertThat(helper.parseFromHistoryToken("history token")).isEqualTo(mockPlace);
   }
 
   @Test public void representPlaceAsHistoryToken() {
-    when(mockOtherPlace.getRepresentation()).thenReturn(mockRepresentation3);
-    when(mockRepresentation3.generateUrlTokenFor(mockOtherPlace)).thenReturn("result");
-    assertThat(helper.representPlaceAsHistoryToken(mockOtherPlace)).isEqualTo("result");
+    when(mockPlace.getRepresentation()).thenReturn(mockRepresentation3);
+    when(mockRepresentation3.generateUrlTokenFor(mockPlace)).thenReturn("result");
+    assertThat(helper.representPlaceAsHistoryToken(mockPlace)).isEqualTo("result");
   }
 }

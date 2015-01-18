@@ -1,18 +1,22 @@
 package com.morgan.client.nav;
 
-import static org.mockito.Mockito.inOrder;
+import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.morgan.client.page.PagePresenterHelper;
+import com.morgan.shared.nav.ApplicationPlace;
 
 /**
  * Tests for the {@link DefaultNavigation} class.
@@ -22,21 +26,71 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultNavigationTest {
 
+  private static final String INITIAL_TOKEN = "initial token";
+
+  @Mock private ApplicationPlace mockDefaultPlace;
+  @Mock private ApplicationPlace mockOtherPlace;
+
   @Mock private HistoryHelper mockHistoryHelper;
+  @Mock private PlaceRepresentationHelper mockPlaceRepresentationHelper;
+  @Mock private PagePresenterHelper mockPagePresenterHelper;
 
   @Captor private ArgumentCaptor<ValueChangeHandler<String>> valueChangeHandlerCaptor;
 
   private DefaultNavigation navigation;
 
   @Before public void createTestInstances() {
-    navigation = new DefaultNavigation(mockHistoryHelper);
+    when(mockHistoryHelper.getToken()).thenReturn(INITIAL_TOKEN);
+
+    navigation = new DefaultNavigation(
+        mockDefaultPlace,
+        mockHistoryHelper,
+        mockPlaceRepresentationHelper,
+        mockPagePresenterHelper);
   }
 
-  @Test public void construction_addsChangeHandlerAndFiresFirstEvent() {
-    InOrder order = inOrder(mockHistoryHelper);
+  @Test public void construction_addsChangeHandler() {
+    verify(mockHistoryHelper).addValueChangeHandler(valueChangeHandlerCaptor.capture());
+  }
 
-    order.verify(mockHistoryHelper).addValueChangeHandler(valueChangeHandlerCaptor.capture());
-    order.verify(mockHistoryHelper).fireCurrentHistoryState();
+  @Test public void construction_callsOnPathChanged() {
+    verify(mockPlaceRepresentationHelper).parseFromHistoryToken(INITIAL_TOKEN);
+  }
+
+  @Test public void onPathChanged_unrecognizedPlace_replacesWithDefault() {
+    verify(mockHistoryHelper).addValueChangeHandler(valueChangeHandlerCaptor.capture());
+    reset(mockPlaceRepresentationHelper, mockPagePresenterHelper ,mockHistoryHelper);
+    when(mockPlaceRepresentationHelper.representPlaceAsHistoryToken(mockDefaultPlace))
+        .thenReturn("default place");
+
+    valueChangeHandlerCaptor.getValue()
+        .onValueChange(new ValueChangeEvent<String>("unrecognized") {});
+    verify(mockHistoryHelper).replaceItem("default place", true);
+  }
+
+  @Test public void onPathChanged_recognizedPlace_presentsPlacesPage() {
+    String historyToken = "history token";
+    verify(mockHistoryHelper).addValueChangeHandler(valueChangeHandlerCaptor.capture());
+    reset(mockPlaceRepresentationHelper, mockPagePresenterHelper ,mockHistoryHelper);
+    when(mockPlaceRepresentationHelper.parseFromHistoryToken(historyToken))
+        .thenReturn(mockOtherPlace);
+
+    valueChangeHandlerCaptor.getValue()
+        .onValueChange(new ValueChangeEvent<String>(historyToken) {});
+    verify(mockPagePresenterHelper).presentPageFor(mockOtherPlace);
+  }
+
+  @Test public void getCurrentPlace() {
+    String historyToken = "history token";
+    verify(mockHistoryHelper).addValueChangeHandler(valueChangeHandlerCaptor.capture());
+    reset(mockPlaceRepresentationHelper, mockPagePresenterHelper ,mockHistoryHelper);
+    when(mockPlaceRepresentationHelper.parseFromHistoryToken(historyToken))
+        .thenReturn(mockOtherPlace);
+
+    valueChangeHandlerCaptor.getValue()
+        .onValueChange(new ValueChangeEvent<String>(historyToken) {});
+
+    assertThat(navigation.getCurrentPlace()).isEqualTo(mockOtherPlace);
   }
 
   @Test public void back_callsThroughToHistoryHelper() {
@@ -47,5 +101,12 @@ public class DefaultNavigationTest {
   @Test public void forward_callsThroughToHistoryHelper() {
     navigation.forward();
     verify(mockHistoryHelper).forward();
+  }
+
+  @Test public void navigateTo() {
+    when(mockPlaceRepresentationHelper.representPlaceAsHistoryToken(mockOtherPlace))
+        .thenReturn("new token");
+    navigation.navigateTo(mockOtherPlace);
+    verify(mockHistoryHelper).newItem("new token", true);
   }
 }
