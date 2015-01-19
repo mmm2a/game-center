@@ -104,6 +104,7 @@
 
     <path refid="production-runtime.class.path"/>
     <pathelement location="${lib.dir}/game-center-client.jar"/>
+    <pathelement location="${lib.dir}/game-center-testutils.jar"/>
   </path>
 
   <path id="gwt-compiler.class.path">
@@ -135,7 +136,7 @@
 
   <target name="java.compile" depends="client.jar,shared.jar,server.jar"/>
 
-  <target name="test" depends="java.compile,test.jar">
+  <target name="test" depends="test-utils.jar,java.compile,test.jar">
     <junit fork="no" haltonfailure="no" printsummary="on">
       <classpath>
         <path refid="test.class.path"/>
@@ -175,6 +176,26 @@
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/game-center-client.jar">
       <fileset dir="${bin.dir}" includes="com/morgan/client/**"/>
+    </jar>
+  </target>
+
+  <target name="test-utils.compile">
+    <mkdir dir="${bin.dir}"/>
+    <javac srcdir="${src.dir}"
+        destdir="${bin.dir}"
+        classpathref="production.class.path"
+        includeAntRuntime="false"
+        includes="com/morgan/testing/**/*.java"/>
+	<copy todir="${bin.dir}/com/morgan/testing">
+		<fileset dir="${src.dir}/com/morgan/testing"
+			includes="${default.compile.copy.includes}"/>
+	</copy>
+  </target>
+
+  <target name="test-utils.jar" depends="test-utils.compile">
+    <mkdir dir="${lib.dir}"/>
+    <jar destfile="${lib.dir}/game-center-testutils.jar">
+      <fileset dir="${bin.dir}" includes="com/morgan/testing/**"/>
     </jar>
   </target>
 

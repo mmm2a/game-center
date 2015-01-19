@@ -117,8 +117,6 @@ class DefaultAlertController implements AlertController {
 
     resources.css().ensureInjected();
 
-    view.setStyleName(resources.css().alerts());
-
     viewContainer.setStyleName(resources.css().alertsContainer());
     view.setStyleName(resources.css().alerts());
 
@@ -133,7 +131,7 @@ class DefaultAlertController implements AlertController {
   private void addViewToContainer(AlertView alertView) {
     for (int i = 0; i < view.getWidgetCount(); i++) {
       AlertView otherView = view.getChildWidget(i);
-      if (otherView.getPriority() >= alertView.getPriority()) {
+      if (otherView.getPriority() <= alertView.getPriority()) {
         view.insert(alertView, i);
         return;
       }
@@ -153,7 +151,7 @@ class DefaultAlertController implements AlertController {
   }
 
   private void stopFading(final DefaultAlert alert, final AlertView alertView) {
-    TimerHandle handle = fadeWatchers.remove(alert);
+    TimerHandle handle = fadeWatchers.remove(alertView);
     if (handle != null) {
       handle.cancel();
     }
