@@ -8,8 +8,8 @@ package com.morgan.client.alert;
 public interface AlertBuilder {
   /**
    * Sets the alert's priority.  Higher priority items (those with higher values) are displayed
-   * higher in the alert display (status messages are always shown above error messages).  By
-   * default alerts have a priority of 0.
+   * higher in the alert display. Status messages by default have a priority of 1000 while error
+   * messages have a default priority of 0.
    */
   AlertBuilder setPriority(int priority);
 
@@ -18,6 +18,11 @@ public interface AlertBuilder {
    * and status alerts do).
    */
   AlertBuilder isFading(boolean isFading);
+
+  /**
+   * Adds a style name to this alert.
+   */
+  AlertBuilder addStyleName(String styleName);
 
   /**
    * Creates the alert represented by this builder.  This does not mean the alert is

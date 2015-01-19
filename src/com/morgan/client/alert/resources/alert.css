@@ -1,0 +1,54 @@
+/*
+ * CSS rules for the alert package.
+ */
+ 
+ @def FADE_DURATION_MS 5000ms;
+ 
+ .alertsContainer {
+   display: -webkit-flex;
+   display: flex;
+   
+   -webkit-justify-content: center;
+   justify-content: center;
+   
+   position: fixed;
+   left: 0;
+   width: 100%;
+   top: 75px;
+   z-index: -1;
+ }
+ 
+ .alerts {
+   z-index: 10000;
+ }
+ 
+ .alert {
+   border-width: 1px;
+   border-style: solid;
+   border-radius: 3px;
+   
+   cursor: pointer;
+   
+   margin: 5px;
+   opacity: 1;
+   padding: 5px;
+   
+   -webkit-transition: opacity FADE_DURATION_MS;
+   -moz-transition: opacity FADE_DURATION_MS;
+   -o-transition: opacity FADE_DURATION_MS;
+   transition: opacity FADE_DURATION_MS;
+ }
+ 
+ .alert.status {
+   background-color: beige;
+   border-color: black;
+ }
+ 
+ .alert.error {
+   background-color: pink;
+   border-color: red;
+ }
+ 
+ .alert.fade {
+   opacity: 0;
+ }

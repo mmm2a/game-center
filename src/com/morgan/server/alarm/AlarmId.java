@@ -1,5 +1,6 @@
 package com.morgan.server.alarm;
 
+
 /**
  * Interface for an alarm ID.  This interface is used so that for persistent alarms (for which
  * clients MIGHT need to store something in a database), they can be stored as, and re-created from

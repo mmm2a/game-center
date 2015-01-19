@@ -2,12 +2,14 @@ package com.morgan.client.alert;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.inject.ImplementedBy;
 
 /**
  * Controller for managing alerts in the UI.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
+@ImplementedBy(DefaultAlertController.class)
 public interface AlertController {
   /**
    * Creates a new alert builder for creating a status alert.
