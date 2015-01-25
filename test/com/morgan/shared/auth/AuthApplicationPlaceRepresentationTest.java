@@ -8,16 +8,16 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Tests for the {@link LoginApplicationPlaceRepresentation} class.
+ * Tests for the {@link AuthApplicationPlaceRepresentation} class.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class LoginApplicationPlaceRepresentationTest {
+public class AuthApplicationPlaceRepresentationTest {
 
-  private LoginApplicationPlaceRepresentation representation;
+  private AuthApplicationPlaceRepresentation representation;
 
   @Before public void createTestInstances() {
-    representation = new LoginApplicationPlaceRepresentation();
+    representation = new AuthApplicationPlaceRepresentation();
   }
 
   @Test public void parseFromPartsAfterToken_notEmpty_returnsNull() {
@@ -26,10 +26,10 @@ public class LoginApplicationPlaceRepresentationTest {
 
   @Test public void parseFromPartsAfterToken_empty_returnsLoginPlace() {
     assertThat(representation.parseFromPartsAfterToken(ImmutableList.<String>of(), null))
-        .isEqualTo(new LoginApplicationPlace());
+        .isEqualTo(new AuthApplicationPlace());
   }
 
   @Test public void getPathPartsAfterTokenFor() {
-    assertThat(representation.getPathPartsAfterTokenFor(new LoginApplicationPlace())).isEmpty();
+    assertThat(representation.getPathPartsAfterTokenFor(new AuthApplicationPlace())).isEmpty();
   }
 }

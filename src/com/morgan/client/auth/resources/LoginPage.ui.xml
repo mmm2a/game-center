@@ -1,0 +1,31 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://google-web-toolkit.googlecode.com/files/xhtml.ent">
+
+<ui:UiBinder
+    xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:gwt='urn:import:com.google.gwt.user.client.ui'
+    ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+    ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+    ui:generateLocales='default'>
+    
+  <ui:with
+      field="res"
+      type="com.morgan.client.auth.AuthResources"/>
+    
+  <gwt:HTMLPanel styleName="{res.css.container}">
+    <div class="{res.css.box} {res.css.loginContainer}">
+      <div class="{res.css.title}">Login</div>
+      <div class="{res.css.infoLine}">
+        <div class="{res.css.label}">Email address</div><gwt:TextBox ui:field="emailAddress"/>
+      </div>
+      <div class="{res.css.infoLine}">
+        <div class="{res.css.label}">Password</div><gwt:PasswordTextBox ui:field="password"/>
+      </div>
+      <div class="{res.css.infoLine}">
+      </div>
+      <div class="{res.css.buttonPanel}">
+        <gwt:Button styleName="{res.css.button}">Login</gwt:Button>
+      </div>
+    </div>
+  </gwt:HTMLPanel>
+    
+</ui:UiBinder>

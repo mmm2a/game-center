@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://google-web-toolkit.googlecode.com/files/xhtml.ent">
+
+<ui:UiBinder
+    xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:gwt='urn:import:com.google.gwt.user.client.ui'
+    ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+    ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+    ui:generateLocales='default'>
+    
+</ui:UiBinder>

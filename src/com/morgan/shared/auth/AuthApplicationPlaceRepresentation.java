@@ -9,27 +9,27 @@ import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 
 /**
- * {@link ApplicationPlaceRepresentation} for the {@link LoginApplicationPlace} place type.
+ * {@link ApplicationPlaceRepresentation} for the {@link AuthApplicationPlace} place type.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class LoginApplicationPlaceRepresentation
+public class AuthApplicationPlaceRepresentation
     extends AbstractTokenBasedApplicationPlaceRepresentation {
 
-  private static final String TOKEN = "login";
+  private static final String TOKEN = "authenticate";
 
-  @Inject public LoginApplicationPlaceRepresentation() {
+  @Inject public AuthApplicationPlaceRepresentation() {
     super(TOKEN);
   }
 
-  @Override protected LoginApplicationPlace parseFromPartsAfterToken(
+  @Override protected AuthApplicationPlace parseFromPartsAfterToken(
       ImmutableList<String> remainingParts,
       ImmutableMap<String, String> parameterMap) {
-    return remainingParts.isEmpty() ? new LoginApplicationPlace() : null;
+    return remainingParts.isEmpty() ? new AuthApplicationPlace() : null;
   }
 
   @Override protected Iterable<String> getPathPartsAfterTokenFor(ApplicationPlace place) {
-    Preconditions.checkArgument(place instanceof LoginApplicationPlace);
+    Preconditions.checkArgument(place instanceof AuthApplicationPlace);
     return ImmutableList.of();
   }
 }

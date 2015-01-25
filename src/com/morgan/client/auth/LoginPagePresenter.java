@@ -1,55 +1,31 @@
 package com.morgan.client.auth;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
-import com.morgan.client.alert.AlertController;
-import com.morgan.client.page.PagePresenter;
-import com.morgan.shared.auth.AuthenticationServiceAsync;
-import com.morgan.shared.auth.LoginApplicationPlace;
 
 /**
- * A {@link PagePresenter} for presenting the login page.
+ * Page widget for displaying the login page.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-class LoginPagePresenter implements PagePresenter<LoginApplicationPlace> {
+class LoginPagePresenter implements IsWidget {
 
-  private final AlertController alerts;
-  private final FlowPanel flowPanel = new FlowPanel();
-  private final AuthenticationServiceAsync service;
-
-  @Inject LoginPagePresenter(AlertController alerts, AuthenticationServiceAsync service) {
-    this.alerts = alerts;
-    this.service = service;
+  /**
+   * View for the {@link LoginPagePresenter}.
+   */
+  @ImplementedBy(DefaultLoginPageView.class)
+  interface LoginPageView extends IsWidget {
   }
 
-  @Override public IsWidget presentPageFor(LoginApplicationPlace place) {
+  private final LoginPageView view;
 
-    alerts.newStatusAlertBuilder("Some status text").create().requestDisplay();
-    alerts.newErrorAlertBuilder("An error message!").create().requestDisplay();
+  @Inject LoginPagePresenter(LoginPageView view) {
+    this.view = view;
+  }
 
-    service.authenticate("mark@mark-morgan.net", "wrong password", new AsyncCallback<Boolean>() {
-      @Override public void onSuccess(Boolean result) {
-        flowPanel.add(new Label("Attempt to log in with \"wrong password\": " + result));
-        service.authenticate("mark@mark-morgan.net", "!!password", new AsyncCallback<Boolean>() {
-          @Override public void onSuccess(Boolean result) {
-            flowPanel.add(new Label("Attempt to log in with \"!!password\": " + result));
-          }
-
-          @Override public void onFailure(Throwable caught) {
-            flowPanel.add(new Label("Unable to contact service"));
-          }
-        });
-      }
-
-      @Override public void onFailure(Throwable caught) {
-        flowPanel.add(new Label("Unable to contact service"));
-      }
-    });
-
-    return flowPanel;
+  @Override public Widget asWidget() {
+    return view.asWidget();
   }
 }
