@@ -13,27 +13,30 @@ import com.morgan.shared.common.Role;
 
 /**
  * Fake implementation of the {@link UserBackend} interface.
- * 
+ *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 @Singleton
 class FakeUserBackend implements UserBackend {
 
+  private final Map<Long, UserInformation> idToUserInformationMap = new HashMap<>();
 	private final Map<String, UserInformation> emailToUserInformationMap = new HashMap<>();
 	private final Map<Long, String> userIdToPasswordMap = new HashMap<>();
-	
+
 	private long nextUserId = 1L;
-	
+
 	@Inject FakeUserBackend() {
 		addUser("Mark", "mark@mark-morgan.net", Role.ADMIN, "!!password");
 	}
-	
+
 	synchronized private void addUser(String name, String email, Role role, String password) {
 		UserInformation userInfo = new UserInformation(nextUserId++, name, email, role);
+
+		idToUserInformationMap.put(userInfo.getUserId(), userInfo);
 		emailToUserInformationMap.put(email, userInfo);
 		userIdToPasswordMap.put(userInfo.getUserId(), password);
 	}
-	
+
 	@Override synchronized public Optional<UserInformation> logIn(
 		String emailAddress, String password)
 		    throws BackendException {
@@ -44,7 +47,12 @@ class FakeUserBackend implements UserBackend {
 			  return Optional.of(info);
 		  }
 	  }
-	  
+
 	  return Optional.absent();
 	}
+
+  @Override synchronized public Optional<UserInformation> findUserById(
+      long userId) throws BackendException {
+    return Optional.fromNullable(idToUserInformationMap.get(userId));
+  }
 }

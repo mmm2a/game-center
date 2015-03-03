@@ -163,6 +163,14 @@ public class CookieHelper {
   }
 
   /**
+   * Logs the current user out.
+   */
+  public void logout() {
+    invalidateCurrentCookie();
+    setAuthenticationCookieIntoResponse(AuthenticationCookie.INVALID_COOKIE);
+  }
+
+  /**
    * Data class representation of an authentication cookie.
    *
    * @author mark@mark-morgan.net (Mark Morgan)

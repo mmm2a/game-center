@@ -1,5 +1,8 @@
 package com.morgan.server.game;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -27,5 +30,13 @@ class BootstrapModule extends AbstractModule {
   @Provides @Singleton protected GameServerFlagAccessor provideGameServerFlagAccessor(
       FlagAccessorFactory accessorFactory) {
     return accessorFactory.getFlagAccessor(GameServerFlagAccessor.class);
+  }
+
+  @Provides protected HttpServletRequest provideNullRequest() {
+    return null;
+  }
+
+  @Provides protected HttpServletResponse provideNullResponse() {
+    return null;
   }
 }

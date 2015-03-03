@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.prod.authdb.AuthDbHelper;
+import com.morgan.shared.common.BackendException;
 import com.morgan.shared.common.Role;
 
 /**
@@ -43,5 +44,12 @@ public class ProdUserBackendTest {
     when(mockHelper.authenticate("email address", "password"))
         .thenReturn(Optional.of(userInformation));
     assertThat(backend.logIn("email address", "password")).hasValue(userInformation);
+  }
+
+  @Test public void findUserById() throws BackendException {
+    UserInformation userInformation = new UserInformation(
+        7L, "display", "email address", Role.MEMBER);
+    when(mockHelper.findUserById(7L)).thenReturn(Optional.of(userInformation));
+    assertThat(backend.findUserById(7L)).hasValue(userInformation);
   }
 }

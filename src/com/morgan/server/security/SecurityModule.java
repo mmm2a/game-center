@@ -18,6 +18,7 @@ import javax.crypto.SecretKey;
 
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -25,6 +26,7 @@ import com.google.inject.Singleton;
 import com.morgan.server.common.CommonBindingAnnotations.DeobfuscationCipher;
 import com.morgan.server.common.CommonBindingAnnotations.ObfuscationCipher;
 import com.morgan.server.common.CommonBindingAnnotations.Obfuscator;
+import com.morgan.server.common.CommonBindingAnnotations.RequestUser;
 import com.morgan.server.common.CommonBindingAnnotations.SslCert;
 import com.morgan.server.util.flag.FlagAccessorFactory;
 
@@ -36,6 +38,10 @@ import com.morgan.server.util.flag.FlagAccessorFactory;
 public class SecurityModule extends AbstractModule {
 
   @Override protected void configure() {
+  }
+
+  @Provides @RequestUser protected Optional<Long> provideRequestUserId(CookieHelper cookieHelper) {
+    return cookieHelper.getUserIdFromCookie();
   }
 
   @Provides @Singleton protected SecurityFlagAccessor provideSecurityFlagAccessor(

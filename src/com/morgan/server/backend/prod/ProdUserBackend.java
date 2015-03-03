@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.UserBackend;
 import com.morgan.server.backend.prod.authdb.AuthDbHelper;
+import com.morgan.shared.common.BackendException;
 
 /**
  * Production implementation of the {@link UserBackend} interface.
@@ -22,4 +23,8 @@ class ProdUserBackend implements UserBackend {
 	@Override public Optional<UserInformation> logIn(String emailAddress, String password) {
 	  return authDbHelper.authenticate(emailAddress, password);
 	}
+
+  @Override public Optional<UserInformation> findUserById(long userId) throws BackendException {
+    return authDbHelper.findUserById(userId);
+  }
 }

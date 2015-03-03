@@ -18,4 +18,7 @@ public interface Navigator {
 
   /** Navigate forward in the browser history */
   void forward();
+
+  /** Causes the current page to reload */
+  void reload();
 }

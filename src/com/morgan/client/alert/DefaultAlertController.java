@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -375,6 +376,20 @@ class DefaultAlertController implements AlertController {
 
     @Override public void cancel() {
       requestCancel(this, view, alert);
+    }
+
+    @Override public <T> AsyncCallback<T> delegateTo(final AsyncCallback<T> delegate) {
+      return new AsyncCallback<T>() {
+        @Override public void onSuccess(T result) {
+          cancel();
+          delegate.onSuccess(result);
+        }
+
+        @Override public void onFailure(Throwable caught) {
+          cancel();
+          delegate.onFailure(caught);
+        }
+      };
     }
   }
 

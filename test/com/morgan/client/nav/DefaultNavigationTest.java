@@ -13,6 +13,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.morgan.client.page.PagePresenterHelper;
@@ -28,6 +30,8 @@ public class DefaultNavigationTest {
 
   private static final String INITIAL_TOKEN = "initial token";
 
+  @Mock private Scheduler mockScheduler;
+
   @Mock private ApplicationPlace mockDefaultPlace;
   @Mock private ApplicationPlace mockOtherPlace;
 
@@ -36,6 +40,7 @@ public class DefaultNavigationTest {
   @Mock private PagePresenterHelper mockPagePresenterHelper;
 
   @Captor private ArgumentCaptor<ValueChangeHandler<String>> valueChangeHandlerCaptor;
+  @Captor private ArgumentCaptor<ScheduledCommand> scheduledCommandCaptor;
 
   private DefaultNavigation navigation;
 
@@ -43,6 +48,7 @@ public class DefaultNavigationTest {
     when(mockHistoryHelper.getToken()).thenReturn(INITIAL_TOKEN);
 
     navigation = new DefaultNavigation(
+        mockScheduler,
         mockDefaultPlace,
         mockHistoryHelper,
         mockPlaceRepresentationHelper,
@@ -53,7 +59,9 @@ public class DefaultNavigationTest {
     verify(mockHistoryHelper).addValueChangeHandler(valueChangeHandlerCaptor.capture());
   }
 
-  @Test public void construction_callsOnPathChanged() {
+  @Test public void construction_callsOnPathChangedDeferred() {
+    verify(mockScheduler).scheduleDeferred(scheduledCommandCaptor.capture());
+    scheduledCommandCaptor.getValue().execute();
     verify(mockPlaceRepresentationHelper).parseFromHistoryToken(INITIAL_TOKEN);
   }
 

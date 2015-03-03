@@ -7,4 +7,18 @@
     ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
     ui:generateLocales='default'>
     
+  <ui:with
+      field="res"
+      type="com.morgan.client.auth.AuthResources"/>
+    
+  <gwt:HTMLPanel styleName="{res.css.container}">
+    <div class="{res.css.box} {res.css.logoutContainer}">
+      <div class="{res.css.title}">Logout</div>
+      <div class="{res.css.infoLine}">Log out of &nbsp;<strong><span ui:field="emailAddress"/></strong></div>
+      <div class="{res.css.buttonPanel}">
+        <gwt:Button ui:field="logoutButton" styleName="{res.css.button}">Logout</gwt:Button>
+      </div>
+    </div>
+  </gwt:HTMLPanel>
+    
 </ui:UiBinder>

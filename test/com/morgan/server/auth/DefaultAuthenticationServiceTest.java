@@ -16,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 import com.morgan.server.backend.UserBackend;
 import com.morgan.server.security.CookieHelper;
+import com.morgan.shared.common.BackendException;
 import com.morgan.shared.common.Role;
 
 /**
@@ -54,5 +55,10 @@ public class DefaultAuthenticationServiceTest {
     InOrder order = inOrder(mockCookieHelper);
     order.verify(mockCookieHelper).invalidateCurrentCookie();
     order.verify(mockCookieHelper).setAuthenticationCookieFor(7L);
+  }
+
+  @Test public void logout_callsThroughToCookieHelper() throws BackendException {
+    service.logout();
+    verify(mockCookieHelper).logout();
   }
 }

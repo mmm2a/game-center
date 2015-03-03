@@ -11,4 +11,7 @@ public interface AuthenticationServiceAsync {
 
   /** See {@link AuthenticationService#authenticate(String, String)} */
   void authenticate(String emailAddress, String password, AsyncCallback<Boolean> callback);
+
+  /** See {@link AuthenticationService#logout()} */
+  void logout(AsyncCallback<Void> callback);
 }

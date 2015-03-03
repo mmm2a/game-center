@@ -50,4 +50,8 @@ public class DefaultAuthenticationService extends RemoteServiceServlet
 
     return userInfo.isPresent();
   }
+
+  @Override public void logout() throws BackendException {
+    cookieHelper.logout();
+  }
 }

@@ -23,7 +23,7 @@
       <div class="{res.css.infoLine}">
       </div>
       <div class="{res.css.buttonPanel}">
-        <gwt:Button styleName="{res.css.button}">Login</gwt:Button>
+        <gwt:Button ui:field="loginButton" styleName="{res.css.button}">Login</gwt:Button>
       </div>
     </div>
   </gwt:HTMLPanel>

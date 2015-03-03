@@ -16,4 +16,9 @@ public interface AuthenticationService extends RemoteService {
    * Method invoked when a user wants to authenticate his/herself against the server.
    */
   boolean authenticate(String emailAddress, String password) throws BackendException;
+
+  /**
+   * Logs the current user (if logged in) out of his/her session.
+   */
+  void logout() throws BackendException;
 }

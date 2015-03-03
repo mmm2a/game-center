@@ -1,8 +1,11 @@
 package com.morgan.client.nav;
 
 import com.google.common.base.Preconditions;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window.Location;
 import com.google.inject.Inject;
 import com.morgan.client.common.CommonBindingAnnotations.Default;
 import com.morgan.client.page.PagePresenterHelper;
@@ -30,8 +33,9 @@ class DefaultNavigation implements Navigator, NavigationState {
   private ApplicationPlace currentPlace;
 
   @Inject DefaultNavigation(
+      Scheduler scheduler,
       @Default ApplicationPlace defaultApplicationPlace,
-      HistoryHelper helper,
+      final HistoryHelper helper,
       PlaceRepresentationHelper representationHelper,
       PagePresenterHelper pagePresentationHelper) {
     this.defaultApplicationPlace = defaultApplicationPlace;
@@ -41,7 +45,13 @@ class DefaultNavigation implements Navigator, NavigationState {
 
     helper.addValueChangeHandler(historyChangeHandler);
 
-    onPathChanged(helper.getToken());
+    // We need to defer schedule the first call to bootstrap the app as it requires in some cases
+    // that the navigator is already created (which can't happen until this constructor returns).
+    scheduler.scheduleDeferred(new ScheduledCommand() {
+      @Override public void execute() {
+        onPathChanged(helper.getToken());
+      }
+    });
   }
 
   private void onPathChanged(String path) {
@@ -69,5 +79,9 @@ class DefaultNavigation implements Navigator, NavigationState {
 
   @Override public void forward() {
     helper.forward();
+  }
+
+  @Override public void reload() {
+    Location.reload();
   }
 }
