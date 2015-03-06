@@ -46,7 +46,7 @@
   </path>
 
   <path id="truth.class.path">
-    <pathelement location="${ext.dir}/Truth/truth-0.23.jar"/>
+    <pathelement location="${ext.dir}/Truth/truth-0.25.jar"/>
   </path>
 
   <path id="junit.class.path">
