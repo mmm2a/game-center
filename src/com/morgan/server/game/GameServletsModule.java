@@ -12,6 +12,8 @@ class GameServletsModule extends ServletModule {
   @Override protected void configureServlets() {
     super.configureServlets();
 
+    filterRegex(".*.nocache.js$").through(DontCacheNoCacheJsFilter.class);
+
     serve("/hello", "/hello/*").with(HelloWorldServlet.class);
   }
 }

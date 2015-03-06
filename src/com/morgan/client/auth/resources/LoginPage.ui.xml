@@ -13,17 +13,25 @@
     
   <gwt:HTMLPanel styleName="{res.css.container}">
     <div class="{res.css.box} {res.css.loginContainer}">
-      <div class="{res.css.title}">Login</div>
-      <div class="{res.css.infoLine}">
-        <div class="{res.css.label}">Email address</div><gwt:TextBox ui:field="emailAddress"/>
+      <div class="{res.css.title}">
+        <ui:msg description="Title for a dialog that allows a user to login to the site">Login</ui:msg>
       </div>
       <div class="{res.css.infoLine}">
-        <div class="{res.css.label}">Password</div><gwt:PasswordTextBox ui:field="password"/>
+        <div class="{res.css.label}">
+          <ui:msg description="Label for an input where the user can enter their email address">Email address</ui:msg>
+        </div><gwt:TextBox ui:field="emailAddress"/>
+      </div>
+      <div class="{res.css.infoLine}">
+        <div class="{res.css.label}">
+          <ui:msg description="Label for a text field where the user can enter their password">Password</ui:msg>
+        </div><gwt:PasswordTextBox ui:field="password"/>
       </div>
       <div class="{res.css.infoLine}">
       </div>
       <div class="{res.css.buttonPanel}">
-        <gwt:Button ui:field="loginButton" styleName="{res.css.button}">Login</gwt:Button>
+        <gwt:Button ui:field="loginButton" styleName="{res.css.button}">
+          <ui:msg description="Label for a button that the user clicks in a log in dialog to perform the log in">Login</ui:msg>
+        </gwt:Button>
       </div>
     </div>
   </gwt:HTMLPanel>

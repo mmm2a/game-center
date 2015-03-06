@@ -5,6 +5,7 @@ import java.util.Set;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -56,6 +57,10 @@ class GameServer {
 
   private Handler createAndConfigureGwtWebApp() {
     WebAppContext handler = webAppContextProvider.get();
+
+    // We need to add the default servlet here so that ALL requests go through something, thus
+    // giving us the ability to filter ALL requests (see DontCacheNoCacheJsFilter.class).
+    handler.addServlet(DefaultServlet.class, "/");
 
     handler.setContextPath(flagAccessor.warContextPath());
 

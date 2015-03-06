@@ -35,12 +35,14 @@ class AuthHostPageServlet extends HttpServlet {
       throws IOException {
 
     try (Writer out = resp.getWriter()) {
-      soy.hostPage(pageConstantsHelper.createPageConstantsJson()).render(out);
       resp.setContentType("text/html");
       resp.setStatus(HttpServletResponse.SC_OK);
       resp.setHeader("Cache-Control", "no-cache"); //HTTP 1.1
+      resp.setHeader("Cache-Control", "max-age=0"); //HTTP 1.1
+      resp.setHeader("Cache-Control", "no-store"); //HTTP 1.1
       resp.setHeader("Pragma", "no-cache"); //HTTP 1.0
       resp.setDateHeader("Expires", 0); //prevents caching at the proxy server
+      soy.hostPage(pageConstantsHelper.createPageConstantsJson()).render(out);
     }
   }
 }

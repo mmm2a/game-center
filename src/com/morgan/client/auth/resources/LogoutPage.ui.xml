@@ -13,10 +13,16 @@
     
   <gwt:HTMLPanel styleName="{res.css.container}">
     <div class="{res.css.box} {res.css.logoutContainer}">
-      <div class="{res.css.title}">Logout</div>
-      <div class="{res.css.infoLine}">Log out of &nbsp;<strong><span ui:field="emailAddress"/></strong></div>
+      <div class="{res.css.title}">
+        <ui:msg description="Title for a dialog that the user can use to log out of his/her account">Logout</ui:msg>
+      </div>
+      <div class="{res.css.infoLine}">
+        <ui:msg description="Text explaining to the user which account s/he is going to be logging out of">Log out of &nbsp;<strong><span ui:ph="emailAddressSpan" ui:field="emailAddress"/></strong></ui:msg>
+      </div>
       <div class="{res.css.buttonPanel}">
-        <gwt:Button ui:field="logoutButton" styleName="{res.css.button}">Logout</gwt:Button>
+        <gwt:Button ui:field="logoutButton" styleName="{res.css.button}">
+          <ui:msg description="Title for a button that the user clicks to log out of his/her account">Logout</ui:msg>
+        </gwt:Button>
       </div>
     </div>
   </gwt:HTMLPanel>
