@@ -58,11 +58,12 @@ public class AbstractTokenBasedApplicationPlaceRepresentationTest {
   }
 
   @Test public void getPathPartsFor_addsToken() {
-    assertThat(representation.getPathPartsFor(mockPlace)).iteratesAs(
-        ImmutableList.<String>builder()
+    assertThat(representation.getPathPartsFor(mockPlace))
+        .containsExactlyElementsIn(ImmutableList.<String>builder()
             .add(TOKEN)
             .addAll(RESULTANT_PATH_PARTS)
-            .build());
+            .build())
+        .inOrder();
   }
 
   private class TestableAbstractTokenBasedApplicationPlaceRepresentation
@@ -75,7 +76,7 @@ public class AbstractTokenBasedApplicationPlaceRepresentationTest {
     @Override protected ApplicationPlace parseFromPartsAfterToken(
         ImmutableList<String> remainingParts,
         ImmutableMap<String, String> parameterMap) {
-      assertThat(remainingParts).iteratesAs(EXPECTED_PATH_PARTS);
+      assertThat(remainingParts).containsExactlyElementsIn(EXPECTED_PATH_PARTS).inOrder();
       assertThat(parameterMap).isEqualTo(EXPECTED_PARAMTERS);
       return mockPlace;
     }

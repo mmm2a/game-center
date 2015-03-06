@@ -56,13 +56,13 @@ public class AbstractEmailProviderTest {
 
   @Test public void get_noUserName_doesNotSetAuth() throws Exception {
     when(mockEmailFlagAccessor.smtpUserName()).thenReturn(null);
-    assertThat(provider.get()).is(mockEmail);
+    assertThat(provider.get()).isSameAs(mockEmail);
     verifyCommonEmailSettings();
     verifyNoMoreInteractions(mockEmail);
   }
 
   @Test public void get() throws Exception {
-    assertThat(provider.get()).is(mockEmail);
+    assertThat(provider.get()).isSameAs(mockEmail);
     verifyCommonEmailSettings();
 
     // There isn't a particularly good way to test the contents of the authenticator, so we just

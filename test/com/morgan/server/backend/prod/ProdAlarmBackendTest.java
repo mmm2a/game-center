@@ -40,7 +40,9 @@ public class ProdAlarmBackendTest {
 
   @Test public void readAllAlarms() {
     when(mockHelper.readAllAlarms()).thenReturn(ImmutableList.of(mockPad1, mockPad2, mockPad3));
-    assertThat(backend.readAllAlarms()).iteratesAs(mockPad1, mockPad2, mockPad3);
+    assertThat(backend.readAllAlarms())
+        .containsExactly(mockPad1, mockPad2, mockPad3)
+        .inOrder();
   }
 
   @Test public void persistNewAlarm_nullDurationAndData_noExceptions() {

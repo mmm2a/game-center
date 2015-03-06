@@ -86,10 +86,12 @@ public class AlarmDbHelperTest {
     when(mockQuery.getResultList()).thenReturn(ImmutableList.of(
         entity1, entity2, entity3));
 
-    assertThat(helper.readAllAlarms()).iteratesAs(
-        new DefaultPersistedAlarmDescription(id1, deadline1, duration1, callbackClass1, data1),
-        new DefaultPersistedAlarmDescription(id2, deadline2, duration2, callbackClass2, data2),
-        new DefaultPersistedAlarmDescription(id3, deadline3, duration3, callbackClass3, data3));
+    assertThat(helper.readAllAlarms())
+        .containsExactly(
+            new DefaultPersistedAlarmDescription(id1, deadline1, duration1, callbackClass1, data1),
+            new DefaultPersistedAlarmDescription(id2, deadline2, duration2, callbackClass2, data2),
+            new DefaultPersistedAlarmDescription(id3, deadline3, duration3, callbackClass3, data3))
+        .inOrder();
 
     verify(mockEntityManager).createNamedQuery("findAllAlarms", AlarmEntity.class);
   }

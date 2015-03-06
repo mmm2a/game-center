@@ -108,7 +108,9 @@ public class FlagAccessorFactoryTest {
   }
 
   @Test public void getArguments() {
-    Truth.assertThat(getAccessorFor(null).getArguments()).iteratesAs("arg1", "arg2", "arg3");
+    Truth.assertThat(getAccessorFor(null).getArguments())
+        .containsExactly("arg1", "arg2", "arg3")
+        .inOrder();
   }
 
   @Test public void stringFlag() {
@@ -116,7 +118,9 @@ public class FlagAccessorFactoryTest {
   }
 
   @Test public void fancyFlag() {
-    Truth.assertThat(getAccessorFor(null).fancyFlag()).iteratesAs("one", "two", "three");
+    Truth.assertThat(getAccessorFor(null).fancyFlag())
+        .containsExactly("one", "two", "three")
+        .inOrder();
   }
 
   @Test public void intFlag() {
@@ -137,7 +141,7 @@ public class FlagAccessorFactoryTest {
   }
 
   @Test public void collectionFlag() {
-    Truth.assertThat(getAccessorFor(null).collectionFlag())
+    Truth.assertThat((Iterable<?>) getAccessorFor(null).collectionFlag())
         .isEqualTo(ImmutableSet.of(TimeUnit.SECONDS, TimeUnit.MINUTES, TimeUnit.HOURS));
   }
 }
