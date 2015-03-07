@@ -29,7 +29,7 @@ public abstract class ApplicationPlace extends Place {
     this(clientApplication, ImmutableMap.<String, String>of());
   }
 
-  final ClientApplication getClientApplication() {
+  public ClientApplication getClientApplication() {
     return clientApplication;
   }
 

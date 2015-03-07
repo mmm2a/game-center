@@ -24,4 +24,19 @@ public enum ClientApplication {
   public String getApplicationPathToken() {
     return applicationPathToken;
   }
+
+  /**
+   * Returns the {@link ClientApplication} whose {@link #getApplicationPathToken()} matches the
+   * input string.
+   */
+  public static ClientApplication fromPathComponent(String path) {
+    for (ClientApplication app : ClientApplication.values()) {
+      if (app.getApplicationPathToken().equals(path)) {
+        return app;
+      }
+    }
+
+    throw new IllegalArgumentException(
+        "Path component " + path + " does not match any known application type");
+  }
 }

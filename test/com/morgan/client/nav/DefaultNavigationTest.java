@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.morgan.client.page.PagePresenterHelper;
 import com.morgan.shared.nav.ApplicationPlace;
+import com.morgan.shared.nav.ClientApplication;
 
 /**
  * Tests for the {@link DefaultNavigation} class.
@@ -33,11 +34,14 @@ public class DefaultNavigationTest {
   @Mock private Scheduler mockScheduler;
 
   @Mock private ApplicationPlace mockDefaultPlace;
+  @Mock private ApplicationPlace mockCurrentPlace;
   @Mock private ApplicationPlace mockOtherPlace;
 
   @Mock private HistoryHelper mockHistoryHelper;
   @Mock private PlaceRepresentationHelper mockPlaceRepresentationHelper;
   @Mock private PagePresenterHelper mockPagePresenterHelper;
+  @Mock private LocationHelper mockLocationHelper;
+  @Mock private UrlCreator mockUrlCreator;
 
   @Captor private ArgumentCaptor<ValueChangeHandler<String>> valueChangeHandlerCaptor;
   @Captor private ArgumentCaptor<ScheduledCommand> scheduledCommandCaptor;
@@ -49,9 +53,11 @@ public class DefaultNavigationTest {
 
     navigation = new DefaultNavigation(
         mockScheduler,
+        mockLocationHelper,
         mockDefaultPlace,
         mockHistoryHelper,
         mockPlaceRepresentationHelper,
+        mockUrlCreator,
         mockPagePresenterHelper);
   }
 
@@ -111,10 +117,27 @@ public class DefaultNavigationTest {
     verify(mockHistoryHelper).forward();
   }
 
-  @Test public void navigateTo() {
+  @Test public void navigateTo_withinSameGwtApp() {
     when(mockPlaceRepresentationHelper.representPlaceAsHistoryToken(mockOtherPlace))
         .thenReturn("new token");
+    navigation.currentPlace = mockCurrentPlace;
+
+    when(mockCurrentPlace.getClientApplication()).thenReturn(ClientApplication.GAME_SERVER);
+    when(mockOtherPlace.getClientApplication()).thenReturn(ClientApplication.GAME_SERVER);
+
     navigation.navigateTo(mockOtherPlace);
     verify(mockHistoryHelper).newItem("new token", true);
+  }
+
+  @Test public void navigateTo_inDifferentGwtApp() {
+    navigation.currentPlace = mockCurrentPlace;
+
+    when(mockCurrentPlace.getClientApplication()).thenReturn(ClientApplication.AUTHENTICATION);
+    when(mockOtherPlace.getClientApplication()).thenReturn(ClientApplication.GAME_SERVER);
+
+    when(mockUrlCreator.createUrlFor(mockOtherPlace)).thenReturn("new url");
+
+    navigation.navigateTo(mockOtherPlace);
+    verify(mockLocationHelper).assign("new url");
   }
 }

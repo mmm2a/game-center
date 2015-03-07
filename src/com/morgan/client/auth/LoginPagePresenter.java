@@ -3,14 +3,15 @@ package com.morgan.client.auth;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 import com.morgan.client.alert.AlertController;
+import com.morgan.client.nav.Navigator;
 import com.morgan.shared.auth.AuthenticationServiceAsync;
+import com.morgan.shared.game.home.HomeApplicationPlace;
 
 /**
  * Page widget for displaying the login page.
@@ -54,16 +55,19 @@ class LoginPagePresenter implements IsWidget {
     }
   };
 
+  private final Navigator navigator;
   private final AlertController alertController;
   private final LoginPageView view;
   private final AuthenticationServiceAsync authService;
   private final AuthenticationMessages messages;
 
   @Inject LoginPagePresenter(
+      Navigator navigator,
       AuthenticationMessages messages,
       AlertController alertController,
       AuthenticationServiceAsync authService,
       LoginPageView view) {
+    this.navigator = navigator;
     this.messages = messages;
     this.alertController = alertController;
     this.view = view;
@@ -84,7 +88,7 @@ class LoginPagePresenter implements IsWidget {
   }
 
   private void handleLoginSucceeded() {
-    Window.alert("Login succeeded");
+    navigator.navigateTo(new HomeApplicationPlace());
   }
 
   private void handleLoginFailed() {

@@ -1,5 +1,6 @@
 package com.morgan.client.nav;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -25,23 +26,29 @@ class DefaultNavigation implements Navigator, NavigationState {
         }
       };
 
+  private final LocationHelper locationHelper;
   private final ApplicationPlace defaultApplicationPlace;
   private final HistoryHelper helper;
   private final PlaceRepresentationHelper representationHelper;
   private final PagePresenterHelper pagePresentationHelper;
+  private final UrlCreator urlCreator;
 
-  private ApplicationPlace currentPlace;
+  @VisibleForTesting ApplicationPlace currentPlace;
 
   @Inject DefaultNavigation(
       Scheduler scheduler,
+      LocationHelper locationHelper,
       @Default ApplicationPlace defaultApplicationPlace,
       final HistoryHelper helper,
       PlaceRepresentationHelper representationHelper,
+      UrlCreator urlCreator,
       PagePresenterHelper pagePresentationHelper) {
+    this.locationHelper = locationHelper;
     this.defaultApplicationPlace = defaultApplicationPlace;
     this.helper = helper;
     this.representationHelper = representationHelper;
     this.pagePresentationHelper = pagePresentationHelper;
+    this.urlCreator = urlCreator;
 
     helper.addValueChangeHandler(historyChangeHandler);
 
@@ -70,7 +77,11 @@ class DefaultNavigation implements Navigator, NavigationState {
 
   @Override public void navigateTo(ApplicationPlace place) {
     Preconditions.checkNotNull(place);
-    helper.newItem(representationHelper.representPlaceAsHistoryToken(place), true);
+    if (currentPlace.getClientApplication() == place.getClientApplication()) {
+      helper.newItem(representationHelper.representPlaceAsHistoryToken(place), true);
+    } else {
+      locationHelper.assign(urlCreator.createUrlFor(place));
+    }
   }
 
   @Override public void back() {

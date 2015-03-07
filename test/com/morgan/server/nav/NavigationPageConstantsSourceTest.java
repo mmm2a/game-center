@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.inject.util.Providers;
 import com.morgan.server.constants.PageConstants;
+import com.morgan.shared.nav.ClientApplication;
 import com.morgan.shared.nav.NavigationConstant;
 
 /**
@@ -23,13 +24,16 @@ import com.morgan.shared.nav.NavigationConstant;
 @RunWith(MockitoJUnitRunner.class)
 public class NavigationPageConstantsSourceTest {
 
+  private static final ClientApplication CLIENT_APPLICATION = ClientApplication.GAME_SERVER;
+
   @Mock private HttpServletRequest mockRequest;
   @Mock private PageConstants mockConstantsSink;
 
   private NavigationPageConstantsSource source;
 
   @Before public void createTestInstances() {
-    source = new NavigationPageConstantsSource(Providers.of(mockRequest));
+    source = new NavigationPageConstantsSource(
+        Providers.of(mockRequest), Providers.of(CLIENT_APPLICATION));
   }
 
   private void doProvideConstantsIntoTest(
@@ -44,6 +48,7 @@ public class NavigationPageConstantsSourceTest {
     verify(mockConstantsSink).add(NavigationConstant.APPLICATION_HOST, host);
     verify(mockConstantsSink).add(NavigationConstant.APPLICATION_PORT, port);
     verify(mockConstantsSink).add(NavigationConstant.APPLICATION_PROTOCOL, expectedProtocol);
+    verify(mockConstantsSink).add(NavigationConstant.APPLICATION_TYPE, CLIENT_APPLICATION);
   }
 
   @Test public void provideConstantsInto_http() {

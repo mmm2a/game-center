@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AbstractApplicationPlaceRepresentationTest.class,
-    AbstractTokenBasedApplicationPlaceRepresentationTest.class })
+    AbstractTokenBasedApplicationPlaceRepresentationTest.class, ClientApplicationTest.class })
 public class AllNavTests {
 
 }

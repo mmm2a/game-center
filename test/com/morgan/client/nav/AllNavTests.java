@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ DefaultNavigationTest.class, PlaceRepresentationHelperTest.class })
+@SuiteClasses({ DefaultNavigationTest.class, PlaceRepresentationHelperTest.class,
+    UrlCreatorTest.class })
 public class AllNavTests {
 
 }
