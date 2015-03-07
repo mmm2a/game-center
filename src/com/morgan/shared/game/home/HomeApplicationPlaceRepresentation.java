@@ -1,4 +1,4 @@
-package com.morgan.shared.auth;
+package com.morgan.shared.game.home;
 
 import javax.annotation.Nullable;
 
@@ -11,27 +11,27 @@ import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 
 /**
- * {@link ApplicationPlaceRepresentation} for the {@link AuthApplicationPlace} place type.
+ * {@link ApplicationPlaceRepresentation} for the {@link HomeApplicationPlace} place type.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class AuthApplicationPlaceRepresentation
+public class HomeApplicationPlaceRepresentation
     extends AbstractTokenBasedApplicationPlaceRepresentation {
 
-  private static final String TOKEN = "authenticate";
+  private static final String TOKEN = "home";
 
-  @Inject public AuthApplicationPlaceRepresentation() {
+  @Inject public HomeApplicationPlaceRepresentation() {
     super(TOKEN);
   }
 
-  @Override @Nullable protected AuthApplicationPlace parseFromPartsAfterToken(
+  @Override @Nullable protected HomeApplicationPlace parseFromPartsAfterToken(
       ImmutableList<String> remainingParts,
       ImmutableMap<String, String> parameterMap) {
-    return remainingParts.isEmpty() ? new AuthApplicationPlace() : null;
+    return remainingParts.isEmpty() ? new HomeApplicationPlace() : null;
   }
 
   @Override protected Iterable<String> getPathPartsAfterTokenFor(ApplicationPlace place) {
-    Preconditions.checkArgument(place instanceof AuthApplicationPlace);
+    Preconditions.checkArgument(place instanceof HomeApplicationPlace);
     return ImmutableList.of();
   }
 }

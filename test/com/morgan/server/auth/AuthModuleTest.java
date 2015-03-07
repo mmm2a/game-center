@@ -15,7 +15,7 @@ import com.morgan.shared.common.BackendException;
 import com.morgan.shared.common.Role;
 
 /**
- * Tests for the {@link AuthModule} class.
+ * Tests for the {@link AuthAppModule} class.
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
@@ -24,10 +24,10 @@ public class AuthModuleTest {
 
   @Mock private UserBackend mockBackend;
 
-  private AuthModule module;
+  private AuthAppModule module;
 
   @Before public void createTestInstances() {
-    module = new AuthModule();
+    module = new AuthAppModule();
   }
 
   @Test public void provideRequestUserInformation_userIdNotPresent_noUserInformation() {
