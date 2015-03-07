@@ -8,7 +8,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Preconditions;
@@ -35,8 +34,6 @@ class DontCacheNoCacheJsFilter implements Filter {
       ServletRequest request, ServletResponse response, FilterChain chain)
           throws IOException, ServletException {
     Preconditions.checkArgument(response instanceof HttpServletResponse);
-
-    System.err.format("Filtering request for: %s\n", ((HttpServletRequest)request ).getServletPath());
 
     HttpServletResponse resp = (HttpServletResponse) response;
 

@@ -1,6 +1,7 @@
 package com.morgan.server.game;
 
 import com.google.inject.servlet.ServletModule;
+import com.morgan.server.auth.LogInFilter;
 
 /**
  * GUICE servlets module for the game engine.
@@ -13,6 +14,7 @@ class GameServletsModule extends ServletModule {
     super.configureServlets();
 
     filterRegex(".*.nocache.js$").through(DontCacheNoCacheJsFilter.class);
+    filter("/apps/game").through(LogInFilter.class);
 
     serve("/hello", "/hello/*").with(HelloWorldServlet.class);
   }

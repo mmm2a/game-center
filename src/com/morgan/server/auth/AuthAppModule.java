@@ -17,9 +17,12 @@ import com.morgan.shared.common.BackendException;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class AuthAppModule extends AbstractModule {
+class AuthAppModule extends AbstractModule {
 
   private static final AdvancedLogger log = new AdvancedLogger(AuthAppModule.class);
+
+  AuthAppModule() {
+  }
 
   @Override protected void configure() {
     install(new AuthHostPageServletModule());

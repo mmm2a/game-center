@@ -66,10 +66,18 @@ public class CookieHelper {
     return null;
   }
 
-  private boolean isValid(AuthenticationCookie cookie) {
-    return cookie.getCookieVersion().equals(flagAccessor.cookieVersion())
+  private Optional<ReadableInstant> validUntil(AuthenticationCookie cookie) {
+    if (cookie.getCookieVersion().equals(flagAccessor.cookieVersion())
         && cookie.getRemoteAddr().equalsIgnoreCase(requestProvider.get().getRemoteAddr())
-        && cookie.getValidUntil().isAfter(clock.now());
+        && cookie.getValidUntil().isAfter(clock.now())) {
+      return Optional.of(cookie.getValidUntil());
+    } else {
+      return Optional.absent();
+    }
+  }
+
+  private boolean isValid(AuthenticationCookie cookie) {
+    return validUntil(cookie).isPresent();
   }
 
   private AuthenticationCookie cookieFromBytes(byte[] bytes) {
@@ -136,6 +144,25 @@ public class CookieHelper {
     }
 
     return userId;
+  }
+
+  /**
+   * Gets the timestamp when the currently logged in user's credentials will expire (or
+   * {@Optional#absent()} if the current request has already expired or isn't logged in).
+   */
+  public Optional<ReadableInstant> getCookieExpirationTime() {
+    Cookie cookie = findCookie();
+    if (cookie != null) {
+      String encrypted = cookie.getValue();
+      try {
+        AuthenticationCookie authCookie = cookieFromBytes(obfuscator.deobfuscateId(encrypted));
+        return validUntil(authCookie);
+      } catch (Exception e) {
+        LOG.debug(e, "Error trying to de-obfuscate the authentication cookie for a user");
+      }
+    }
+
+    return Optional.absent();
   }
 
   /**
