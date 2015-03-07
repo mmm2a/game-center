@@ -5,6 +5,7 @@ import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.inject.AbstractModule;
@@ -21,6 +22,8 @@ import com.morgan.shared.nav.ClientApplication;
  */
 public class NavigationModule extends AbstractModule {
 
+  private static final CharMatcher APP_TRIMMER = CharMatcher.is('/');
+
   private static final String APPS_PREFIX = "/apps/";
 
   @Override protected void configure() {
@@ -36,7 +39,7 @@ public class NavigationModule extends AbstractModule {
       URL url = new URL(requestProvider.get().getRequestURL().toString());
       String path = url.getPath();
       Preconditions.checkState(path.startsWith(APPS_PREFIX));
-      path = path.substring(APPS_PREFIX.length());
+      path = APP_TRIMMER.trimTrailingFrom(path.substring(APPS_PREFIX.length()));
       clientApp = ClientApplication.fromPathComponent(path);
     } catch (MalformedURLException e) {
       // this shouldn't happen
