@@ -5,8 +5,8 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 
@@ -17,11 +17,11 @@ import com.morgan.shared.nav.ApplicationPlaceRepresentation;
  */
 public class PlaceRepresentationHelper {
 
-  private final ImmutableSet<ApplicationPlaceRepresentation> placeRepresentations;
+  private final Provider<Set<ApplicationPlaceRepresentation>> placeRepresentationsProvider;
 
   @Inject PlaceRepresentationHelper(
-      Set<ApplicationPlaceRepresentation> placeRepresentations) {
-    this.placeRepresentations = ImmutableSet.copyOf(placeRepresentations);
+      Provider<Set<ApplicationPlaceRepresentation>> placeRepresentationsProvider) {
+    this.placeRepresentationsProvider = placeRepresentationsProvider;
   }
 
   /**
@@ -31,7 +31,7 @@ public class PlaceRepresentationHelper {
    */
   @Nullable ApplicationPlace parseFromHistoryToken(String historyToken) {
     Preconditions.checkNotNull(historyToken);
-    for (ApplicationPlaceRepresentation representation : placeRepresentations) {
+    for (ApplicationPlaceRepresentation representation : placeRepresentationsProvider.get()) {
       ApplicationPlace parsedPlace = representation.parsePlaceFromToken(historyToken);
       if (parsedPlace != null) {
         return parsedPlace;

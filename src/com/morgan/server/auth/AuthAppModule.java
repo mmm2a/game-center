@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.multibindings.Multibinder;
 import com.morgan.server.backend.UserBackend;
 import com.morgan.server.common.CommonBindingAnnotations.RequestUser;
@@ -30,6 +31,10 @@ class AuthAppModule extends AbstractModule {
 
     Multibinder.newSetBinder(binder(), PageConstantsSource.class)
         .addBinding().to(AuthenticationPageConstantsSource.class);
+
+    AuthorizationEnforcer enforcer = new AuthorizationEnforcer();
+    requestInjection(enforcer);
+    bindInterceptor(Matchers.any(), Matchers.annotatedWith(AuthorizedFor.class), enforcer);
   }
 
   @Provides @Singleton

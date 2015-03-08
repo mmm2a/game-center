@@ -10,7 +10,10 @@ public enum Role {
   ADMIN,
 
   /** Indicates that a user is a regular member for the game engine running */
-  MEMBER;
+  MEMBER,
+
+  /** Indicates that the caller's role is unknown (i.e., not logged in) */
+  UNKNOWN;
 
   /**
    * Returns {@code true} if this role is at least as powerful as the desired role.

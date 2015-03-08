@@ -7,11 +7,11 @@ import javax.annotation.Nullable;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.morgan.client.common.CommonBindingAnnotations.PagePresenters;
 import com.morgan.shared.nav.ApplicationPlace;
@@ -26,13 +26,14 @@ import com.morgan.shared.nav.ApplicationPlace;
 public class PagePresenterHelper {
 
   @SuppressWarnings("rawtypes")
-  private final ImmutableMap<Class, PagePresenter> pagePresentersMap;
+  private final Provider<Map<Class, PagePresenter>> pagePresentersMapProvider;
 
   @Nullable private IsWidget currentPage;
 
   @SuppressWarnings("rawtypes")
-  @Inject PagePresenterHelper(@PagePresenters Map<Class, PagePresenter> pagePresentersMap) {
-    this.pagePresentersMap = ImmutableMap.copyOf(pagePresentersMap);
+  @Inject PagePresenterHelper(
+      @PagePresenters Provider<Map<Class, PagePresenter>> pagePresentersMapProvider) {
+    this.pagePresentersMapProvider = pagePresentersMapProvider;
   }
 
   @VisibleForTesting HasWidgets.ForIsWidget getRootPanel() {
@@ -50,7 +51,7 @@ public class PagePresenterHelper {
   public <T extends ApplicationPlace> void presentPageFor(T place) {
     Preconditions.checkNotNull(place);
     @SuppressWarnings("unchecked")
-    PagePresenter<T> presenter = pagePresentersMap.get(place.getClass());
+    PagePresenter<T> presenter = pagePresentersMapProvider.get().get(place.getClass());
     Preconditions.checkState(presenter != null);
 
     // Remove the current page if its there

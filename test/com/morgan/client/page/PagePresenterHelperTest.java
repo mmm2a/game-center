@@ -7,6 +7,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.inject.util.Providers;
 import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 import com.morgan.shared.nav.ClientApplication;
@@ -89,10 +92,10 @@ public class PagePresenterHelperTest {
 
     @SuppressWarnings("rawtypes")
     TestablePagePresenterHelper() {
-      super(ImmutableMap.<Class, PagePresenter>of(
+      super(Providers.<Map<Class, PagePresenter>>of(ImmutableMap.<Class, PagePresenter>of(
         PlaceClass1.class, mockPagePresenter1,
         PlaceClass2.class, mockPagePresenter2,
-        PlaceClass3.class, mockPagePresenter3));
+        PlaceClass3.class, mockPagePresenter3)));
     }
 
     @Override HasWidgets.ForIsWidget getRootPanel() {

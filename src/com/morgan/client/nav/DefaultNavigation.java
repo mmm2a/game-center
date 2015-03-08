@@ -8,6 +8,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window.Location;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.morgan.client.common.CommonBindingAnnotations.Default;
 import com.morgan.client.page.PagePresenterHelper;
 import com.morgan.shared.nav.ApplicationPlace;
@@ -27,7 +28,7 @@ class DefaultNavigation implements Navigator, NavigationState {
       };
 
   private final LocationHelper locationHelper;
-  private final ApplicationPlace defaultApplicationPlace;
+  private final Provider<ApplicationPlace> defaultApplicationPlaceProvider;
   private final HistoryHelper helper;
   private final PlaceRepresentationHelper representationHelper;
   private final PagePresenterHelper pagePresentationHelper;
@@ -38,13 +39,13 @@ class DefaultNavigation implements Navigator, NavigationState {
   @Inject DefaultNavigation(
       Scheduler scheduler,
       LocationHelper locationHelper,
-      @Default ApplicationPlace defaultApplicationPlace,
+      @Default Provider<ApplicationPlace> defaultApplicationPlaceProvider,
       final HistoryHelper helper,
       PlaceRepresentationHelper representationHelper,
       UrlCreator urlCreator,
       PagePresenterHelper pagePresentationHelper) {
     this.locationHelper = locationHelper;
-    this.defaultApplicationPlace = defaultApplicationPlace;
+    this.defaultApplicationPlaceProvider = defaultApplicationPlaceProvider;
     this.helper = helper;
     this.representationHelper = representationHelper;
     this.pagePresentationHelper = pagePresentationHelper;
@@ -66,8 +67,8 @@ class DefaultNavigation implements Navigator, NavigationState {
     if (currentPlace != null) {
       pagePresentationHelper.presentPageFor(currentPlace);
     } else {
-      helper.replaceItem(
-          representationHelper.representPlaceAsHistoryToken(defaultApplicationPlace), true);
+      helper.replaceItem(representationHelper.representPlaceAsHistoryToken(
+          defaultApplicationPlaceProvider.get()), true);
     }
   }
 

@@ -17,6 +17,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.inject.util.Providers;
 import com.morgan.client.page.PagePresenterHelper;
 import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ClientApplication;
@@ -54,7 +55,7 @@ public class DefaultNavigationTest {
     navigation = new DefaultNavigation(
         mockScheduler,
         mockLocationHelper,
-        mockDefaultPlace,
+        Providers.of(mockDefaultPlace),
         mockHistoryHelper,
         mockPlaceRepresentationHelper,
         mockUrlCreator,

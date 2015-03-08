@@ -3,6 +3,8 @@ package com.morgan.client.nav;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.util.Providers;
 import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ApplicationPlaceRepresentation;
 
@@ -30,8 +33,8 @@ public class PlaceRepresentationHelperTest {
   private PlaceRepresentationHelper helper;
 
   @Before public void createTestInstances() {
-    helper = new PlaceRepresentationHelper(
-        ImmutableSet.of(mockRepresentation1, mockRepresentation2, mockRepresentation3));
+    helper = new PlaceRepresentationHelper(Providers.<Set<ApplicationPlaceRepresentation>>of(
+        ImmutableSet.of(mockRepresentation1, mockRepresentation2, mockRepresentation3)));
   }
 
   @Test public void parseFromHistoryToken_matchReturned() {

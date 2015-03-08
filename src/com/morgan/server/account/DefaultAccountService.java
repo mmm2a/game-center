@@ -3,6 +3,7 @@ package com.morgan.server.account;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.morgan.server.auth.AuthorizedFor;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.shared.account.AccountService;
 import com.morgan.shared.auth.ClientUserInformation;
@@ -24,7 +25,9 @@ class DefaultAccountService extends RemoteServiceServlet implements AccountServi
   @Inject DefaultAccountService() {
   }
 
-  @Override public ClientUserInformation createAccount(
+  @Override
+  @AuthorizedFor(Role.ADMIN)
+  public ClientUserInformation createAccount(
       String emailAddress,
       String displayName,
       Role memberRole) throws BackendException {
