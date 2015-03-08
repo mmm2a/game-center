@@ -32,10 +32,10 @@ public class AuthPagePresenterTest {
   }
 
   @Test public void presentPageFor_loggedIn_showsLogoutPage() {
-    assertThat(createPresenter(true).presentPageFor(null)).isEqualTo(mockLogoutPagePresenter);
+    assertThat(createPresenter(true).presentPageFor(null)).hasValue(mockLogoutPagePresenter);
   }
 
   @Test public void presentPageFor_loggedOut_showsLogInPage() {
-    assertThat(createPresenter(false).presentPageFor(null)).isEqualTo(mockLoginPagePresenter);
+    assertThat(createPresenter(false).presentPageFor(null)).hasValue(mockLoginPagePresenter);
   }
 }
