@@ -15,7 +15,5 @@ class GameServletsModule extends ServletModule {
 
     filterRegex(".*.nocache.js$").through(DontCacheNoCacheJsFilter.class);
     filter("/apps/game").through(LogInFilter.class);
-
-    serve("/hello", "/hello/*").with(HelloWorldServlet.class);
   }
 }
