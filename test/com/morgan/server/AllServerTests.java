@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.morgan.server.account.AllAccountTests;
 import com.morgan.server.alarm.AllAlarmTests;
 import com.morgan.server.auth.AllAuthTests;
 import com.morgan.server.backend.AllBackendTests;
@@ -15,6 +16,7 @@ import com.morgan.server.util.AllUtilTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+  AllAccountTests.class,
   AllAlarmTests.class,
   AllAuthTests.class,
   AllBackendTests.class,

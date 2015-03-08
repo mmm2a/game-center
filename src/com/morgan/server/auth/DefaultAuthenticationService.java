@@ -16,7 +16,7 @@ import com.morgan.shared.common.BackendException;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 @Singleton
-public class DefaultAuthenticationService extends RemoteServiceServlet
+class DefaultAuthenticationService extends RemoteServiceServlet
     implements AuthenticationService {
 
   static final long serialVersionUID = 1L;
