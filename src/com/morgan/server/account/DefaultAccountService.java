@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.auth.AuthorizedFor;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 import com.morgan.shared.account.AccountService;
 import com.morgan.shared.auth.ClientUserInformation;
 import com.morgan.shared.common.BackendException;
@@ -20,7 +21,7 @@ class DefaultAccountService extends RemoteServiceServlet implements AccountServi
 
   static final long serialVersionUID = 1L;
 
-  private static final AdvancedLogger log = new AdvancedLogger(DefaultAccountService.class);
+  @InjectLogger private AdvancedLogger log;
 
   @Inject DefaultAccountService() {
   }

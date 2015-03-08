@@ -17,6 +17,7 @@ import com.morgan.server.common.CommonBindingAnnotations.Background;
 import com.morgan.server.email.EmailModule;
 import com.morgan.server.nav.NavigationModule;
 import com.morgan.server.security.SecurityModule;
+import com.morgan.server.util.log.LogModule;
 
 /**
  * Main GUICE module for the game server.
@@ -35,6 +36,7 @@ class GameModule extends AbstractModule {
     install(new EmailModule());
     install(new AlarmModule());
     install(new NavigationModule());
+    install(new LogModule());
 
     bind(EventBus.class).in(Singleton.class);
   }
