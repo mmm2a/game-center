@@ -9,6 +9,6 @@ public enum AuthenticationConstant {
 
   CURRENT_USER_DISPLAY_NAME,
   CURRENT_USER_EMAIL,
-
+  IS_ADMIN,
   IS_LOGGED_IN;
 }

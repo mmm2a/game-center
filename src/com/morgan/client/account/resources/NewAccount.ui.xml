@@ -1,0 +1,39 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://google-web-toolkit.googlecode.com/files/xhtml.ent">
+
+<ui:UiBinder
+    xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:gwt='urn:import:com.google.gwt.user.client.ui'
+    ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+    ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+    ui:generateLocales='default'>
+    
+  <ui:with
+      field="res"
+      type="com.morgan.client.account.AccountResources"/>
+    
+  <gwt:HTMLPanel styleName="{res.css.container}">
+    <div class="{res.css.box} {res.css.creationContainer}">
+      <div class="{res.css.title}">
+        <ui:msg description="Title for a dialog that allows a user to create a new account for the site">Account creation</ui:msg>
+      </div>
+      <div class="{res.css.infoLine}">
+        <div class="{res.css.label}">
+          <ui:msg description="Label for an input where the user can enter their email address">Email address</ui:msg>
+        </div><gwt:TextBox ui:field="emailAddress"/>
+      </div>
+      <div class="{res.css.infoLine}">
+        <div class="{res.css.label}">
+          <ui:msg description="Label for a text field where the user can enter the display name">Display name</ui:msg>
+        </div><gwt:TextBox ui:field="displayName"/>
+      </div>
+      <div class="{res.css.infoLine}">
+      </div>
+      <div class="{res.css.buttonPanel}">
+        <gwt:Button ui:field="createButton" styleName="{res.css.button}">
+          <ui:msg description="Label for a button that the user clicks in an account creation dialog to perform the creation">Create account</ui:msg>
+        </gwt:Button>
+      </div>
+    </div>
+  </gwt:HTMLPanel>
+    
+</ui:UiBinder>

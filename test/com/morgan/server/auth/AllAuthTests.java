@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ AuthHostPageServletTest.class, AuthModuleTest.class,
-    DefaultAuthenticationServiceTest.class, LogInFilterTest.class })
+@SuiteClasses({ AuthenticationPageConstantsSourceTest.class, AuthHostPageServletTest.class,
+    AuthModuleTest.class, DefaultAuthenticationServiceTest.class, LogInFilterTest.class })
 public class AllAuthTests {
 
 }

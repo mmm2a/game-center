@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -58,7 +59,11 @@ public class PagePresenterHelper {
       currentPage = null;
     }
 
-    currentPage = Preconditions.checkNotNull(presenter.presentPageFor(place));
-    getRootPanel().add(currentPage);
+    Optional<? extends IsWidget> newPage =
+        Preconditions.checkNotNull(presenter.presentPageFor(place));
+    currentPage = newPage.orNull();
+    if (currentPage != null) {
+      getRootPanel().add(currentPage);
+    }
   }
 }

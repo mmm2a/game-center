@@ -1,5 +1,6 @@
 package com.morgan.client.game.home;
 
+import com.google.common.base.Optional;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Inject;
@@ -16,7 +17,7 @@ class HomePagePresenter implements PagePresenter<HomeApplicationPlace> {
   @Inject HomePagePresenter() {
   }
 
-  @Override public IsWidget presentPageFor(HomeApplicationPlace place) {
-    return new Label("Welcome to the game server!");
+  @Override public Optional<? extends IsWidget> presentPageFor(HomeApplicationPlace place) {
+    return Optional.of(new Label("Welcome to the game server!"));
   }
 }

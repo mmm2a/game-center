@@ -15,11 +15,10 @@
   left: 0;
   width: 100%;
   top: 75px;
-  z-index: -1;
+  z-index: 1000;
 }
  
 .alerts {
-  z-index: 10000;
 }
  
 .alert {

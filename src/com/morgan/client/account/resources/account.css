@@ -1,0 +1,69 @@
+/*
+ * CSS file for the account package.
+ */
+ 
+.container {
+  display: -webkit-flex;
+  display: flex;
+  
+  -webkit-justify-content: center;
+  justify: center;
+  
+  height: 100%;
+  width: 100%;
+}
+
+.box {
+  background-color: lightgreen;
+  border: 1px solid darkgreen;
+  border-radius: 10px;
+  
+  padding: 5px 20px 20px 20px;
+  position: relative;
+  top: 150px;
+  
+  width: 500px;
+}
+
+.creationContainer {
+}
+
+.title {
+  border-bottom: 1px solid grey;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.infoLine {
+  -webkit-align-items: center;
+  align-items: center;
+  
+  display: -webkit-flex;
+  display: flex;
+  
+  padding-top: 10px;
+}
+
+.label {
+  -webkit-flex: 2;
+  -ms-flex: 2;
+  flex: 2;
+}
+
+.infoLine input {
+  -webkit-flex: 5;
+  -ms-flex: 5;
+  flex: 5;
+}
+
+.buttonPanel {
+}
+
+.button {
+  background-color: lightblue;
+  border-color: cadetblue;
+  float: right;
+  padding: 5px 10px;
+}

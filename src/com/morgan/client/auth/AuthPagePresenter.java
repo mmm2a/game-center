@@ -1,5 +1,6 @@
 package com.morgan.client.auth;
 
+import com.google.common.base.Optional;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -28,9 +29,9 @@ class AuthPagePresenter implements PagePresenter<AuthApplicationPlace> {
     this.logoutPagePresenterProvider = logoutPagePresenterProvider;
   }
 
-  @Override public IsWidget presentPageFor(AuthApplicationPlace place) {
-    return constants.getBoolean(AuthenticationConstant.IS_LOGGED_IN)
+  @Override public Optional<? extends IsWidget> presentPageFor(AuthApplicationPlace place) {
+    return Optional.of(constants.getBoolean(AuthenticationConstant.IS_LOGGED_IN)
         ? logoutPagePresenterProvider.get()
-        : loginPagePresenterProvider.get();
+        : loginPagePresenterProvider.get());
   }
 }

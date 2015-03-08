@@ -1,5 +1,6 @@
 package com.morgan.client.page;
 
+import com.google.common.base.Optional;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.morgan.shared.nav.ApplicationPlace;
 
@@ -14,5 +15,5 @@ public interface PagePresenter<P extends ApplicationPlace> {
   /**
    * Asks this presenter to present the correct page for the given place.
    */
-  IsWidget presentPageFor(P place);
+  Optional<? extends IsWidget> presentPageFor(P place);
 }

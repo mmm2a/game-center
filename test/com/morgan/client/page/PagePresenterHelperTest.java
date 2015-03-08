@@ -2,10 +2,10 @@ package com.morgan.client.page;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -49,9 +50,9 @@ public class PagePresenterHelperTest {
   }
 
   @Before public void setUpCommonMockInteractions() {
-    when(mockPagePresenter1.presentPageFor(PLACE1)).thenReturn(mockPage1);
-    when(mockPagePresenter2.presentPageFor(PLACE2)).thenReturn(mockPage2);
-    when(mockPagePresenter3.presentPageFor(PLACE3)).thenReturn(mockPage3);
+    doReturn(Optional.of(mockPage1)).when(mockPagePresenter1).presentPageFor(PLACE1);
+    doReturn(Optional.of(mockPage2)).when(mockPagePresenter2).presentPageFor(PLACE2);
+    doReturn(Optional.of(mockPage3)).when(mockPagePresenter3).presentPageFor(PLACE3);
   }
 
   @Test public void presentPageFor_rendersNewPage() {
@@ -70,6 +71,18 @@ public class PagePresenterHelperTest {
     verify(spyHelper).removeWidgetFromParent(mockPage1);
     spyHelper.presentPageFor(PLACE3);
     verify(spyHelper).removeWidgetFromParent(mockPage2);
+  }
+
+  @Test public void presentPageFor_absentPage_ignores() {
+    doReturn(Optional.absent()).when(mockPagePresenter2).presentPageFor(PLACE2);
+    TestablePagePresenterHelper spyHelper = spy(helper);
+    doNothing().when(spyHelper).removeWidgetFromParent(any(IsWidget.class));
+
+    spyHelper.presentPageFor(PLACE1);
+    verify(spyHelper, never()).removeWidgetFromParent(any(IsWidget.class));
+    spyHelper.presentPageFor(PLACE2);
+    verify(spyHelper).removeWidgetFromParent(mockPage1);
+    spyHelper.presentPageFor(PLACE3);
   }
 
   class TestablePagePresenterHelper extends PagePresenterHelper {
