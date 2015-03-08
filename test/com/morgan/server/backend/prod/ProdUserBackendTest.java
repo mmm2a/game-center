@@ -52,4 +52,13 @@ public class ProdUserBackendTest {
     when(mockHelper.findUserById(7L)).thenReturn(Optional.of(userInformation));
     assertThat(backend.findUserById(7L)).hasValue(userInformation);
   }
+
+  @Test public void createAccount() throws BackendException {
+    UserInformation userInfo =
+        new UserInformation(7L, "display name", "email address", Role.MEMBER);
+    when(mockHelper.createAccount("in email", "in display", "in password", Role.ADMIN))
+        .thenReturn(userInfo);
+    assertThat(backend.createAccount("in email", "in display", "in password", Role.ADMIN))
+        .isSameAs(userInfo);
+  }
 }

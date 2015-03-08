@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.auth.UserInformation;
@@ -29,12 +31,15 @@ class FakeUserBackend implements UserBackend {
 		addUser("Mark", "mark@mark-morgan.net", Role.ADMIN, "!!password");
 	}
 
-	synchronized private void addUser(String name, String email, Role role, String password) {
+	synchronized private UserInformation addUser(
+	    String name, String email, Role role, String password) {
 		UserInformation userInfo = new UserInformation(nextUserId++, name, email, role);
 
 		idToUserInformationMap.put(userInfo.getUserId(), userInfo);
 		emailToUserInformationMap.put(email, userInfo);
 		userIdToPasswordMap.put(userInfo.getUserId(), password);
+
+		return userInfo;
 	}
 
 	@Override synchronized public Optional<UserInformation> logIn(
@@ -54,5 +59,23 @@ class FakeUserBackend implements UserBackend {
   @Override synchronized public Optional<UserInformation> findUserById(
       long userId) throws BackendException {
     return Optional.fromNullable(idToUserInformationMap.get(userId));
+  }
+
+  @Override synchronized public UserInformation createAccount(
+      String emailAddress,
+      String displayName,
+      String password,
+      Role role) throws BackendException {
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(emailAddress));
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(displayName));
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(password));
+    Preconditions.checkNotNull(role);
+
+    if (emailToUserInformationMap.containsKey(emailAddress)) {
+      throw new BackendException(
+          String.format("User with email address %s already exists", emailAddress));
+    }
+
+    return addUser(displayName, emailAddress, role, password);
   }
 }

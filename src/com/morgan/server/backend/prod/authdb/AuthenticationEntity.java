@@ -2,6 +2,7 @@ package com.morgan.server.backend.prod.authdb;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import com.google.common.base.Preconditions;
@@ -16,7 +17,7 @@ import com.google.common.base.Strings;
 @Entity(name = "password")
 class AuthenticationEntity {
 
-  @Id
+  @Id @GeneratedValue
   private long id;
 
   @Column(length = 256, nullable = false)
@@ -28,6 +29,11 @@ class AuthenticationEntity {
   AuthenticationEntity(long id, String password) {
     Preconditions.checkArgument(!Strings.isNullOrEmpty(password));
     this.id = id;
+    this.password = password;
+  }
+
+  AuthenticationEntity(String password) {
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(password));
     this.password = password;
   }
 

@@ -9,6 +9,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 import com.morgan.server.auth.UserInformation;
+import com.morgan.shared.common.BackendException;
+import com.morgan.shared.common.Role;
 
 /**
  * A helper class for helping with database access related to authentication.
@@ -65,5 +67,27 @@ public class AuthDbHelper {
     }
 
     return Optional.absent();
+  }
+
+  /**
+   * Attempt to create a new user account.
+   */
+  @Transactional
+  public UserInformation createAccount(
+      String emailAddress,
+      String displayName,
+      String password,
+      Role memberRole) throws BackendException {
+    EntityManager entityManager = entityManagerProvider.get();
+    AuthenticationEntity authEntity = new AuthenticationEntity(password);
+    UserInformationEntity userEntity = new UserInformationEntity(
+        emailAddress, displayName, memberRole);
+    userEntity.setAuthenticationEntity(authEntity);
+    try {
+      entityManager.persist(userEntity);
+      return new UserInformation(userEntity.getId(), displayName, emailAddress, memberRole);
+    } catch (Throwable cause) {
+      throw new BackendException("Unable to create user account", cause);
+    }
   }
 }

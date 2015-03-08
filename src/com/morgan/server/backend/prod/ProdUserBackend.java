@@ -1,11 +1,14 @@
 package com.morgan.server.backend.prod;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.UserBackend;
 import com.morgan.server.backend.prod.authdb.AuthDbHelper;
 import com.morgan.shared.common.BackendException;
+import com.morgan.shared.common.Role;
 
 /**
  * Production implementation of the {@link UserBackend} interface.
@@ -26,5 +29,18 @@ class ProdUserBackend implements UserBackend {
 
   @Override public Optional<UserInformation> findUserById(long userId) throws BackendException {
     return authDbHelper.findUserById(userId);
+  }
+
+  @Override public UserInformation createAccount(
+      String emailAddress,
+      String displayName,
+      String password,
+      Role memberRole) throws BackendException {
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(emailAddress));
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(displayName));
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(password));
+    Preconditions.checkNotNull(memberRole);
+
+    return authDbHelper.createAccount(emailAddress, displayName, password, memberRole);
   }
 }

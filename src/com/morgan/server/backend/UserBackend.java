@@ -3,6 +3,7 @@ package com.morgan.server.backend;
 import com.google.common.base.Optional;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.shared.common.BackendException;
+import com.morgan.shared.common.Role;
 
 /**
  * Interface for communicating with the backend to deal with user authentication issues.
@@ -10,6 +11,12 @@ import com.morgan.shared.common.BackendException;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 public interface UserBackend {
+
+  /**
+   * Create a new user account.
+   */
+  UserInformation createAccount(
+      String emailAddress, String displayName, String password, Role role) throws BackendException;
 
 	/**
 	 * Try to log the current user in with the given email address and the given password.

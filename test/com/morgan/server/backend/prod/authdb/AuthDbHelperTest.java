@@ -3,6 +3,7 @@ package com.morgan.server.backend.prod.authdb;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,8 @@ import javax.persistence.TypedQuery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -34,6 +37,8 @@ public class AuthDbHelperTest {
 
   @Mock private EntityManager mockEntityManager;
   @Mock private TypedQuery<UserInformationEntity> mockQuery;
+
+  @Captor private ArgumentCaptor<UserInformationEntity> userInfoEntityCaptor;
 
   private AuthDbHelper helper;
 
@@ -81,5 +86,21 @@ public class AuthDbHelperTest {
             .setAuthenticationEntity(new AuthenticationEntity(USER_ID, "password"))));
     assertThat(helper.authenticate(EMAIL, "password"))
         .hasValue(new UserInformation(USER_ID, DISPLAY_NAME, EMAIL, ROLE));
+  }
+
+  @Test public void createAccount() throws Exception {
+    String email = "email address";
+    String display = "display name";
+    String password = "password";
+    Role role = Role.MEMBER;
+
+    assertThat(helper.createAccount(email, display, password, role))
+        .isEqualTo(new UserInformation(0L, display, email, role));
+    verify(mockEntityManager).persist(userInfoEntityCaptor.capture());
+    UserInformationEntity entity = userInfoEntityCaptor.getValue();
+    assertThat(entity.getEmailAddress()).isEqualTo(email);
+    assertThat(entity.getDisplayName()).isEqualTo(display);
+    assertThat(entity.getRole()).isEqualTo(role);
+    assertThat(entity.getAuthenticationEntity().getPassword()).isEqualTo(password);
   }
 }

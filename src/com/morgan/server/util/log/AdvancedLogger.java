@@ -18,7 +18,14 @@ import com.google.common.base.Preconditions;
  */
 public class AdvancedLogger {
 
+  public static final AdvancedLogger NULL = new AdvancedLogger();
+
   private final Logger delegate;
+
+  private AdvancedLogger() {
+    delegate = Logger.getLogger("com.morgan.null");
+    delegate.setLevel(Level.OFF);
+  }
 
   public AdvancedLogger(Class<?> loggingClass) {
     delegate = Logger.getLogger(loggingClass.getName());

@@ -1,5 +1,7 @@
 package com.morgan.server.game;
 
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.concurrent.Executors;
 
 import com.google.common.eventbus.EventBus;
@@ -49,5 +51,9 @@ class GameModule extends AbstractModule {
   @Provides @Singleton
   protected ListeningScheduledExecutorService provideScheduledExecutorService() {
     return MoreExecutors.listeningDecorator(Executors.newScheduledThreadPool(4));
+  }
+
+  @Provides @Singleton protected Random provideRandomGenerator() {
+    return new SecureRandom();
   }
 }
