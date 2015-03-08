@@ -12,6 +12,7 @@ import com.google.inject.Provider;
 import com.morgan.client.common.CommonBindingAnnotations.Default;
 import com.morgan.client.page.PagePresenterHelper;
 import com.morgan.shared.nav.ApplicationPlace;
+import com.morgan.shared.nav.UrlCreator;
 
 /**
  * Default implementation of both the {@link Navigator} and {@link NavigationState} interfaces.
@@ -81,7 +82,7 @@ class DefaultNavigation implements Navigator, NavigationState {
     if (currentPlace.getClientApplication() == place.getClientApplication()) {
       helper.newItem(representationHelper.representPlaceAsHistoryToken(place), true);
     } else {
-      locationHelper.assign(urlCreator.createUrlFor(place));
+      locationHelper.assign(urlCreator.createUrlFor(place).asString());
     }
   }
 

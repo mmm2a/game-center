@@ -17,10 +17,12 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.inject.util.Providers;
 import com.morgan.client.page.PagePresenterHelper;
 import com.morgan.shared.nav.ApplicationPlace;
 import com.morgan.shared.nav.ClientApplication;
+import com.morgan.shared.nav.UrlCreator;
 
 /**
  * Tests for the {@link DefaultNavigation} class.
@@ -136,9 +138,9 @@ public class DefaultNavigationTest {
     when(mockCurrentPlace.getClientApplication()).thenReturn(ClientApplication.AUTHENTICATION);
     when(mockOtherPlace.getClientApplication()).thenReturn(ClientApplication.GAME_SERVER);
 
-    when(mockUrlCreator.createUrlFor(mockOtherPlace)).thenReturn("new url");
+    when(mockUrlCreator.createUrlFor(mockOtherPlace)).thenReturn(UriUtils.fromString("new/url"));
 
     navigation.navigateTo(mockOtherPlace);
-    verify(mockLocationHelper).assign("new url");
+    verify(mockLocationHelper).assign("new/url");
   }
 }

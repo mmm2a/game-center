@@ -14,6 +14,7 @@ import com.google.inject.Provides;
 import com.google.inject.multibindings.Multibinder;
 import com.morgan.server.constants.PageConstantsSource;
 import com.morgan.shared.nav.ClientApplication;
+import com.morgan.shared.nav.UrlCreator;
 
 /**
  * GUICE module for the navigation package.
@@ -27,6 +28,8 @@ public class NavigationModule extends AbstractModule {
   private static final String APPS_PREFIX = "/apps/";
 
   @Override protected void configure() {
+    bind(UrlCreator.class).to(ServerUrlCreator.class);
+
     Multibinder.newSetBinder(binder(), PageConstantsSource.class)
         .addBinding().to(NavigationPageConstantsSource.class);
   }

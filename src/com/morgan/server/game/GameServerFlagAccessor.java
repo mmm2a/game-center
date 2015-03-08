@@ -8,7 +8,13 @@ import com.morgan.server.util.flag.FlagAccessor;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-interface GameServerFlagAccessor extends FlagAccessor {
+public interface GameServerFlagAccessor extends FlagAccessor {
+
+  @Flag(name = "server-title",
+      description = "Title for this running server",
+      required = false,
+      defaultValue = "Morgan Game Server")
+  String serverTitle();
 
   @Flag(name = "secure",
       description = "Boolean flag indicating whether or not the server should run with HTTPS",

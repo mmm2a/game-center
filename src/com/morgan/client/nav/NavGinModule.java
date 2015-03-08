@@ -7,6 +7,7 @@ import com.google.inject.Provides;
 import com.morgan.client.constants.ClientPageConstants;
 import com.morgan.shared.nav.ClientApplication;
 import com.morgan.shared.nav.NavigationConstant;
+import com.morgan.shared.nav.UrlCreator;
 
 /**
  * GIN module for the client nav package.
@@ -19,6 +20,7 @@ public class NavGinModule extends AbstractGinModule {
     bind(DefaultNavigation.class).asEagerSingleton();
     bind(NavigationState.class).to(DefaultNavigation.class);
     bind(Navigator.class).to(DefaultNavigation.class);
+    bind(UrlCreator.class).to(ClientUrlCreator.class);
   }
 
   @Provides protected ClientApplication provideClientApplication(ClientPageConstants constants) {

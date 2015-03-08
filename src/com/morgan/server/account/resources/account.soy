@@ -1,0 +1,57 @@
+{namespace com.morgan.server.account autoescape="strict"}
+
+/**
+ * Soy template for generating HTML email messages to users who have just had an account created for
+ * them.
+ *
+ * @param serverTitle A string parameter identifying the name of the server.
+ * @param serverUrl A SafeUri parameter identifying the URI for the server
+ * @param emailAddress A string parameter representing the new user's email address.
+ * @param displayName A string parameter representing the new user's display name.
+ * @param password A string parameter representing the new user's temporary password.
+ */
+{template .createdEmailHtml}
+  <html>
+    <body>
+      {$displayName},
+      <br><br>
+      An account has just been created for you on <b>{$serverTitle}</b>.  To access your account,
+      please visit <a href="{$serverUrl}">the authentication page</a> and log in.  Your account
+      information is:
+      <br>
+      <ul>
+        <li>Email address: <b>{$emailAddress}</b>
+        <li>Display name: <b>{$displayName}</b>
+        <li>Password (please change as soon as possible): <b>{$password}</b>
+      </ul>
+      <br>
+      Sincerely,
+      <br>
+      <i>{$serverTitle}</i>
+    </body>
+  </html>
+{/template}
+
+/**
+ * Soy template for generating text email messages to users who have just had an account created for
+ * them.
+ *
+ * @param serverTitle A string parameter identifying the name of the server.
+ * @param serverUrl A SafeUri parameter identifying the URI for the server
+ * @param emailAddress A string parameter representing the new user's email address.
+ * @param displayName A string parameter representing the new user's display name.
+ * @param password A string parameter representing the new user's temporary password.
+ */
+{template .createdEmailPlain}
+  {$displayName},
+  
+  An account has just been created for you on {$serverTitle}.  To access your account,
+  please visit {$serverUrl} and log in.  Your account information is:
+  
+  * Email address: {$emailAddress}
+  * Display name: {$displayName}
+  * Password (please change as soon as possible): {$password}
+  
+  Sincerely,
+  {$serverTitle}
+{/template}

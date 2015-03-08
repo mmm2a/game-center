@@ -19,6 +19,7 @@ import com.morgan.server.common.CommonBindingAnnotations.Background;
 import com.morgan.server.email.EmailModule;
 import com.morgan.server.nav.NavigationModule;
 import com.morgan.server.security.SecurityModule;
+import com.morgan.server.util.flag.FlagAccessorFactory;
 import com.morgan.server.util.log.LogModule;
 
 /**
@@ -55,5 +56,10 @@ class GameModule extends AbstractModule {
 
   @Provides @Singleton protected Random provideRandomGenerator() {
     return new SecureRandom();
+  }
+
+  @Provides @Singleton protected GameServerFlagAccessor provideGameServerFlagAccessor(
+      FlagAccessorFactory accessorFactory) {
+    return accessorFactory.getFlagAccessor(GameServerFlagAccessor.class);
   }
 }
