@@ -20,6 +20,7 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 import com.morgan.server.util.time.Clock;
 
 /**
@@ -29,8 +30,6 @@ import com.morgan.server.util.time.Clock;
  */
 public class CookieHelper {
 
-  private static final AdvancedLogger LOG = new AdvancedLogger(CookieHelper.class);
-
   private static final String COOKIE_NAME = "com.morgan.game-center.auth";
 
   private final SecurityFlagAccessor flagAccessor;
@@ -39,6 +38,8 @@ public class CookieHelper {
   private final Provider<HttpServletResponse> responseProvider;
 
   private final AuthenticationCookieObfuscator obfuscator;
+
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject CookieHelper(
       SecurityFlagAccessor flagAccessor,
@@ -91,7 +92,7 @@ public class CookieHelper {
           ois.readUTF());
     } catch (IOException ioe) {
       // If anything happens, log it, but simply say there isn't a cookie
-      LOG.debug(ioe, "Error trying to deserialize cookie from bytes");
+      log.debug(ioe, "Error trying to deserialize cookie from bytes");
       return AuthenticationCookie.INVALID_COOKIE;
     }
   }
@@ -117,7 +118,7 @@ public class CookieHelper {
     } catch (Exception e) {
       // If anything goes wrong, we obviously fail to set the cookie.  We throw an exception to
       // higher levels to deal with this
-      LOG.warning(e, "Unable to set the authentication cookie into the header for user %d",
+      log.warning(e, "Unable to set the authentication cookie into the header for user %d",
           authCookie.getUserId());
       throw new RuntimeException("Unable to set authentication cookie into header.", e);
     }
@@ -139,7 +140,7 @@ public class CookieHelper {
           return Optional.of(authCookie.getUserId());
         }
       } catch (Exception e) {
-        LOG.debug(e, "Error trying to de-obfuscate the authentication cookie for a user");
+        log.debug(e, "Error trying to de-obfuscate the authentication cookie for a user");
       }
     }
 
@@ -158,7 +159,7 @@ public class CookieHelper {
         AuthenticationCookie authCookie = cookieFromBytes(obfuscator.deobfuscateId(encrypted));
         return validUntil(authCookie);
       } catch (Exception e) {
-        LOG.debug(e, "Error trying to de-obfuscate the authentication cookie for a user");
+        log.debug(e, "Error trying to de-obfuscate the authentication cookie for a user");
       }
     }
 

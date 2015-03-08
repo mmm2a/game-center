@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.morgan.server.common.CommonBindingAnnotations.RequestUser;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 import com.morgan.shared.common.PermissionDeniedException;
 import com.morgan.shared.common.Role;
 
@@ -21,7 +22,7 @@ import com.morgan.shared.common.Role;
  */
 class AuthorizationEnforcer implements MethodInterceptor {
 
-  private static final AdvancedLogger log = new AdvancedLogger(AuthorizationEnforcer.class);
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject @RequestUser private Provider<Optional<UserInformation>> requestUserProvider;
 

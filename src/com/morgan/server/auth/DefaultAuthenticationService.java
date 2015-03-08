@@ -7,6 +7,7 @@ import com.google.inject.Singleton;
 import com.morgan.server.backend.UserBackend;
 import com.morgan.server.security.CookieHelper;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 import com.morgan.shared.auth.AuthenticationService;
 import com.morgan.shared.common.BackendException;
 
@@ -21,7 +22,7 @@ class DefaultAuthenticationService extends RemoteServiceServlet
 
   static final long serialVersionUID = 1L;
 
-  private static final AdvancedLogger log = new AdvancedLogger(DefaultAuthenticationService.class);
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   private final UserBackend userBackend;
   private final CookieHelper cookieHelper;

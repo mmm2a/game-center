@@ -23,6 +23,7 @@ import com.morgan.server.alarm.AlarmManager;
 import com.morgan.server.security.SecurityInformationHelper;
 import com.morgan.server.security.UserIdObfuscator;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 
 /**
  * Simple "hello world" servlet to prove the server is running.
@@ -34,12 +35,12 @@ class HelloWorldServlet extends HttpServlet {
 
   static final long serialVersionUID = 0L;
 
-  private static final AdvancedLogger log = new AdvancedLogger(HelloWorldServlet.class);
-
   private final AlarmManager alarms;
   private final SecurityInformationHelper helper;
   private final UserIdObfuscator obfuscator;
   private final Provider<HtmlEmail> htmlEmailProvider;
+
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject HelloWorldServlet(AlarmManager alarms, SecurityInformationHelper helper, UserIdObfuscator obfuscator, Provider<HtmlEmail> htmlEmailProvider) {
     this.alarms = alarms;
@@ -96,6 +97,8 @@ class HelloWorldServlet extends HttpServlet {
   }
 
   static class PersistentAlarmCallback implements AlarmCallback {
+    @InjectLogger AdvancedLogger log = AdvancedLogger.NULL;
+
     @Inject PersistentAlarmCallback() {
     }
 

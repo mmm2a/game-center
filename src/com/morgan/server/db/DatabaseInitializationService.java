@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.PersistService;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 
 /**
  * A GUICE service that will create SQL tables using the given persistence unit if necessary, but
@@ -28,10 +29,10 @@ import com.morgan.server.util.log.AdvancedLogger;
  * @author mark@mark-morgan.net (Mark Morgan)
  */
 class DatabaseInitializationService {
-  private static final AdvancedLogger logger = new AdvancedLogger(
-      DatabaseInitializationService.class);
 
   private final PersistService persistService;
+
+  @InjectLogger private AdvancedLogger logger = AdvancedLogger.NULL;
 
   private void handleDatabaseException(DatabaseException e) {
     if (e.getDatabaseErrorCode() == 20000) {

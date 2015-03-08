@@ -26,6 +26,7 @@ import com.morgan.server.backend.AlarmBackend;
 import com.morgan.server.backend.AlarmBackend.PersistedAlarmDescription;
 import com.morgan.server.common.CommonBindingAnnotations.Background;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 import com.morgan.server.util.time.Clock;
 
 /**
@@ -36,7 +37,7 @@ import com.morgan.server.util.time.Clock;
 @Singleton
 class DefaultAlarmManager extends AbstractService implements AlarmManager, Runnable {
 
-  private static final AdvancedLogger log = new AdvancedLogger(DefaultAlarmManager.class);
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @VisibleForTesting static final int INITIAL_CAPACITY = 32;
   @VisibleForTesting static final long MINIMUM_SLEEP_TIME_MS = 100L;

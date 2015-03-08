@@ -10,6 +10,7 @@ import com.morgan.server.backend.UserBackend;
 import com.morgan.server.common.CommonBindingAnnotations.RequestUser;
 import com.morgan.server.constants.PageConstantsSource;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 import com.morgan.server.util.soy.SoyTemplateFactory;
 import com.morgan.shared.common.BackendException;
 
@@ -20,7 +21,7 @@ import com.morgan.shared.common.BackendException;
  */
 class AuthAppModule extends AbstractModule {
 
-  private static final AdvancedLogger log = new AdvancedLogger(AuthAppModule.class);
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   AuthAppModule() {
   }

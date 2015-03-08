@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.Inject;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 
 /**
  * Utility class for starting up all services that have been configured.
@@ -14,9 +15,9 @@ import com.morgan.server.util.log.AdvancedLogger;
  */
 public class ServiceStarter {
 
-  private static final AdvancedLogger log = new AdvancedLogger(ServiceStarter.class);
-
   private final ImmutableSet<Service> services;
+
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject ServiceStarter(Set<Service> services) {
     this.services = ImmutableSet.copyOf(services);

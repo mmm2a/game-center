@@ -13,6 +13,7 @@ import com.google.inject.Provider;
 import com.morgan.server.common.CommonBindingAnnotations.DeobfuscationCipher;
 import com.morgan.server.common.CommonBindingAnnotations.ObfuscationCipher;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 
 /**
  * A class that can obfuscate and deobfuscate user ids.
@@ -21,10 +22,10 @@ import com.morgan.server.util.log.AdvancedLogger;
  */
 class DefaultUserIdObfuscator implements UserIdObfuscator {
 
-  private static final AdvancedLogger LOG = new AdvancedLogger(DefaultUserIdObfuscator.class);
-
   private final Provider<Cipher> obfuscationCipherProvider;
   private final Provider<Cipher> deobfuscationCipherProvider;
+
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject DefaultUserIdObfuscator(
       @ObfuscationCipher Provider<Cipher> obfuscationCipherProvider,
@@ -63,7 +64,7 @@ class DefaultUserIdObfuscator implements UserIdObfuscator {
     try {
       return toString(cipher.doFinal(clear));
     } catch (IllegalBlockSizeException | BadPaddingException e) {
-      LOG.error(e, "Unable to encrypt user id %d", id);
+      log.error(e, "Unable to encrypt user id %d", id);
       throw new RuntimeException("Unable to encrypt user id", e);
     }
   }
@@ -74,7 +75,7 @@ class DefaultUserIdObfuscator implements UserIdObfuscator {
     try {
       return fromByteArray(cipher.doFinal(encrypted));
     } catch (IllegalBlockSizeException | BadPaddingException e) {
-      LOG.error(e, "Unable to decrypt user id %s", id);
+      log.error(e, "Unable to decrypt user id %s", id);
       throw new RuntimeException("Unable to decrypt user id", e);
     }
   }

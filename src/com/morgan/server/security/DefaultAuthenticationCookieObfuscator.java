@@ -13,6 +13,7 @@ import com.google.inject.Provider;
 import com.morgan.server.common.CommonBindingAnnotations.DeobfuscationCipher;
 import com.morgan.server.common.CommonBindingAnnotations.ObfuscationCipher;
 import com.morgan.server.util.log.AdvancedLogger;
+import com.morgan.server.util.log.InjectLogger;
 
 /**
  * Default implementation of the {@link AuthenticationCookieObfuscator}.
@@ -21,11 +22,10 @@ import com.morgan.server.util.log.AdvancedLogger;
  */
 class DefaultAuthenticationCookieObfuscator implements AuthenticationCookieObfuscator {
 
-  private static final AdvancedLogger LOG =
-      new AdvancedLogger(DefaultAuthenticationCookieObfuscator.class);
-
   private final Provider<Cipher> obfuscationCipherProvider;
   private final Provider<Cipher> deobfuscationCipherProvider;
+
+  @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject DefaultAuthenticationCookieObfuscator(
       @ObfuscationCipher Provider<Cipher> obfuscationCipherProvider,
@@ -42,7 +42,7 @@ class DefaultAuthenticationCookieObfuscator implements AuthenticationCookieObfus
       cipher.doFinal(inputBuffer, outputBuffer);
       return BaseEncoding.base64().encode(outputBuffer.array());
     } catch (IllegalBlockSizeException | BadPaddingException | ShortBufferException e) {
-      LOG.error(e, "Unable to encrypt authentication token");
+      log.error(e, "Unable to encrypt authentication token");
       throw new RuntimeException("Unable to encrypt authentication token", e);
     }
   }
@@ -55,7 +55,7 @@ class DefaultAuthenticationCookieObfuscator implements AuthenticationCookieObfus
       cipher.doFinal(input, output);
       return output.array();
     } catch (IllegalBlockSizeException | BadPaddingException | ShortBufferException e) {
-      LOG.error(e, "Unable to decrypt authentication token");
+      log.error(e, "Unable to decrypt authentication token");
       throw new RuntimeException("Unable to decrypt authentication token", e);
     }
   }

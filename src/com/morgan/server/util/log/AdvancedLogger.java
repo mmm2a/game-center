@@ -27,7 +27,7 @@ public class AdvancedLogger {
     delegate.setLevel(Level.OFF);
   }
 
-  public AdvancedLogger(Class<?> loggingClass) {
+  AdvancedLogger(Class<?> loggingClass) {
     delegate = Logger.getLogger(loggingClass.getName());
   }
 
