@@ -53,4 +53,10 @@ public final class CommonBindingAnnotations {
   @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
   public @interface RequestUser {
   }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
+  public @interface UserId {
+  }
 }

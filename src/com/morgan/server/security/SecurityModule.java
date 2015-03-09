@@ -18,6 +18,7 @@ import javax.crypto.SecretKey;
 
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
+import com.google.common.base.Converter;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
@@ -28,6 +29,7 @@ import com.morgan.server.common.CommonBindingAnnotations.ObfuscationCipher;
 import com.morgan.server.common.CommonBindingAnnotations.Obfuscator;
 import com.morgan.server.common.CommonBindingAnnotations.RequestUser;
 import com.morgan.server.common.CommonBindingAnnotations.SslCert;
+import com.morgan.server.common.CommonBindingAnnotations.UserId;
 import com.morgan.server.util.flag.FlagAccessorFactory;
 
 /**
@@ -38,6 +40,19 @@ import com.morgan.server.util.flag.FlagAccessorFactory;
 public class SecurityModule extends AbstractModule {
 
   @Override protected void configure() {
+  }
+
+  @Provides @UserId Converter<Long, String> provideUserIdConverter(
+      final UserIdObfuscator obfuscator) {
+    return new Converter<Long, String>() {
+      @Override protected String doForward(Long a) {
+        return obfuscator.obfuscateId(a);
+      }
+
+      @Override protected Long doBackward(String b) {
+        return obfuscator.deobfuscateId(b);
+      }
+    };
   }
 
   @Provides @RequestUser protected Optional<Long> provideRequestUserId(CookieHelper cookieHelper) {
