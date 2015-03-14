@@ -76,6 +76,7 @@
     <path refid="guice.class.path"/>
     <path refid="gin.class.path"/>
     <path refid="jetty.class.path"/>
+    <path refid="truth.class.path"/>
     <path refid="joda.class.path"/>
     <path refid="gson.class.path"/>
     <path refid="soy.class.path"/>
@@ -210,6 +211,9 @@
 		<fileset dir="${src.dir}/com/morgan/server"
 			includes="${default.compile.copy.includes}"/>
 	</copy>
+    <copy todir="${bin.dir}/com/morgan/server/polymer/resources">
+        <fileset dir="${src.dir}/com/morgan/server/polymer/resources"/>
+    </copy>
   </target>
 
   <target name="shared.compile">

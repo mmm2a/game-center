@@ -9,6 +9,7 @@ import com.morgan.server.util.common.AllCommonTests;
 import com.morgan.server.util.flag.AllFlagTests;
 import com.morgan.server.util.log.AllLogTests;
 import com.morgan.server.util.macro.AllMacroTests;
+import com.morgan.server.util.mime.AllMimeTests;
 import com.morgan.server.util.soy.AllSoyTests;
 
 @RunWith(Suite.class)
@@ -17,6 +18,7 @@ import com.morgan.server.util.soy.AllSoyTests;
   AllFlagTests.class,
   AllLogTests.class,
   AllMacroTests.class,
+  AllMimeTests.class,
   AllCommandLineTests.class,
   AllSoyTests.class,
   })

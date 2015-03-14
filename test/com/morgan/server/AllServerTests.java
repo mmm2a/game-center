@@ -12,6 +12,7 @@ import com.morgan.server.email.AllEmailTests;
 import com.morgan.server.feature.AllFeatureTests;
 import com.morgan.server.game.AllGameTests;
 import com.morgan.server.nav.AllNavTests;
+import com.morgan.server.polymer.AllPolymerTests;
 import com.morgan.server.util.AllUtilTests;
 
 @RunWith(Suite.class)
@@ -23,6 +24,7 @@ import com.morgan.server.util.AllUtilTests;
   AllEmailTests.class,
   AllGameTests.class,
   AllNavTests.class,
+  AllPolymerTests.class,
   AllUtilTests.class,
   AllFeatureTests.class
   })
