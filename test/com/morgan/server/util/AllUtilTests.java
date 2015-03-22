@@ -11,6 +11,7 @@ import com.morgan.server.util.log.AllLogTests;
 import com.morgan.server.util.macro.AllMacroTests;
 import com.morgan.server.util.mime.AllMimeTests;
 import com.morgan.server.util.soy.AllSoyTests;
+import com.morgan.server.util.stat.AllStatTests;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -21,6 +22,7 @@ import com.morgan.server.util.soy.AllSoyTests;
   AllMimeTests.class,
   AllCommandLineTests.class,
   AllSoyTests.class,
+  AllStatTests.class,
   })
 public class AllUtilTests {
 

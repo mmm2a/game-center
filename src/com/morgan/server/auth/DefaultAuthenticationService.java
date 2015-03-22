@@ -8,6 +8,7 @@ import com.morgan.server.backend.UserBackend;
 import com.morgan.server.security.CookieHelper;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.log.InjectLogger;
+import com.morgan.server.util.stat.MeasureStatistics;
 import com.morgan.shared.auth.AuthenticationService;
 import com.morgan.shared.common.BackendException;
 
@@ -34,6 +35,7 @@ class DefaultAuthenticationService extends RemoteServiceServlet
     this.cookieHelper = cookieHelper;
   }
 
+  @MeasureStatistics
   @Override public boolean authenticate(
       String emailAddress, String password) throws BackendException {
     log.trace("User \"%s\" is attempting to log in", emailAddress);
@@ -52,6 +54,7 @@ class DefaultAuthenticationService extends RemoteServiceServlet
     return userInfo.isPresent();
   }
 
+  @MeasureStatistics
   @Override public void logout() throws BackendException {
     cookieHelper.logout();
   }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.constants.PageConstantsHelper;
+import com.morgan.server.util.stat.MeasureStatistics;
 
 /**
  * Servlet implementation for serving the game host page.
@@ -31,6 +32,7 @@ class GameHostPageServlet extends HttpServlet {
     this.pageConstantsHelper = pageConstantsHelper;
   }
 
+  @MeasureStatistics
   @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
 

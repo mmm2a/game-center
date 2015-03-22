@@ -38,6 +38,7 @@ public class FakeClock implements Clock {
 
   public FakeClock setAutoIncrement(long autoIncrement) {
     Preconditions.checkArgument(autoIncrement >= 0);
+    this.autoIncrement = autoIncrement;
     return this;
   }
 

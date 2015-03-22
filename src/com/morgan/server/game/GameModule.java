@@ -23,6 +23,7 @@ import com.morgan.server.security.SecurityModule;
 import com.morgan.server.util.flag.FlagAccessorFactory;
 import com.morgan.server.util.log.LogModule;
 import com.morgan.server.util.mime.MimeModule;
+import com.morgan.server.util.stat.StatModule;
 
 /**
  * Main GUICE module for the game server.
@@ -44,6 +45,7 @@ class GameModule extends AbstractModule {
     install(new LogModule());
     install(new MimeModule());
     install(new PolymerModule());
+    install(new StatModule());
 
     bind(EventBus.class).in(Singleton.class);
   }

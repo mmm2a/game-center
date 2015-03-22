@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.auth.AuthorizedFor;
 import com.morgan.server.auth.UserInformation;
+import com.morgan.server.util.stat.MeasureStatistics;
 import com.morgan.shared.account.AccountService;
 import com.morgan.shared.auth.ClientUserInformation;
 import com.morgan.shared.common.BackendException;
@@ -33,6 +34,7 @@ class DefaultAccountService extends RemoteServiceServlet implements AccountServi
 
   @Override
   @AuthorizedFor(Role.ADMIN)
+  @MeasureStatistics
   public ClientUserInformation createAccount(
       String emailAddress,
       String displayName,

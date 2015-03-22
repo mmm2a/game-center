@@ -19,6 +19,7 @@ import com.google.inject.Singleton;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.log.InjectLogger;
 import com.morgan.server.util.mime.MediaTypeMapper;
+import com.morgan.server.util.stat.MeasureStatistics;
 
 /**
  * Servlet for serving the polymer components (located under the accompanying resources folder).
@@ -49,6 +50,7 @@ class PolymerComponentServlet extends HttpServlet {
     return path;
   }
 
+  @MeasureStatistics
   @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     String relativePath = LEADING_SLASH_TRIMMER.trimLeadingFrom(req.getPathInfo());
