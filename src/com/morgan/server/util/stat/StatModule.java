@@ -14,6 +14,8 @@ import com.morgan.server.util.flag.FlagAccessorFactory;
 public final class StatModule extends AbstractModule {
 
   @Override protected void configure() {
+    install(new StatServletModule());
+
     bind(StatisticsSync.class).to(DefaultStatisticsManager.class);
 
     StatisticsMeasurer measurer = new StatisticsMeasurer();
