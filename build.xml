@@ -37,6 +37,11 @@
     <pathelement location="${ext.dir}/GIN/gin-2.1.2.jar"/>
   </path>
 
+  <path id="jfreechart.class.path">
+    <pathelement location="${ext.dir}/JFreeChart/jcommon-1.0.23.jar"/>
+    <pathelement location="${ext.dir}/JFreeChart/jfreechart-1.0.19.jar"/>
+  </path>
+
   <path id="mockito.class.path">
     <pathelement location="${ext.dir}/Mockito/mockito-all-1.9.5.jar"/>
   </path>
@@ -82,6 +87,7 @@
     <path refid="soy.class.path"/>
     <path refid="gwt-server.class.path"/>
     <path refid="commons-email.class.path"/>
+    <path refid="jfreechart.class.path"/>
 
     <pathelement location="${ext.dir}/jsr305.jar"/>
     <pathelement location="${ext.dir}/javax.inject.jar"/>

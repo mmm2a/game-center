@@ -20,6 +20,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public final class GameIdentifier implements IsSerializable {
 
+  private static final int MAX_LENGTH = 32;
+
   private static final CharMatcher VALID_CHARS = CharMatcher.inRange('a', 'z')
       .or(CharMatcher.DIGIT)
       .or(CharMatcher.is('-'));
@@ -33,6 +35,7 @@ public final class GameIdentifier implements IsSerializable {
   public GameIdentifier(String identifier) {
     Preconditions.checkArgument(!Strings.isNullOrEmpty(identifier));
     Preconditions.checkArgument(VALID_CHARS.matchesAllOf(identifier));
+    Preconditions.checkArgument(identifier.length() <= MAX_LENGTH);
 
     this.identifier = identifier;
   }

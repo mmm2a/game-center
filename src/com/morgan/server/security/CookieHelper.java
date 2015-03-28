@@ -149,7 +149,7 @@ public class CookieHelper {
 
   /**
    * Gets the timestamp when the currently logged in user's credentials will expire (or
-   * {@Optional#absent()} if the current request has already expired or isn't logged in).
+   * {@link Optional#absent()} if the current request has already expired or isn't logged in).
    */
   public Optional<ReadableInstant> getCookieExpirationTime() {
     Cookie cookie = findCookie();

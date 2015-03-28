@@ -4,8 +4,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.morgan.server.game.modules.AllModulesTests;
+
 @RunWith(Suite.class)
-@SuiteClasses({ GameServerTest.class })
+@SuiteClasses({
+  AllModulesTests.class,
+  GameServerTest.class
+  })
 public class AllGameTests {
 
 }
