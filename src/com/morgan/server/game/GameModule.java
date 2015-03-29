@@ -23,6 +23,7 @@ import com.morgan.server.backend.BackendModule;
 import com.morgan.server.common.CommonBindingAnnotations.Background;
 import com.morgan.server.email.EmailModule;
 import com.morgan.server.game.modules.ModulesLoader;
+import com.morgan.server.game.modules.ModulesModule;
 import com.morgan.server.nav.NavigationModule;
 import com.morgan.server.polymer.PolymerModule;
 import com.morgan.server.security.SecurityModule;
@@ -53,6 +54,7 @@ class GameModule extends AbstractModule {
     install(new MimeModule());
     install(new PolymerModule());
     install(new StatModule());
+    install(new ModulesModule());
 
     bind(EventBus.class).in(Singleton.class);
 

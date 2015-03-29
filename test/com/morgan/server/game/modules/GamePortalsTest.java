@@ -1,6 +1,7 @@
 package com.morgan.server.game.modules;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -60,5 +61,12 @@ public class GamePortalsTest {
     assertThat(portals.getPortal(GAME_ID_1)).isEqualTo(mockPortal1);
     assertThat(portals.getPortal(GAME_ID_2)).isEqualTo(mockPortal2);
     assertThat(portals.getPortal(GAME_ID_3)).isEqualTo(mockPortal3);
+  }
+
+  @Test public void doStart() {
+    portals.doStart();
+    verify(mockPortal1).startAsync();
+    verify(mockPortal2).startAsync();
+    verify(mockPortal3).startAsync();
   }
 }
