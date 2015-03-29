@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public final class GameIdentifier implements IsSerializable {
+public final class GameIdentifier implements IsSerializable, HasGameIdentifier {
 
   private static final int MAX_LENGTH = 32;
 
@@ -42,6 +42,10 @@ public final class GameIdentifier implements IsSerializable {
 
   public String getIdentifier() {
     return identifier;
+  }
+
+  @Override public GameIdentifier getGameIdentifier() {
+    return this;
   }
 
   @Override public int hashCode() {
