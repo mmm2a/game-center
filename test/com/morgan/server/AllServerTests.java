@@ -13,6 +13,7 @@ import com.morgan.server.feature.AllFeatureTests;
 import com.morgan.server.game.AllGameTests;
 import com.morgan.server.nav.AllNavTests;
 import com.morgan.server.polymer.AllPolymerTests;
+import com.morgan.server.staticres.AllStaticResTests;
 import com.morgan.server.util.AllUtilTests;
 
 @RunWith(Suite.class)
@@ -26,7 +27,8 @@ import com.morgan.server.util.AllUtilTests;
   AllNavTests.class,
   AllPolymerTests.class,
   AllUtilTests.class,
-  AllFeatureTests.class
+  AllFeatureTests.class,
+  AllStaticResTests.class,
   })
 public class AllServerTests {
 

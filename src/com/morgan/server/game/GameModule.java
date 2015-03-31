@@ -27,6 +27,8 @@ import com.morgan.server.game.modules.ModulesModule;
 import com.morgan.server.nav.NavigationModule;
 import com.morgan.server.polymer.PolymerModule;
 import com.morgan.server.security.SecurityModule;
+import com.morgan.server.staticres.StaticResourcesFactory;
+import com.morgan.server.staticres.StaticResourcesModule;
 import com.morgan.server.util.flag.FlagAccessorFactory;
 import com.morgan.server.util.log.LogModule;
 import com.morgan.server.util.mime.MimeModule;
@@ -55,6 +57,7 @@ class GameModule extends AbstractModule {
     install(new PolymerModule());
     install(new StatModule());
     install(new ModulesModule());
+    install(new StaticResourcesModule());
 
     bind(EventBus.class).in(Singleton.class);
 
@@ -89,5 +92,10 @@ class GameModule extends AbstractModule {
   @Provides @Singleton protected GameServerFlagAccessor provideGameServerFlagAccessor(
       FlagAccessorFactory accessorFactory) {
     return accessorFactory.getFlagAccessor(GameServerFlagAccessor.class);
+  }
+
+  @Provides @Singleton protected GameStaticResources provideGameStaticResources(
+      StaticResourcesFactory factory) {
+    return factory.createProxy(GameStaticResources.class);
   }
 }
