@@ -1,6 +1,8 @@
 package com.morgan.server.game.modules.tictactoe;
 
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.AbstractService;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.inject.Inject;
 import com.morgan.server.game.modules.GamePortal;
 
@@ -20,5 +22,9 @@ class TicTacToePortal extends AbstractService implements GamePortal {
 
   @Override protected void doStop() {
     // Nothing needs to be done
+  }
+
+  @Override public Optional<SafeUri> getGameIcon() {
+    return Optional.absent();
   }
 }
