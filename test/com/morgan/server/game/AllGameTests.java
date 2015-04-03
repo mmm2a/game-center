@@ -9,7 +9,8 @@ import com.morgan.server.game.modules.AllModulesTests;
 @RunWith(Suite.class)
 @SuiteClasses({
   AllModulesTests.class,
-  GameServerTest.class
+  GameServerTest.class,
+  PortalToDescriptorFunctionTest.class,
   })
 public class AllGameTests {
 
