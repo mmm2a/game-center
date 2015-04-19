@@ -133,9 +133,9 @@
         <path refid="production-runtime.class.path"/>
       </classpath>
       <arg value="--nosecure"/>
-      <arg value="--port=8080"/>
+      <arg value="--port=18080"/>
       <arg value="--configuration=security/keystore.conf"/>
-      <arg value="--backend-type=FAKE"/>
+      <arg value="--backend-type=PROD"/>
     </java>
   </target>
 

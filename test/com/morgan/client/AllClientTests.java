@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import com.morgan.client.account.AllAccountTests;
 import com.morgan.client.alert.AllAlertTests;
 import com.morgan.client.auth.AllAuthTests;
+import com.morgan.client.mwt.AllMwtTests;
 import com.morgan.client.nav.AllNavTests;
 import com.morgan.client.page.AllPageTests;
 
@@ -15,6 +16,7 @@ import com.morgan.client.page.AllPageTests;
   AllAccountTests.class,
   AllAlertTests.class,
   AllAuthTests.class,
+  AllMwtTests.class,
   AllNavTests.class,
   AllPageTests.class,
 })

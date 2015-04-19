@@ -1,0 +1,2 @@
+You need to replace files in `/usr/libexec/java_home`/jre/lib/security
+ (usually /Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/jre/lib/security

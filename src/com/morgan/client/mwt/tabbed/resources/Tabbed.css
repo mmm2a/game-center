@@ -1,0 +1,79 @@
+/*
+ * CSS resource file for the tabbed package.
+ */
+
+@def BORDER_STYLE 1px solid black;
+@def BORDER_RADIUS 3px;
+
+.tabbedPanel.vertical .tabs {
+  border-bottom: none;
+  border-right: BORDER_STYLE;
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+}
+
+.tabbedPanel .tabs {
+  border-bottom: BORDER_STYLE;
+}
+
+.tabbedPanel .tabs .tab {
+  color: #999;
+  display: inline-block;
+  padding: 5px;
+  position: relative;
+  top: 1px;
+}
+
+.tabbedPanel.vertical .tabs .tab {
+  border-right: BORDER_STYLE;
+  display: block;
+  left: 1px;
+  top: 0;
+}
+
+.tabbedPanel .tabs .tab.active {
+  border-bottom: 1px solid white;
+  border-left: BORDER_STYLE;
+  border-right: BORDER_STYLE;
+  border-top: BORDER_STYLE;
+  border-top-left-radius: BORDER_RADIUS;
+  border-top-right-radius: BORDER_RADIUS;
+  color: black;
+}
+
+.tabbedPanel.vertical .tabs .tab.active {
+  border-bottom: BORDER_STYLE;
+  border-bottom-left-radius: BORDER_RADIUS;
+  border-right: 1px solid white;
+  border-top-right-radius: 0;
+}
+
+.tabbedPanel .tabs .tab:hover,
+.tabbedPanel .tabs .tab:focus {
+  background-color: #efefef;
+  color: black;
+}
+
+.tabbedPanel .tabs .tab.disabled:hover,
+.tabbedPanel .tabs .tab.disabled:focus,
+.tabbedPanel .tabs .tab.active:hover,
+.tabbedPanel .tabs .tab.active:focus {
+  background-color: white;
+}
+
+.tabbedPanel .tabs .tab.disabled,
+.tabbedPanel .tabs .tab.disabled:hover,
+.tabbedPanel .tabs .tab.disabled:focus {
+  color: #efefef;
+}
+
+.tabbedPanel .content {
+  padding: 5px;
+}
+
+.tabbedPanel.vertical .content {
+  display: inline-block;
+  height: 100%;
+  vertical-align: top;
+}
