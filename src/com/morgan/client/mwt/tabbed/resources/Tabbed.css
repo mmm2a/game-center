@@ -20,6 +20,8 @@
 .tabbedPanel .tabs .tab {
   color: #999;
   display: inline-block;
+  margin: 0 5px;
+  outline: none;
   padding: 5px;
   position: relative;
   top: 1px;
@@ -29,6 +31,7 @@
   border-right: BORDER_STYLE;
   display: block;
   left: 1px;
+  margin: 5px 0;
   top: 0;
 }
 
@@ -69,7 +72,11 @@
 }
 
 .tabbedPanel .content {
-  padding: 5px;
+  padding: 5px 10px;
+}
+
+.tabbedPanel.vertical .content {
+  padding: 10px 5px;
 }
 
 .tabbedPanel.vertical .content {
