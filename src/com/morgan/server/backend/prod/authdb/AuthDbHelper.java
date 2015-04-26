@@ -58,13 +58,13 @@ public class AuthDbHelper {
   @Transactional
   public ImmutableMap<Long, UserInformation> findUsersById(Set<Long> ids) {
     EntityManager entityManager = entityManagerProvider.get();
+
     ImmutableMap.Builder<Long, UserInformation> resultBuilder = ImmutableMap.builder();
-    for (long id : ids) {
-      UserInformationEntity entity = entityManager.find(UserInformationEntity.class, id);
-      if (entity != null) {
-        resultBuilder.put(id, convertUserInformationEntityToUserInformation(entity));
-      }
-    }
+    ids.stream()
+        .map(i -> entityManager.find(UserInformationEntity.class, i))
+        .filter(u -> u != null)
+        .map(u -> convertUserInformationEntityToUserInformation(u))
+        .forEach(u -> resultBuilder.put(u.getUserId(), u));
 
     return resultBuilder.build();
   }

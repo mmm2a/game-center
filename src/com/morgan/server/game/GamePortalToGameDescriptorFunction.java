@@ -1,8 +1,9 @@
 package com.morgan.server.game;
 
+import java.util.function.Function;
+
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
 import com.google.inject.Inject;
 import com.morgan.server.game.modules.GamePortal;
 import com.morgan.shared.game.modules.GameDescriptor;
@@ -13,7 +14,8 @@ import com.morgan.shared.game.modules.GameDescriptor;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-class GamePortalToGameDescriptorFunction implements Function<GamePortal, GameDescriptor> {
+class GamePortalToGameDescriptorFunction
+    implements Function<GamePortal, GameDescriptor> {
 
   private final GameStaticResources gameStaticResources;
 

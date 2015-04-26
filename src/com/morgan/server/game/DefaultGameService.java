@@ -1,7 +1,6 @@
 package com.morgan.server.game;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -30,7 +29,9 @@ class DefaultGameService extends RemoteServiceServlet implements GameService {
   }
 
   @Override public ImmutableSet<GameDescriptor> getAllGames() throws BackendException {
-    return ImmutableSet.copyOf(Iterables.transform(gamePortals.getPortalsMap().values(),
-        portalToDescriptionFunction));
+    return ImmutableSet.copyOf(
+        gamePortals.getPortalsMap().values().stream()
+            .map(portalToDescriptionFunction)
+            .iterator());
   }
 }
