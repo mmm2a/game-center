@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 import com.morgan.server.auth.UserInformation;
+import com.morgan.server.util.guavato8.Immutables;
 import com.morgan.shared.common.BackendException;
 import com.morgan.shared.common.Role;
 
@@ -59,14 +60,12 @@ public class AuthDbHelper {
   public ImmutableMap<Long, UserInformation> findUsersById(Set<Long> ids) {
     EntityManager entityManager = entityManagerProvider.get();
 
-    ImmutableMap.Builder<Long, UserInformation> resultBuilder = ImmutableMap.builder();
-    ids.stream()
-        .map(i -> entityManager.find(UserInformationEntity.class, i))
-        .filter(u -> u != null)
-        .map(u -> convertUserInformationEntityToUserInformation(u))
-        .forEach(u -> resultBuilder.put(u.getUserId(), u));
-
-    return resultBuilder.build();
+    return Immutables.mapFrom(
+        ids.stream()
+            .map(i -> entityManager.find(UserInformationEntity.class, i))
+            .filter(u -> u != null)
+            .map(u -> convertUserInformationEntityToUserInformation(u)),
+        (UserInformation u) -> u.getUserId());
   }
 
   /**
