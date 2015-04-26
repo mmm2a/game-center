@@ -1,9 +1,12 @@
 package com.morgan.server.backend.prod.authdb;
 
+import java.util.Set;
+
 import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -47,6 +50,23 @@ public class AuthDbHelper {
     EntityManager entityManager = entityManagerProvider.get();
     return Optional.fromNullable(convertUserInformationEntityToUserInformation(
         entityManager.find(UserInformationEntity.class, id)));
+  }
+
+  /**
+   * Finds a bunch of users by their IDs.
+   */
+  @Transactional
+  public ImmutableMap<Long, UserInformation> findUsersById(Set<Long> ids) {
+    EntityManager entityManager = entityManagerProvider.get();
+    ImmutableMap.Builder<Long, UserInformation> resultBuilder = ImmutableMap.builder();
+    for (long id : ids) {
+      UserInformationEntity entity = entityManager.find(UserInformationEntity.class, id);
+      if (entity != null) {
+        resultBuilder.put(id, convertUserInformationEntityToUserInformation(entity));
+      }
+    }
+
+    return resultBuilder.build();
   }
 
   /**

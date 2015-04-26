@@ -1,8 +1,11 @@
 package com.morgan.server.backend.prod;
 
+import java.util.Set;
+
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.UserBackend;
@@ -29,6 +32,11 @@ class ProdUserBackend implements UserBackend {
 
   @Override public Optional<UserInformation> findUserById(long userId) throws BackendException {
     return authDbHelper.findUserById(userId);
+  }
+
+  @Override public ImmutableMap<Long, UserInformation> findUsersById(Set<Long> ids)
+      throws BackendException {
+    return authDbHelper.findUsersById(ids);
   }
 
   @Override public UserInformation createAccount(

@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ AccountCreationHelperTest.class, DefaultAccountServiceTest.class })
+@SuiteClasses({ AccountCreationHelperTest.class, DefaultAccountLookupHelperTest.class,
+    DefaultAccountServiceTest.class })
 public class AllAccountTests {
 
 }

@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.util.Providers;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.shared.common.Role;
@@ -60,6 +62,18 @@ public class AuthDbHelperTest {
 
     assertThat(helper.findUserById(7))
         .hasValue(new UserInformation(USER_ID, DISPLAY_NAME, EMAIL, ROLE));
+  }
+
+  @Test public void findUsersById() {
+    ImmutableSet<Long> ids = ImmutableSet.of(7L, 42L, 69L);
+    when(mockEntityManager.find(UserInformationEntity.class, 7L))
+        .thenReturn(new UserInformationEntity(7L, "email1", "display 1", ROLE));
+    when(mockEntityManager.find(UserInformationEntity.class, 69L))
+        .thenReturn(new UserInformationEntity(69L, "email3", "display 3", ROLE));
+    ImmutableMap<Long, UserInformation> result = helper.findUsersById(ids);
+    assertThat(result).hasSize(2);
+    assertThat(result).containsEntry(7L, new UserInformation(7L, "display 1", "email1", ROLE));
+    assertThat(result).containsEntry(69L, new UserInformation(69L, "display 3", "email3", ROLE));
   }
 
   @Test public void authenticate_noSuchUser_returnsAbsent() {

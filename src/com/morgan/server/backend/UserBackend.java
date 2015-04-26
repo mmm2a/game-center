@@ -1,6 +1,9 @@
 package com.morgan.server.backend;
 
+import java.util.Set;
+
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.shared.common.BackendException;
 import com.morgan.shared.common.Role;
@@ -30,4 +33,10 @@ public interface UserBackend {
 	 * {@link Optional#absent()}.
 	 */
 	Optional<UserInformation> findUserById(long userId) throws BackendException;
+
+	/**
+	 * Look's up a bunch of user's by their IDs and returns a map of the results.  If a user can't
+	 * be found, then no result is returned for that user.
+	 */
+  ImmutableMap<Long, UserInformation> findUsersById(Set<Long> ids) throws BackendException;
 }

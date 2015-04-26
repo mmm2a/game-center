@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.morgan.server.auth.UserInformation;
 import com.morgan.server.backend.prod.authdb.AuthDbHelper;
 import com.morgan.shared.common.BackendException;
@@ -51,6 +53,29 @@ public class ProdUserBackendTest {
         7L, "display", "email address", Role.MEMBER);
     when(mockHelper.findUserById(7L)).thenReturn(Optional.of(userInformation));
     assertThat(backend.findUserById(7L)).hasValue(userInformation);
+  }
+
+  @Test public void findUsersById() throws BackendException {
+    UserInformation userInformation1 = new UserInformation(
+        7L, "display 1", "email address 1", Role.MEMBER);
+    UserInformation userInformation2 = new UserInformation(
+        42L, "display 2", "email address 2", Role.MEMBER);
+    UserInformation userInformation3 = new UserInformation(
+        69L, "display 3", "email address 3", Role.MEMBER);
+
+    ImmutableSet<Long> ids = ImmutableSet.of(7L, 42L, 69L);
+    ImmutableMap<Long, UserInformation> result = ImmutableMap.of(
+        7L, userInformation1,
+        42L, userInformation2,
+        69L, userInformation3);
+
+    when(mockHelper.findUsersById(ids)).thenReturn(result);
+
+    result = backend.findUsersById(ids);
+    assertThat(result).hasSize(3);
+    assertThat(result).containsEntry(7L, userInformation1);
+    assertThat(result).containsEntry(42L, userInformation2);
+    assertThat(result).containsEntry(69L, userInformation3);
   }
 
   @Test public void createAccount() throws BackendException {

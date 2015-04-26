@@ -2,10 +2,12 @@ package com.morgan.server.backend.fake;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.morgan.server.auth.UserInformation;
@@ -59,6 +61,19 @@ class FakeUserBackend implements UserBackend {
   @Override synchronized public Optional<UserInformation> findUserById(
       long userId) throws BackendException {
     return Optional.fromNullable(idToUserInformationMap.get(userId));
+  }
+
+  @Override synchronized public ImmutableMap<Long, UserInformation> findUsersById(Set<Long> ids)
+      throws BackendException {
+    ImmutableMap.Builder<Long, UserInformation> resultBuilder = ImmutableMap.builder();
+    for (long id : ids) {
+      Optional<UserInformation> user = findUserById(id);
+      if (user.isPresent()) {
+        resultBuilder.put(id, user.get());
+      }
+    }
+
+    return resultBuilder.build();
   }
 
   @Override synchronized public UserInformation createAccount(
