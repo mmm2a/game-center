@@ -2,6 +2,7 @@ package com.morgan.client.game;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.morgan.client.account.AccountGinModule;
+import com.morgan.client.alert.AlertGinModule;
 import com.morgan.client.common.CommonBindingAnnotations.Default;
 import com.morgan.client.common.CommonGinModule;
 import com.morgan.client.game.home.HomeGinModule;
@@ -16,6 +17,7 @@ import com.morgan.shared.nav.ApplicationPlace;
 public class GameAppGinModule extends AbstractGinModule {
 
   @Override protected void configure() {
+    install(new AlertGinModule());
     install(new CommonGinModule());
     install(new HomeGinModule());
     install(new AccountGinModule());

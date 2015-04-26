@@ -47,6 +47,24 @@ public interface HasTabs extends HasTabListeners, Iterable<Tab> {
    *
    * @throws IllegalArgumentException if the name given is empty or not unique.
    */
+  Tab createAndAddTab(Enum<?> tabName, SafeHtml tabLabel) throws IllegalArgumentException;
+
+  /**
+   * Creates a new {@link Tab} instance and inserts it at the index given registered with
+   * this panel.  The name give MUST be unique within the set of registered tabs.
+   *
+   * @throws IllegalArgumentException if the name given is empty or not unique.
+   * @throws IndexOutOfBoundsException if the index is greater than the current size.
+   */
+  Tab createAndInsertTab(Enum<?> tabName, SafeHtml tabLabel, int index)
+      throws IllegalArgumentException, IndexOutOfBoundsException;
+
+  /**
+   * Creates a new {@link Tab} instance and appends it to the end of the tabs registered with
+   * this panel.  The name give MUST be unique within the set of registered tabs.
+   *
+   * @throws IllegalArgumentException if the name given is empty or not unique.
+   */
   Tab createAndAddTab(String tabName, SafeHtml tabLabel) throws IllegalArgumentException;
 
   /**

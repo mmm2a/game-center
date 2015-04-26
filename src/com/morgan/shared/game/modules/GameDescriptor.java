@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -14,12 +15,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public final class GameDescriptor implements IsSerializable, HasGameIdentifier {
+public class GameDescriptor implements IsSerializable, HasGameIdentifier {
 
   private GameIdentifier gameIdentifier;
   private String name;
   private SafeHtml description;
-  private SafeUri icon;
+  private String icon;
 
   GameDescriptor() {
     // Default constructor for GWT
@@ -35,7 +36,7 @@ public final class GameDescriptor implements IsSerializable, HasGameIdentifier {
     this.gameIdentifier = Preconditions.checkNotNull(gameIdentifier);
     this.name = name;
     this.description = Preconditions.checkNotNull(description);
-    this.icon = Preconditions.checkNotNull(icon);
+    this.icon = Preconditions.checkNotNull(icon).asString();
   }
 
   @Override public GameIdentifier getGameIdentifier() {
@@ -51,7 +52,7 @@ public final class GameDescriptor implements IsSerializable, HasGameIdentifier {
   }
 
   public SafeUri getIcon() {
-    return icon;
+    return UriUtils.fromTrustedString(icon);
   }
 
   @Override public int hashCode() {

@@ -1,0 +1,27 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://google-web-toolkit.googlecode.com/files/xhtml.ent">
+
+<ui:UiBinder
+    xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:gwt='urn:import:com.google.gwt.user.client.ui'
+    xmlns:a11y='urn:import:com.morgan.client.mwt.a11y'
+    ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+    ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+    ui:generateLocales='default'>
+    
+  <ui:with
+      field="res"
+      type="com.morgan.client.game.home.HomeResources"/>
+
+  <a11y:AccessibleFocusPanel ui:field="focusPanel" styleName="{res.css.game}">
+    <gwt:HTMLPanel>
+      <div class="{res.css.icon}">
+        <img ui:field="icon"/>
+      </div><!-- No whitespace
+   --><div class="{res.css.content}">
+        <div class="{res.css.name}" ui:field="name"/>
+        <div class="{res.css.description}" ui:field="description"/>
+      </div>
+    </gwt:HTMLPanel>
+  </a11y:AccessibleFocusPanel>
+    
+</ui:UiBinder>

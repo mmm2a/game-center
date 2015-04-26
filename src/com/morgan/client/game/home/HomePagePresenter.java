@@ -1,7 +1,8 @@
 package com.morgan.client.game.home;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Inject;
@@ -17,22 +18,43 @@ import com.morgan.shared.game.home.HomeApplicationPlace;
  */
 class HomePagePresenter implements PagePresenter<HomeApplicationPlace> {
 
-  private final TabbedPanel panel;
+  /**
+   * Enumeration of all possible tabs in the tabbed panel.
+   *
+   * @author mark@mark-morgan.net (Mark Morgan)
+   */
+  enum Tab {
+    ACTIVE_GAMES,
+    GAME_PORTALS,
+    GAMES_I_OWN;
+  }
 
-  @Inject HomePagePresenter(TabbedPanel panel) {
+  private final HomeMessages messages;
+
+  private final TabbedPanel panel;
+  private final AllGamesWidget allGames;
+
+  @Inject HomePagePresenter(
+      HomeMessages messages,
+      TabbedPanel panel,
+      AllGamesWidget allGames) {
+    this.messages = messages;
     this.panel = panel;
+    this.allGames = allGames;
+  }
+
+  @VisibleForTesting IsWidget createPlaceHolderWidget(SafeHtml title) {
+    return new Label(title.asString());
   }
 
   @Override public Optional<? extends IsWidget> presentPageFor(HomeApplicationPlace place) {
-    panel.asWidget().setWidth("100%");
-    panel.asWidget().setHeight("100%");
     panel.setOrientation(Orientation.VERTICAL);
-    panel.createAndAddTab("Active games", SafeHtmlUtils.fromString("Active games"))
-        .setWidget(new Label("Active games"));
-    panel.createAndAddTab("Game portals", SafeHtmlUtils.fromString("Game portals"))
-        .setWidget(new Label("Game portals"));
-    panel.createAndAddTab("Games I own", SafeHtmlUtils.fromString("Games I own"))
-        .setWidget(new Label("Games I own"));
+    panel.createAndAddTab(Tab.ACTIVE_GAMES, messages.activeGames())
+        .setWidget(createPlaceHolderWidget(messages.activeGames()));
+    panel.createAndAddTab(Tab.GAME_PORTALS, messages.allGames())
+        .setWidget(allGames);
+    panel.createAndAddTab(Tab.GAMES_I_OWN, messages.gamesICreated())
+        .setWidget(createPlaceHolderWidget(messages.gamesICreated()));
 
     return Optional.of(panel);
   }

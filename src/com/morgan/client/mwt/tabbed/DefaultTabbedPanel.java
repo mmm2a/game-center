@@ -336,4 +336,14 @@ class DefaultTabbedPanel extends AbstractTabbedPanel implements TabbedPanel {
       label.setHTML(html);
     }
   }
+
+  @Override public Tab createAndAddTab(Enum<?> tabName, SafeHtml tabLabel)
+      throws IllegalArgumentException {
+    return createAndAddTab(tabName.name(), tabLabel);
+  }
+
+  @Override public Tab createAndInsertTab(Enum<?> tabName, SafeHtml tabLabel, int index)
+      throws IllegalArgumentException, IndexOutOfBoundsException {
+    return createAndInsertTab(tabName.name(), tabLabel, index);
+  }
 }
