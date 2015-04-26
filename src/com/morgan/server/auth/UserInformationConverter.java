@@ -33,9 +33,9 @@ class UserInformationConverter implements Function<UserInformation, ClientUserIn
     UserInformation requester = requestUserProvider.get().get();
     if (requester.getUserRole() == Role.ADMIN) {
       return ClientUserInformation.withPrivlidgedInformation(
-          input.getDisplayName(), input.getUserRole());
+          input.getUserId(), input.getDisplayName(), input.getUserRole());
     } else {
-      return ClientUserInformation.withHiddenRole(input.getDisplayName());
+      return ClientUserInformation.withHiddenRole(input.getUserId(), input.getDisplayName());
     }
   }
 }

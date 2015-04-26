@@ -15,7 +15,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class GameDescriptor implements IsSerializable, HasGameIdentifier {
+public final class GameDescriptor implements IsSerializable, HasGameIdentifier {
 
   private GameIdentifier gameIdentifier;
   private String name;

@@ -7,6 +7,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.morgan.shared.common.HasUniqueId;
 import com.morgan.shared.common.Role;
 
 /**
@@ -14,8 +15,9 @@ import com.morgan.shared.common.Role;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class ClientUserInformation implements IsSerializable {
+public class ClientUserInformation implements IsSerializable, HasUniqueId {
 
+  private long id;
   private String displayName;
   private Optional<Role> memberRole;
 
@@ -23,10 +25,15 @@ public class ClientUserInformation implements IsSerializable {
     // Default constructor for GWT
   }
 
-  private ClientUserInformation(String displayName, Optional<Role> memberRole) {
+  private ClientUserInformation(long id, String displayName, Optional<Role> memberRole) {
     Preconditions.checkArgument(!Strings.isNullOrEmpty(displayName));
+    this.id = id;
     this.displayName = displayName;
     this.memberRole = memberRole;
+  }
+
+  @Override public long getId() {
+    return id;
   }
 
   public String getDisplayName() {
@@ -38,7 +45,7 @@ public class ClientUserInformation implements IsSerializable {
   }
 
   @Override public int hashCode() {
-    return Objects.hash(displayName, memberRole);
+    return Objects.hash(id, displayName, memberRole);
   }
 
   @Override public boolean equals(Object o) {
@@ -51,12 +58,14 @@ public class ClientUserInformation implements IsSerializable {
     }
 
     ClientUserInformation other = (ClientUserInformation) o;
-    return displayName.equals(other.displayName)
+    return id == other.id
+        && displayName.equals(other.displayName)
         && memberRole.equals(other.memberRole);
   }
 
   @Override public String toString() {
     return MoreObjects.toStringHelper(ClientUserInformation.class)
+        .add("id", id)
         .add("displayName", displayName)
         .add("memberRole", memberRole)
         .toString();
@@ -66,15 +75,15 @@ public class ClientUserInformation implements IsSerializable {
    * Creates a new {@link ClientUserInformation} instance but withholds adding the member role which
    * is considered privlidged.
    */
-  public static ClientUserInformation withHiddenRole(String displayName) {
-    return new ClientUserInformation(displayName, Optional.<Role>absent());
+  public static ClientUserInformation withHiddenRole(long id, String displayName) {
+    return new ClientUserInformation(id, displayName, Optional.<Role>absent());
   }
 
   /**
    * Creates a new {@link ClientUserInformation} instance with privlidged information included.
    */
   public static ClientUserInformation withPrivlidgedInformation(
-      String displayName, Role memberRole) {
-    return new ClientUserInformation(displayName, Optional.of(memberRole));
+      long id, String displayName, Role memberRole) {
+    return new ClientUserInformation(id ,displayName, Optional.of(memberRole));
   }
 }
