@@ -38,6 +38,7 @@ public class AccountCreationPagePresenterTest {
 
   private static final AccountMessages MESSAGES = FakeMessagesFactory.create(AccountMessages.class);
 
+  private static final long ID = 7L;
   private static final String EMAIL = "email address";
   private static final String DISPLAY = "display name";
 
@@ -153,7 +154,7 @@ public class AccountCreationPagePresenterTest {
     createPresenter(true).presentPageFor(null);
     verifyClickHandlerRegistered().onClick(null);
     verifyServiceCalled()
-        .onSuccess(ClientUserInformation.withPrivlidgedInformation(DISPLAY, Role.MEMBER));
+        .onSuccess(ClientUserInformation.withPrivlidgedInformation(ID, DISPLAY, Role.MEMBER));
     assertAbout(FakeAlertController.ALERT)
         .that(alerts.newStatusAlertBuilder(MESSAGES.creatingAccount(DISPLAY))
             .isFading(false)

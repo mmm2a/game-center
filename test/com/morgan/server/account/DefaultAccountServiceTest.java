@@ -30,7 +30,7 @@ public class DefaultAccountServiceTest {
   private static final UserInformation USER_INFO =
       new UserInformation(USER_ID, DISPLAY, EMAIL, ROLE);
   private static final ClientUserInformation CLIENT_USER_INFO =
-      ClientUserInformation.withPrivlidgedInformation(DISPLAY, ROLE);
+      ClientUserInformation.withPrivlidgedInformation(USER_ID, DISPLAY, ROLE);
 
   @Mock private AccountCreationHelper mockCreationHelper;
   @Mock private Function<UserInformation, ClientUserInformation> mockUserInformationConverter;
