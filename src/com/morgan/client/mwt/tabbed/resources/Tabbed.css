@@ -19,6 +19,7 @@
 
 .tabbedPanel .tabs .tab {
   color: #999;
+  cursor: pointer;
   display: inline-block;
   margin: 0 5px;
   outline: none;
