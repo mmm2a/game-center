@@ -3,6 +3,8 @@ package com.morgan.server.mtg.json;
 import java.util.Locale;
 import java.util.function.Function;
 
+import org.joda.time.ReadablePartial;
+
 import com.google.common.collect.ImmutableCollection;
 import com.google.gson.JsonObject;
 import com.google.inject.AbstractModule;
@@ -21,6 +23,7 @@ import com.morgan.server.mtg.OtherSymbol;
 import com.morgan.server.mtg.Rarity;
 import com.morgan.server.mtg.SetType;
 import com.morgan.server.mtg.TextWithSymbols;
+import com.morgan.server.mtg.Watermark;
 
 /**
  * GUICE module for the mtg.json package.
@@ -48,6 +51,9 @@ public class JsonModule extends AbstractModule {
     bind(new TypeLiteral<Function<String, TextWithSymbols>>() {})
         .annotatedWith(JsonMapping.class)
         .to(JsonTextWithSymbolsConverter.class);
+    bind(new TypeLiteral<Function<String, ReadablePartial>>() {})
+        .annotatedWith(JsonMapping.class)
+        .to(JsonToPartialFunction.class);
   }
 
   @Provides @JsonMapping protected Function<String, BorderColor> provideBorderColorJsonMapping() {
@@ -186,6 +192,33 @@ public class JsonModule extends AbstractModule {
         .addMapping("{T}", OtherSymbol.TAP)
         .addMapping("{Q}", OtherSymbol.UNTAP)
         .addMapping("{C}", OtherSymbol.CHAOS)
+        .build();
+  }
+
+  @Provides @JsonMapping protected Function<String, Watermark> provideJsonToWatermarkMapping() {
+    return JsonEnumMapping.builderFor(Watermark.class)
+        .addMapping("Atarka", Watermark.ATARKA)
+        .addMapping("Abzan", Watermark.ABZAN)
+        .addMapping("Izzet", Watermark.IZZET)
+        .addMapping("Mardu", Watermark.MARDU)
+        .addMapping("Dromoka", Watermark.DROMOKA)
+        .addMapping("Selesnya", Watermark.SELESNYA)
+        .addMapping("Mirran", Watermark.MIRRAN)
+        .addMapping("Phyrexian", Watermark.PHYREXIAN)
+        .addMapping("Jeskai", Watermark.JESKAI)
+        .addMapping("Simic", Watermark.SIMIC)
+        .addMapping("Golgari", Watermark.GOLGARI)
+        .addMapping("Silumgar", Watermark.SILUMGAR)
+        .addMapping("Orzhov", Watermark.ORZHOV)
+        .addMapping("Temur", Watermark.TEMUR)
+        .addMapping("Sultai", Watermark.SULTAI)
+        .addMapping("Kolaghan", Watermark.KOLAGHAN)
+        .addMapping("Ojutai", Watermark.OJUTAI)
+        .addMapping("Rakdos", Watermark.RAKDOS)
+        .addMapping("Dimir", Watermark.DIMIR)
+        .addMapping("Azorius", Watermark.AZORIUS)
+        .addMapping("Boros", Watermark.BOROS)
+        .addMapping("Gruul", Watermark.GRUUL)
         .build();
   }
 }

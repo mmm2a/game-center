@@ -9,6 +9,11 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Partial;
+import org.joda.time.ReadablePartial;
+import org.joda.time.YearMonth;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -39,10 +44,31 @@ public final class Card {
 
   private final String cardType;
   private final ImmutableSet<CardSuperType> cardSuperTypes;
-  private final CardType cardClassification;
+  private final Optional<CardType> cardClassification;
   private final ImmutableSet<String> subTypes;
   private final Rarity rarity;
-  private final TextWithSymbols text;
+  private final Optional<TextWithSymbols> text;
+
+  private final Optional<String> flavor;
+  private final Optional<String> number;
+  private final String artist;
+
+  private final Optional<String> power;
+  private final Optional<String> toughness;
+  private final Optional<Integer> loyalty;
+
+  private final ImmutableSet<String> alternateMultiverseIds;
+
+  private final Optional<BorderColor> borderColorOverride;
+  private final Optional<Watermark> watermark;
+
+  private final boolean timeShifted;
+  private final Optional<Integer> handModifier;
+  private final Optional<Integer> lifeModifier;
+  private final boolean reserved;
+  private final boolean starter;
+
+  private final Optional<ReadablePartial> releaseDate;
 
   private Card(
       Optional<String> multiverseId,
@@ -54,11 +80,27 @@ public final class Card {
       ImmutableSet<ManaColor> colors,
       String cardType,
       ImmutableSet<CardSuperType> cardSuperTypes,
-      CardType cardClassification,
+      Optional<CardType> cardClassification,
       ImmutableSet<String> subTypes,
       Rarity rarity,
-      TextWithSymbols text) {
+      Optional<TextWithSymbols> text,
+      Optional<String> flavor,
+      Optional<String> number,
+      String artist,
+      Optional<String> power,
+      Optional<String> toughness,
+      Optional<Integer> loyalty,
+      ImmutableSet<String> alternateMultiverseIds,
+      Optional<BorderColor> borderColorOverride,
+      Optional<Watermark> watermark,
+      boolean timeShifted,
+      Optional<Integer> handModifier,
+      Optional<Integer> lifeModifier,
+      boolean reserved,
+      boolean starter,
+      Optional<ReadablePartial> releaseDate) {
     Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(artist));
 
     this.multiverseId = Preconditions.checkNotNull(multiverseId);
     this.name = name;
@@ -73,12 +115,34 @@ public final class Card {
     this.subTypes = Preconditions.checkNotNull(subTypes);
     this.rarity = Preconditions.checkNotNull(rarity);
     this.text = Preconditions.checkNotNull(text);
+    this.flavor = Preconditions.checkNotNull(flavor);
+    this.number = Preconditions.checkNotNull(number);
+    this.artist = artist;
+    this.power = Preconditions.checkNotNull(power);
+    this.toughness = Preconditions.checkNotNull(toughness);
+    this.loyalty = Preconditions.checkNotNull(loyalty);
+    this.alternateMultiverseIds = Preconditions.checkNotNull(alternateMultiverseIds);
+    this.borderColorOverride = Preconditions.checkNotNull(borderColorOverride);
+    this.watermark = Preconditions.checkNotNull(watermark);
+    this.timeShifted = timeShifted;
+    this.handModifier = Preconditions.checkNotNull(handModifier);
+    this.lifeModifier = Preconditions.checkNotNull(lifeModifier);
+    this.reserved = reserved;
+    this.starter = starter;
+    this.releaseDate = Preconditions.checkNotNull(releaseDate);
 
     Preconditions.checkArgument(allNames.contains(name));
   }
 
   public Optional<String> getMultiverseId() {
     return multiverseId;
+  }
+
+  /**
+   * Gets the other multiverse ids by which this card is known (i.e., alternative image art).
+   */
+  public ImmutableSet<String> getAlternateMultiverseIds() {
+    return alternateMultiverseIds;
   }
 
   public String getName() {
@@ -113,7 +177,7 @@ public final class Card {
     return cardSuperTypes;
   }
 
-  public CardType getCardClassification() {
+  public Optional<CardType> getCardClassification() {
     return cardClassification;
   }
 
@@ -125,8 +189,85 @@ public final class Card {
     return rarity;
   }
 
-  public TextWithSymbols getText() {
+  public Optional<TextWithSymbols> getText() {
     return text;
+  }
+
+  public Optional<String> getFlavorText() {
+    return flavor;
+  }
+
+  public Optional<String> getNumber() {
+    return number;
+  }
+
+  public String getArtist() {
+    return artist;
+  }
+
+  public Optional<String> getPower() {
+    return power;
+  }
+
+  public Optional<String> getToughness() {
+    return toughness;
+  }
+
+  public Optional<Integer> getLoyalty() {
+    return loyalty;
+  }
+
+  public Optional<BorderColor> getBorderColorOverride() {
+    return borderColorOverride;
+  }
+
+  public Optional<Watermark> getWatermark() {
+    return watermark;
+  }
+
+  public boolean isTimeShifted() {
+    return timeShifted;
+  }
+
+  /**
+   * Gets the hand modifier if any (only for Vanguard).
+   */
+  public Optional<Integer> getHandModifier() {
+    return handModifier;
+  }
+
+  /**
+   * Gets the life modifier if any (only for Vanguard).
+   */
+  public Optional<Integer> getLifeModifier() {
+    return lifeModifier;
+  }
+
+  /**
+   * Is this card reserved by Wizards of the Coast for reprint.
+   */
+  public boolean isReserved() {
+    return reserved;
+  }
+
+  /**
+   * Is this card one that is included in a starter set.
+   */
+  public boolean isStarter() {
+    return starter;
+  }
+
+  /**
+   * Returns the release date as either a
+   * <ul>
+   *   <li>{@link LocalDate}
+   *   <li>{@link YearMonth}
+   *   <li>{@link Partial} with only a year set
+   * </ul>
+   * or returns absent if no release date is known/appropriate.
+   */
+  public Optional<ReadablePartial> getReleaseDate() {
+    return releaseDate;
   }
 
   @Override public int hashCode() {
@@ -155,7 +296,22 @@ public final class Card {
         && cardClassification == other.cardClassification
         && subTypes.equals(other.subTypes)
         && rarity.equals(other.rarity)
-        && text.equals(other.text);
+        && text.equals(other.text)
+        && flavor.equals(other.flavor)
+        && number.equals(other.number)
+        && artist.equals(other.artist)
+        && power.equals(other.power)
+        && toughness.equals(other.toughness)
+        && loyalty.equals(other.loyalty)
+        && alternateMultiverseIds.equals(other.alternateMultiverseIds)
+        && borderColorOverride.equals(other.borderColorOverride)
+        && watermark.equals(other.watermark)
+        && timeShifted == other.timeShifted
+        && handModifier.equals(other.handModifier)
+        && lifeModifier.equals(other.lifeModifier)
+        && reserved == other.reserved
+        && starter == other.starter
+        && releaseDate.equals(other.releaseDate);
   }
 
   @Override public String toString() {
@@ -173,6 +329,21 @@ public final class Card {
         .add("subTypes", subTypes)
         .add("rarity", rarity)
         .add("text", text)
+        .add("flavor", flavor)
+        .add("number", number)
+        .add("artist", artist)
+        .add("power", power)
+        .add("toughness", toughness)
+        .add("loyalty", loyalty)
+        .add("alternateMultiverseIds", alternateMultiverseIds)
+        .add("borderColorOverride", borderColorOverride)
+        .add("watermark", watermark)
+        .add("timeShifted", timeShifted)
+        .add("handModifier", handModifier)
+        .add("lifeModifier", lifeModifier)
+        .add("reserved", reserved)
+        .add("starter", starter)
+        .add("releaseDate", releaseDate)
         .toString();
   }
 
@@ -190,15 +361,35 @@ public final class Card {
     private final Set<ManaColor> colors = new HashSet<>();
     private final Set<CardSuperType> cardSuperTypes = new HashSet<>();
     private final Set<String> subTypes = new HashSet<>();
+    private final Set<String> alternateMultiverseIds = new HashSet<>();
 
     private Optional<String> multiverseId = Optional.empty();
     private String name;
     private CardLayout cardLayout;
     @Nullable private Integer convertedManaCost = null;
     private String cardType;
-    private CardType cardClassification;
+    @Nullable private CardType cardClassification;
     private Rarity rarity;
-    private TextWithSymbols text;
+    @Nullable private TextWithSymbols text;
+
+    @Nullable private String flavor;
+    @Nullable private String number;
+    private String artist;
+
+    @Nullable private String power;
+    @Nullable private String toughness;
+    @Nullable private Integer loyalty;
+
+    @Nullable private BorderColor borderColorOverride;
+    @Nullable private Watermark watermark;
+
+    private Boolean timeShifted;
+    @Nullable private Integer handModifier;
+    @Nullable private Integer lifeModifier;
+    private Boolean reserved;
+    private Boolean starter;
+
+    @Nullable ReadablePartial releaseDate;
 
     private Builder() {
     }
@@ -279,6 +470,88 @@ public final class Card {
       return this;
     }
 
+    public Builder setNumber(String number) {
+      Preconditions.checkArgument(!Strings.isNullOrEmpty(number));
+      this.number = number;
+      return this;
+    }
+
+    public Builder setFlavor(String flavor) {
+      Preconditions.checkArgument(!Strings.isNullOrEmpty(flavor));
+      this.flavor = flavor;
+      return this;
+    }
+
+    public Builder setArtist(String artist) {
+      Preconditions.checkArgument(!Strings.isNullOrEmpty(artist));
+      this.artist = artist;
+      return this;
+    }
+
+    public Builder setPower(String power) {
+      Preconditions.checkArgument(!Strings.isNullOrEmpty(power));
+      this.power = power;
+      return this;
+    }
+
+    public Builder setToughness(String toughness) {
+      Preconditions.checkArgument(!Strings.isNullOrEmpty(toughness));
+      this.toughness = toughness;
+      return this;
+    }
+
+    public Builder setLoyalty(int loyalty) {
+      Preconditions.checkArgument(loyalty > 0);
+      this.loyalty = loyalty;
+      return this;
+    }
+
+    public Builder setBorderColorOverride(BorderColor borderColorOverride) {
+      this.borderColorOverride = Preconditions.checkNotNull(borderColorOverride);
+      return this;
+    }
+
+    public Builder setWatermark(Watermark watermark) {
+      this.watermark = Preconditions.checkNotNull(watermark);
+      return this;
+    }
+
+    public Builder setTimeShifted(boolean isTimeShifted) {
+      this.timeShifted = isTimeShifted;
+      return this;
+    }
+
+    public Builder setHandModifier(int handModifier) {
+      this.handModifier = handModifier;
+      return this;
+    }
+
+    public Builder setLifeModifier(int lifeModifier) {
+      this.lifeModifier = lifeModifier;
+      return this;
+    }
+
+    public Builder setReserved(boolean isReserved) {
+      this.reserved = isReserved;
+      return this;
+    }
+
+    public Builder setStarter(boolean isStarter) {
+      this.starter = isStarter;
+      return this;
+    }
+
+    public Builder addAlternateMultiverseId(String alternateMultiverseId) {
+      Preconditions.checkArgument(!Strings.isNullOrEmpty(alternateMultiverseId));
+      this.alternateMultiverseIds.add(alternateMultiverseId);
+      return this;
+    }
+
+    public Builder setReleaseDate(ReadablePartial releaseDate) {
+      this.releaseDate = Preconditions.checkNotNull(releaseDate);
+      return this;
+    }
+
     public Card build() {
       // Since we're about to add name to names, let's make sure it was set
       Preconditions.checkState(!Strings.isNullOrEmpty(name));
@@ -292,10 +565,25 @@ public final class Card {
           ImmutableSet.copyOf(colors),
           cardType,
           ImmutableSet.copyOf(cardSuperTypes),
-          cardClassification,
+          Optional.ofNullable(cardClassification),
           ImmutableSet.copyOf(subTypes),
           Preconditions.checkNotNull(rarity),
-          Preconditions.checkNotNull(text));
+          Optional.ofNullable(text),
+          Optional.ofNullable(flavor),
+          Optional.ofNullable(number),
+          Preconditions.checkNotNull(artist),
+          Optional.ofNullable(power),
+          Optional.ofNullable(toughness),
+          Optional.ofNullable(loyalty),
+          ImmutableSet.copyOf(alternateMultiverseIds),
+          Optional.ofNullable(borderColorOverride),
+          Optional.ofNullable(watermark),
+          Preconditions.checkNotNull(timeShifted),
+          Optional.ofNullable(handModifier),
+          Optional.ofNullable(lifeModifier),
+          Preconditions.checkNotNull(reserved),
+          Preconditions.checkNotNull(starter),
+          Optional.ofNullable(releaseDate));
     }
   }
 }

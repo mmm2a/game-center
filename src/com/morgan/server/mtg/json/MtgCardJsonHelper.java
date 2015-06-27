@@ -38,9 +38,9 @@ public class MtgCardJsonHelper {
     cardSetsJson.entrySet().forEach(
         e -> resultBuilder.put(
             e.getKey(), jsonToCardSetFunction.apply(e.getValue().getAsJsonObject())));
-
     log.info("%s", visitState.generateReport());
+    ImmutableMap<String, CardSet> cardSets = resultBuilder.build();
 
-    return resultBuilder.build();
+    return cardSets;
   }
 }

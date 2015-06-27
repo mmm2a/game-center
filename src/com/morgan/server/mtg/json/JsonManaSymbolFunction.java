@@ -6,6 +6,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.morgan.server.mtg.ManaColor;
 import com.morgan.server.mtg.ManaSymbol;
@@ -17,6 +18,8 @@ import com.morgan.server.mtg.ManaSymbol;
  */
 class JsonManaSymbolFunction implements Function<String, ManaSymbol> {
 
+  private static final ImmutableSet<String> BAD_CARD_SYMBOLS = ImmutableSet.of(
+      "Y", "½", "hw", "hr", "∞");
   private static final ImmutableMap<String, ManaColor> CHARS_TO_COLORS =
       ImmutableMap.<String, ManaColor>builder()
           .put("R", ManaColor.RED)
@@ -53,6 +56,8 @@ class JsonManaSymbolFunction implements Function<String, ManaSymbol> {
         builder.setIsSnow(true);
       } else if (part.equals(X_MANA_CHAR)) {
         builder.clearCount();
+      } else if (BAD_CARD_SYMBOLS.contains(part)) {
+        throw new BadCardException();
       } else {
         builder.setCount(Integer.parseInt(part));
       }

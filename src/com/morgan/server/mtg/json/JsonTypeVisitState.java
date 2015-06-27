@@ -38,6 +38,9 @@ class JsonTypeVisitState {
     return new Function<String, JsonElement>() {
       @Override public JsonElement apply(String t) {
         Long l = fieldNameToVisitCount.get(t);
+        if (l == null) {
+          l = new Long(0);
+        }
         l = l + 1;
         fieldNameToVisitCount.put(t, l);
         return value.get(t);

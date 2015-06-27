@@ -95,8 +95,10 @@ class JsonToCardSetFunction implements Function<JsonObject, CardSet> {
     for (JsonElement e : cardsElement.getAsJsonArray()) {
       try {
         cardSetBuilder.addCard(jsonToCardFunction.apply(e.getAsJsonObject()));
+      } catch (BadCardException be) {
+        log.info("Encourntered a bad card: %s", be.getMessage());
       } catch (Exception ep) {
-        log.debug(ep, "Error parsing card \"%s\"", e);
+        throw ep;
       }
     }
 
