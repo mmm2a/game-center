@@ -13,6 +13,7 @@ import com.google.inject.TypeLiteral;
 import com.morgan.server.mtg.BoosterType;
 import com.morgan.server.mtg.BorderColor;
 import com.morgan.server.mtg.Card;
+import com.morgan.server.mtg.CardExtraInformation;
 import com.morgan.server.mtg.CardLayout;
 import com.morgan.server.mtg.CardSet;
 import com.morgan.server.mtg.CardSuperType;
@@ -54,6 +55,9 @@ public class JsonModule extends AbstractModule {
     bind(new TypeLiteral<Function<String, ReadablePartial>>() {})
         .annotatedWith(JsonMapping.class)
         .to(JsonToPartialFunction.class);
+    bind(new TypeLiteral<Function<JsonObject, CardExtraInformation>>() {})
+        .annotatedWith(JsonMapping.class)
+        .to(JsonToCardExtraInformationFunction.class);
   }
 
   @Provides @JsonMapping protected Function<String, BorderColor> provideBorderColorJsonMapping() {
@@ -190,6 +194,7 @@ public class JsonModule extends AbstractModule {
   @Provides @JsonMapping protected Function<String, OtherSymbol> provideJsonToOtherSymbolMapping() {
     return JsonEnumMapping.builderFor(OtherSymbol.class)
         .addMapping("{T}", OtherSymbol.TAP)
+        .addMapping("{Tap}", OtherSymbol.TAP)
         .addMapping("{Q}", OtherSymbol.UNTAP)
         .addMapping("{C}", OtherSymbol.CHAOS)
         .build();

@@ -26,7 +26,6 @@ public final class JsonEnumMapping<T extends Enum<T>> implements Function<String
     EnumSet<T> unSeen = EnumSet.allOf(enumType);
 
     this.mapping = ImmutableMap.copyOf(mapping);
-    Verify.verify(unSeen.size() == mapping.size());
     mapping.values().stream().forEach(a -> unSeen.remove(a));
     Verify.verify(unSeen.isEmpty());
   }

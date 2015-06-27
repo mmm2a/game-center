@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.morgan.server.mtg.BorderColor;
 import com.morgan.server.mtg.Card;
+import com.morgan.server.mtg.CardExtraInformation;
 import com.morgan.server.mtg.CardLayout;
 import com.morgan.server.mtg.CardSuperType;
 import com.morgan.server.mtg.CardType;
@@ -44,6 +45,7 @@ class JsonToCardFunction implements Function<JsonObject, Card> {
   private final Function<String, BorderColor> borderColorMapping;
   private final Function<String, Watermark> watermarkMapping;
   private final Function<String, ReadablePartial> jsonToReleaseDate;
+  private final Function<JsonObject, CardExtraInformation> cardExtraInformationFunction;
 
   @Inject JsonToCardFunction(
       JsonTypeVisitState visitState,
@@ -56,7 +58,8 @@ class JsonToCardFunction implements Function<JsonObject, Card> {
       @JsonMapping Function<String, TextWithSymbols> textWithSymbolsMapping,
       @JsonMapping Function<String, BorderColor> borderColorMapping,
       @JsonMapping Function<String, Watermark> watermarkMapping,
-      @JsonMapping Function<String, ReadablePartial> jsonToReleaseDate) {
+      @JsonMapping Function<String, ReadablePartial> jsonToReleaseDate,
+      @JsonMapping Function<JsonObject, CardExtraInformation> cardExtraInformationFunction) {
     this.visitState = visitState;
     this.cardLayoutFunction = cardLayoutFunction;
     this.jsonManaSymbolsFunction = jsonManaSymbolsFunction;
@@ -68,6 +71,7 @@ class JsonToCardFunction implements Function<JsonObject, Card> {
     this.borderColorMapping = borderColorMapping;
     this.watermarkMapping = watermarkMapping;
     this.jsonToReleaseDate = jsonToReleaseDate;
+    this.cardExtraInformationFunction = cardExtraInformationFunction;
   }
 
   private Card applyOrThrow(JsonObject obj) {
@@ -187,6 +191,8 @@ class JsonToCardFunction implements Function<JsonObject, Card> {
     if (obj.has("releaseDate")) {
       builder.setReleaseDate(jsonToReleaseDate.apply(accessor.apply("releaseDate").getAsString()));
     }
+
+    builder.setCardExtraInformation(cardExtraInformationFunction.apply(obj));
 
     return builder.build();
   }

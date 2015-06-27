@@ -70,6 +70,8 @@ public final class Card {
 
   private final Optional<ReadablePartial> releaseDate;
 
+  private final CardExtraInformation cardExtraInformation;
+
   private Card(
       Optional<String> multiverseId,
       String name,
@@ -98,7 +100,8 @@ public final class Card {
       Optional<Integer> lifeModifier,
       boolean reserved,
       boolean starter,
-      Optional<ReadablePartial> releaseDate) {
+      Optional<ReadablePartial> releaseDate,
+      CardExtraInformation cardExtraInformation) {
     Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
     Preconditions.checkArgument(!Strings.isNullOrEmpty(artist));
 
@@ -130,6 +133,7 @@ public final class Card {
     this.reserved = reserved;
     this.starter = starter;
     this.releaseDate = Preconditions.checkNotNull(releaseDate);
+    this.cardExtraInformation = Preconditions.checkNotNull(cardExtraInformation);
 
     Preconditions.checkArgument(allNames.contains(name));
   }
@@ -270,6 +274,10 @@ public final class Card {
     return releaseDate;
   }
 
+  public CardExtraInformation getCardExtraInformation() {
+    return cardExtraInformation;
+  }
+
   @Override public int hashCode() {
     return Objects.hash(multiverseId, name);
   }
@@ -311,7 +319,8 @@ public final class Card {
         && lifeModifier.equals(other.lifeModifier)
         && reserved == other.reserved
         && starter == other.starter
-        && releaseDate.equals(other.releaseDate);
+        && releaseDate.equals(other.releaseDate)
+        && cardExtraInformation.equals(other.cardExtraInformation);
   }
 
   @Override public String toString() {
@@ -344,6 +353,7 @@ public final class Card {
         .add("reserved", reserved)
         .add("starter", starter)
         .add("releaseDate", releaseDate)
+        .add("cardExtraInformation", cardExtraInformation)
         .toString();
   }
 
@@ -390,6 +400,8 @@ public final class Card {
     private Boolean starter;
 
     @Nullable ReadablePartial releaseDate;
+
+    private CardExtraInformation cardExtraInformation;
 
     private Builder() {
     }
@@ -552,6 +564,11 @@ public final class Card {
       return this;
     }
 
+    public Builder setCardExtraInformation(CardExtraInformation cardExtraInformation) {
+      this.cardExtraInformation = Preconditions.checkNotNull(cardExtraInformation);
+      return this;
+    }
+
     public Card build() {
       // Since we're about to add name to names, let's make sure it was set
       Preconditions.checkState(!Strings.isNullOrEmpty(name));
@@ -583,7 +600,8 @@ public final class Card {
           Optional.ofNullable(lifeModifier),
           Preconditions.checkNotNull(reserved),
           Preconditions.checkNotNull(starter),
-          Optional.ofNullable(releaseDate));
+          Optional.ofNullable(releaseDate),
+          Preconditions.checkNotNull(cardExtraInformation));
     }
   }
 }
