@@ -9,8 +9,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
-import com.morgan.server.mtg.CardExtraInformation;
 import com.morgan.server.mtg.TextWithSymbols;
+import com.morgan.server.mtg.raw.CardExtraInformation;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.log.InjectLogger;
 

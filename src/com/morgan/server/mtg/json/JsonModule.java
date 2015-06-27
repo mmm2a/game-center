@@ -12,12 +12,8 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.morgan.server.mtg.BoosterType;
 import com.morgan.server.mtg.BorderColor;
-import com.morgan.server.mtg.Card;
-import com.morgan.server.mtg.CardExtraInformation;
 import com.morgan.server.mtg.CardLayout;
-import com.morgan.server.mtg.CardSet;
 import com.morgan.server.mtg.CardSuperType;
-import com.morgan.server.mtg.CardType.CardTypeComponent;
 import com.morgan.server.mtg.ManaColor;
 import com.morgan.server.mtg.ManaSymbol;
 import com.morgan.server.mtg.OtherSymbol;
@@ -25,6 +21,10 @@ import com.morgan.server.mtg.Rarity;
 import com.morgan.server.mtg.SetType;
 import com.morgan.server.mtg.TextWithSymbols;
 import com.morgan.server.mtg.Watermark;
+import com.morgan.server.mtg.CardType.CardTypeComponent;
+import com.morgan.server.mtg.raw.Card;
+import com.morgan.server.mtg.raw.CardExtraInformation;
+import com.morgan.server.mtg.raw.CardSet;
 
 /**
  * GUICE module for the mtg.json package.

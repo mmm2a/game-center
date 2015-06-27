@@ -12,6 +12,8 @@
 		<class>com.morgan.server.backend.prod.authdb.AuthenticationEntity</class>
 		<class>com.morgan.server.backend.prod.authdb.UserInformationEntity</class>
 		<class>com.morgan.server.backend.prod.alarmdb.AlarmEntity</class>
+		<class>com.morgan.server.backend.prod.mtgdb.CardEntity</class>
+		<class>com.morgan.server.backend.prod.mtgdb.CardImageEntity</class>
 		
 		<properties>
 			<property name="eclipselink.target-database" value="DERBY"/>

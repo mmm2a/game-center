@@ -4,8 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -15,9 +21,11 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.morgan.server.mtg.CardSet;
+import com.morgan.server.backend.MtgRawCardBackend;
 import com.morgan.server.mtg.json.JsonModule;
 import com.morgan.server.mtg.json.MtgCardJsonHelper;
+import com.morgan.server.mtg.raw.Card;
+import com.morgan.server.mtg.raw.CardSet;
 import com.morgan.server.util.cmdline.CommandLine;
 import com.morgan.server.util.cmdline.CommandLineParser;
 import com.morgan.server.util.flag.Flag;
@@ -48,6 +56,18 @@ public final class ParseMtgCardJSONIntoDb {
         defaultValue = "",
         required = false)
     String idFile();
+
+    @Flag(name = "images-path",
+        description = "Path to a directory under which images are kept where the last character of "
+            + "the multiverseid is used as a sub directory",
+        required = true)
+    String imagesPath();
+
+    @Flag(name = "dry-run",
+        description = "If true, then the database is not updated",
+        defaultValue = "false",
+        required = false)
+    boolean isDryRun();
   }
 
   private static final class ParseMtgCardJSONIntoDbModule extends AbstractModule {
@@ -64,14 +84,17 @@ public final class ParseMtgCardJSONIntoDb {
 
   private final ToolFlagAccessor flagAccessor;
   private final MtgCardJsonHelper mtgCardJsonHelper;
+  private final MtgRawCardBackend rawCardBackend;
 
   @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   @Inject ParseMtgCardJSONIntoDb(
       ToolFlagAccessor flagAccessor,
-      MtgCardJsonHelper mtgCardJsonHelper) {
+      MtgCardJsonHelper mtgCardJsonHelper,
+      MtgRawCardBackend rawCardBackend) {
     this.flagAccessor = flagAccessor;
     this.mtgCardJsonHelper = mtgCardJsonHelper;
+    this.rawCardBackend = rawCardBackend;
   }
 
   void runTool() throws FileNotFoundException, IOException {
@@ -94,6 +117,16 @@ public final class ParseMtgCardJSONIntoDb {
       }
       log.info("Done writing ids to %s", flagAccessor.idFile());
     }
+
+    if (!flagAccessor.isDryRun()) {
+      ImmutableList.Builder<Card> cardsBuilder = ImmutableList.builder();
+      cardSetMap.values().stream()
+          .flatMap(s -> s.getCards().stream())
+          .forEach(c -> cardsBuilder.add(c));
+      ImmutableList<Card> cards = cardsBuilder.build();
+      log.info("Inserting %d cards into the database\n", cards.size());
+      rawCardBackend.insertCards(cards, new ImagePathFunction());
+    }
   }
 
   public static void main(String []args) throws Exception {
@@ -103,5 +136,28 @@ public final class ParseMtgCardJSONIntoDb {
     // Then create the GUICE injector to bootstrap the server.
     Injector injector = Guice.createInjector(new ParseMtgCardJSONIntoDbModule());
     injector.getInstance(ParseMtgCardJSONIntoDb.class).runTool();
+  }
+
+  private class ImagePathFunction implements Function<String, Path> {
+
+    @Override @Nullable public Path apply(@Nullable String t) {
+      if (t == null) {
+        return null;
+      }
+
+      Path p = Paths.get(flagAccessor.imagesPath(), t.substring(t.length() -1));
+      Path jpegPath = p.resolve(t + ".jpg");
+      Path pngPath = p.resolve(t + ".png");
+
+      if (pngPath.toFile().isFile()) {
+        return pngPath;
+      }
+
+      if (jpegPath.toFile().isFile()) {
+        return jpegPath;
+      }
+
+      return null;
+    }
   }
 }

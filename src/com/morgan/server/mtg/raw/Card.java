@@ -1,4 +1,4 @@
-package com.morgan.server.mtg;
+package com.morgan.server.mtg.raw;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,6 +21,15 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.morgan.server.mtg.BorderColor;
+import com.morgan.server.mtg.CardLayout;
+import com.morgan.server.mtg.CardSuperType;
+import com.morgan.server.mtg.CardType;
+import com.morgan.server.mtg.ManaColor;
+import com.morgan.server.mtg.ManaSymbol;
+import com.morgan.server.mtg.Rarity;
+import com.morgan.server.mtg.TextWithSymbols;
+import com.morgan.server.mtg.Watermark;
 
 /**
  * Represents an individual Magic the Gathering card.

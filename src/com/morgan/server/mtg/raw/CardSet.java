@@ -1,4 +1,4 @@
-package com.morgan.server.mtg;
+package com.morgan.server.mtg.raw;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -13,6 +13,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.morgan.server.mtg.BorderColor;
+import com.morgan.server.mtg.SetType;
 
 
 /**

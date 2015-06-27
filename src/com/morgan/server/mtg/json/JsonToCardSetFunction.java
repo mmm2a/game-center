@@ -12,9 +12,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.morgan.server.mtg.BorderColor;
-import com.morgan.server.mtg.Card;
-import com.morgan.server.mtg.CardSet;
 import com.morgan.server.mtg.SetType;
+import com.morgan.server.mtg.raw.Card;
+import com.morgan.server.mtg.raw.CardSet;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.log.InjectLogger;
 
