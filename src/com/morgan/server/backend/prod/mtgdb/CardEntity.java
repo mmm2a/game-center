@@ -57,10 +57,17 @@ class CardEntity {
   @JoinColumn(name = "allnames", nullable = true)
   @Nullable Collection<CardNameEntity> allCardNames;
 
+  @Column(nullable = true)
+  @Nullable private Integer convertedManaCost;
+
+  @Column(length = 8, nullable = false)
+  private String colors;
+
   CardEntity() {
   }
 
   CardEntity(
+      ManaColorRepresentation manaColorRepresentation,
       ManaSymbolsRepresentation manaSymbolsRepresentation,
       Card rawCard,
       @Nullable CardImageEntity cardImageEntity) {
@@ -71,6 +78,8 @@ class CardEntity {
     this.manaSymbols = manaSymbolsRepresentation.convert(rawCard.getManaSymbols());
 
     allCardNames = generateAllNamesEntities(rawCard);
+
+    this.convertedManaCost = rawCard.getConvertedManaCost().orElse(null);
   }
 
   private Collection<CardNameEntity> generateAllNamesEntities(Card rawCard) {
