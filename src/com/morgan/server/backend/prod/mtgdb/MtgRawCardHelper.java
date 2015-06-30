@@ -28,9 +28,13 @@ public class MtgRawCardHelper {
   @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   private final Provider<EntityManager> entityManagerProvider;
+  private final ManaSymbolsRepresentation manaSymbolsRepresentation;
 
-  @Inject MtgRawCardHelper(Provider<EntityManager> entityManagerProvider) {
+  @Inject MtgRawCardHelper(
+      Provider<EntityManager> entityManagerProvider,
+      ManaSymbolsRepresentation manaSymbolsRepresentation) {
     this.entityManagerProvider = entityManagerProvider;
+    this.manaSymbolsRepresentation = manaSymbolsRepresentation;
   }
 
   private static byte[] readImageDataFrom(Path imagePath) throws IOException {
@@ -74,7 +78,7 @@ public class MtgRawCardHelper {
         }
       }
 
-      CardEntity entity = new CardEntity(card, cardImageEntity);
+      CardEntity entity = new CardEntity(manaSymbolsRepresentation, card, cardImageEntity);
       mgr.persist(entity);
     }
   }
