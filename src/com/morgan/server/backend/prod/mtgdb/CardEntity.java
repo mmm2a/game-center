@@ -1,9 +1,6 @@
 package com.morgan.server.backend.prod.mtgdb;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
@@ -15,15 +12,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableList;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.morgan.server.mtg.CardLayout;
-import com.morgan.server.mtg.ManaSymbol;
-import com.morgan.server.mtg.raw.Card;
 
 /**
  * Database entity for storing information about a card.
@@ -53,8 +48,7 @@ class CardEntity {
   @JoinColumn(name = "image", nullable = true)
   @Nullable private CardImageEntity cardImageEntity;
 
-  @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.LAZY)
-  @JoinColumn(name = "allnames", nullable = true)
+  @ManyToMany(cascade = { CascadeType.ALL}, fetch = FetchType.LAZY)
   @Nullable Collection<CardNameEntity> allCardNames;
 
   @Column(nullable = true)
@@ -63,31 +57,38 @@ class CardEntity {
   @Column(length = 8, nullable = false)
   private String colors;
 
+  @Column(length = 64, nullable = true)
+  @Nullable private String cardType;
+
   CardEntity() {
   }
 
   CardEntity(
-      ManaColorRepresentation manaColorRepresentation,
-      ManaSymbolsRepresentation manaSymbolsRepresentation,
-      Card rawCard,
-      @Nullable CardImageEntity cardImageEntity) {
-    multiverseId = rawCard.getMultiverseId().orElse(null);
-    name = rawCard.getName();
-    cardLayout = rawCard.getCardLayout();
-    this.cardImageEntity = cardImageEntity;
-    this.manaSymbols = manaSymbolsRepresentation.convert(rawCard.getManaSymbols());
+      String name,
+      @Nullable String multiverseId,
+      CardLayout cardLayout,
+      String manaSymbols,
+      @Nullable CardImageEntity cardImage,
+      Iterable<CardNameEntity> allCardNames,
+      @Nullable Integer convertedManaCost,
+      String colors,
+      @Nullable String cardType) {
 
-    allCardNames = generateAllNamesEntities(rawCard);
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
+    Preconditions.checkNotNull(cardLayout);
+    Preconditions.checkNotNull(manaSymbols);
+    Preconditions.checkNotNull(allCardNames);
+    Preconditions.checkNotNull(colors);
 
-    this.convertedManaCost = rawCard.getConvertedManaCost().orElse(null);
-  }
-
-  private Collection<CardNameEntity> generateAllNamesEntities(Card rawCard) {
-    List<CardNameEntity> entities = new ArrayList<>();
-    for (String name : rawCard.getAllNames()) {
-      entities.add(new CardNameEntity(name));
-    }
-    return entities;
+    this.name = name;
+    this.multiverseId = multiverseId;
+    this.cardLayout = cardLayout;
+    this.manaSymbols = manaSymbols;
+    this.cardImageEntity = cardImage;
+    this.allCardNames = ImmutableSet.copyOf(allCardNames);
+    this.convertedManaCost = convertedManaCost;
+    this.colors = colors;
+    this.cardType = Strings.isNullOrEmpty(cardType) ? null : cardType;
   }
 
   long getCardId() {
@@ -98,21 +99,31 @@ class CardEntity {
     return name;
   }
 
-  ImmutableSet<String> getAllNames() {
-    ImmutableSet.Builder<String> resultBuilder = ImmutableSet.builder();
-    if (allCardNames != null) {
-      for (CardNameEntity entity : allCardNames) {
-        resultBuilder.add(entity.getName());
-      }
-    }
-    return resultBuilder.build();
+  Iterable<CardNameEntity> getAllNames() {
+    return (allCardNames == null) ? ImmutableSet.of() : allCardNames;
   }
 
-  Optional<String> getMultiverseId() {
-    return Optional.ofNullable(multiverseId);
+  @Nullable String getMultiverseId() {
+    return multiverseId;
   }
 
-  public ImmutableCollection<ManaSymbol> getManaSymbols(ManaSymbolsRepresentation rep) {
-    return ImmutableList.copyOf(rep.reverse().convert(manaSymbols));
+  String getManaSymbols() {
+    return manaSymbols;
+  }
+
+  @Nullable CardImageEntity getCardImage() {
+    return cardImageEntity;
+  }
+
+  CardLayout getCardLayout() {
+    return cardLayout;
+  }
+
+  @Nullable Integer getConvertedManaCost() {
+    return convertedManaCost;
+  }
+
+  @Nullable String getCardType() {
+    return cardType;
   }
 }

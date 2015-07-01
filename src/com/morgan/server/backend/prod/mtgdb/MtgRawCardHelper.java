@@ -1,19 +1,16 @@
 package com.morgan.server.backend.prod.mtgdb;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
-import com.google.common.io.ByteStreams;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
-import com.morgan.server.mtg.ImageType;
 import com.morgan.server.mtg.raw.Card;
 import com.morgan.server.util.log.AdvancedLogger;
 import com.morgan.server.util.log.InjectLogger;
@@ -28,19 +25,19 @@ public class MtgRawCardHelper {
   @InjectLogger private AdvancedLogger log = AdvancedLogger.NULL;
 
   private final Provider<EntityManager> entityManagerProvider;
+  private final ManaColorRepresentation manaColorRepresentation;
   private final ManaSymbolsRepresentation manaSymbolsRepresentation;
+  private final CardImageEntityFunction cardImageEntityFunction;
 
   @Inject MtgRawCardHelper(
       Provider<EntityManager> entityManagerProvider,
-      ManaSymbolsRepresentation manaSymbolsRepresentation) {
+      ManaColorRepresentation manaColorRepresentation,
+      ManaSymbolsRepresentation manaSymbolsRepresentation,
+      CardImageEntityFunction cardImageEntityFunction) {
     this.entityManagerProvider = entityManagerProvider;
+    this.manaColorRepresentation = manaColorRepresentation;
     this.manaSymbolsRepresentation = manaSymbolsRepresentation;
-  }
-
-  private static byte[] readImageDataFrom(Path imagePath) throws IOException {
-    try (InputStream in = new FileInputStream(imagePath.toFile())) {
-      return ByteStreams.toByteArray(in);
-    }
+    this.cardImageEntityFunction = cardImageEntityFunction;
   }
 
   @Transactional
@@ -58,27 +55,20 @@ public class MtgRawCardHelper {
         log.debug("Inserting card %d into DB", count);
       }
 
-      CardImageEntity cardImageEntity = null;
-      byte[] imageData = null;
-      Optional<String> multiverseId = card.getMultiverseId();
-      if (multiverseId.isPresent()) {
-        Path imagePath = multiverseIdToFilePathFunction.apply(multiverseId.get());
-        if (imagePath != null) {
-          ImageType imageType;
-          if (imagePath.toString().endsWith(".png")) {
-            imageType = ImageType.PNG;
-          } else if (imagePath.toString().endsWith(".jpg")) {
-            imageType = ImageType.JPG;
-          } else {
-            throw new IllegalArgumentException("Didn't expect image type for " + imagePath);
-          }
-
-          imageData = readImageDataFrom(imagePath);
-          cardImageEntity = new CardImageEntity(multiverseId.get(), imageType, imageData);
-        }
-      }
-
-      CardEntity entity = new CardEntity(manaSymbolsRepresentation, card, cardImageEntity);
+      CardEntity entity = new CardEntity(
+          card.getName(),
+          card.getMultiverseId().orElse(null),
+          card.getCardLayout(),
+          manaSymbolsRepresentation.convert(card.getManaSymbols()),
+          cardImageEntityFunction.apply(card, multiverseIdToFilePathFunction),
+          ImmutableSet.copyOf(card.getAllNames().stream()
+              .map(s -> new CardNameEntity(s))
+              .iterator()),
+          card.getConvertedManaCost().orElse(null),
+          card.getColors().stream()
+              .map(c -> manaColorRepresentation.convert(c).toString())
+              .collect(Collectors.joining()),
+          card.getCardType());
       mgr.persist(entity);
     }
   }
