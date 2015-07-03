@@ -1,5 +1,6 @@
 package com.morgan.server.mtg;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.google.common.base.MoreObjects;
@@ -11,7 +12,9 @@ import com.google.common.collect.ImmutableList;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public final class TextWithSymbols {
+public final class TextWithSymbols implements Serializable {
+
+  static final long serialVersionUID = 0L;
 
   public enum NodeType {
     TEXT(String.class),
@@ -35,7 +38,9 @@ public final class TextWithSymbols {
    * @param <T> the type of content in the node ({@link String}, {@link ManaSymbol}, or
    *     {@link OtherSymbol}.
    */
-  public static final class Node<T> {
+  public static final class Node<T> implements Serializable {
+
+    static final long serialVersionUID = 0L;
 
     private final NodeType nodeType;
     private final T value;

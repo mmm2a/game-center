@@ -1,9 +1,12 @@
 package com.morgan.server.mtg;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -15,7 +18,9 @@ import com.google.common.collect.ImmutableSet;
  *
  * @author mark@mark-morgan.net (Mark Morgan)
  */
-public class ManaSymbol {
+public class ManaSymbol implements Serializable {
+
+  static final long serialVersionUID = 0L;
 
   // Empty means colorless
   private final ImmutableSet<ManaColor> colors;
@@ -23,7 +28,7 @@ public class ManaSymbol {
   private final boolean isSnow;
 
   // If count is absent, then its "X" mana
-  private final Optional<Integer> count;
+  @Nullable private final Integer count;
 
   private ManaSymbol(
       ImmutableSet<ManaColor> colors,
@@ -38,7 +43,7 @@ public class ManaSymbol {
     this.colors = ImmutableSet.copyOf(colors);
     this.isPhyrexian = isPhyrexian;
     this.isSnow = isSnow;
-    this.count = count;
+    this.count = count.orElse(null);
 
     // A couple of combinations that aren't allowed
     Preconditions.checkState(
@@ -80,15 +85,15 @@ public class ManaSymbol {
    * Returns the number of this mana symbol, or {@link Optional#empty()} if its "X" mana.
    */
   public Optional<Integer> getCount() {
-    return count;
+    return Optional.ofNullable(count);
   }
 
   public ManaSymbol makeSnow(boolean isSnow) {
-    return new ManaSymbol(colors, isPhyrexian, isSnow, count);
+    return new ManaSymbol(colors, isPhyrexian, isSnow, getCount());
   }
 
   public ManaSymbol makePhyrexian(boolean isPhyrexian) {
-    return new ManaSymbol(colors, isPhyrexian, isSnow, count);
+    return new ManaSymbol(colors, isPhyrexian, isSnow, getCount());
   }
 
   @Override public int hashCode() {
@@ -108,7 +113,7 @@ public class ManaSymbol {
     return colors.equals(other.colors)
         && isPhyrexian == other.isPhyrexian
         && isSnow == other.isSnow
-        && count.equals(other.count);
+        && Objects.equals(count, other.count);
   }
 
   @Override public String toString() {
